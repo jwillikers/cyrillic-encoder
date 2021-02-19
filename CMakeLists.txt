@@ -1,0 +1,87 @@
+cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
+
+project(
+  cyrillic-encoder
+  VERSION 0.0.1
+  DESCRIPTION
+    "A sample application which maps alphanumeric latin characters to cyrillic characters"
+  HOMEPAGE_URL https://github.com/jwillikers/cyrillic-encoder
+  LANGUAGES CXX)
+
+include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+include(CTest)
+include(FetchContent)
+
+#FetchContent_Declare(
+#    cmake-conan
+#    GIT_REPOSITORY https://github.com/conan-io/cmake-conan.git
+#    GIT_TAG v0.15)
+#FetchContent_GetProperties(cmake-conan)
+#if(NOT cmake-conan_POPULATED)
+#  FetchContent_Populate(cmake-conan)
+#  list(APPEND CMAKE_MODULE_PATH ${cmake-conan_SOURCE_DIR})
+#endif()
+#
+#include(conan)
+#
+#conan_cmake_run(REQUIRES boost/1.75.0 boost-ext-ut/1.1.8
+#                BASIC_SETUP
+#                BUILD missing)
+
+FetchContent_Declare(
+  cmake-scripts
+  GIT_REPOSITORY https://github.com/StableCoder/cmake-scripts
+  GIT_TAG 20.11)
+FetchContent_GetProperties(cmake-scripts)
+if(NOT cmake-scripts_POPULATED)
+  FetchContent_Populate(cmake-scripts)
+  list(APPEND CMAKE_MODULE_PATH ${cmake-scripts_SOURCE_DIR})
+endif()
+
+include(sanitizers)
+
+set(FORMAT_CHECK_CMAKE
+    yes
+    CACHE BOOL "")
+FetchContent_Declare(
+  format
+  GIT_REPOSITORY https://github.com/TheLartians/Format.cmake.git
+  GIT_TAG v1.6)
+FetchContent_MakeAvailable(format)
+
+set(USE_CCACHE
+    yes
+    CACHE BOOL "")
+FetchContent_Declare(
+  ccache.cmake
+  GIT_REPOSITORY https://github.com/TheLartians/Ccache.cmake.git
+  GIT_TAG v1.2.1)
+FetchContent_MakeAvailable(ccache.cmake)
+
+set(BUILD_SHARED_LIBS
+    yes
+    CACHE BOOL "")
+set(CMAKE_CXX_EXTENSIONS
+    no
+    CACHE BOOL "")
+set(CMAKE_CXX_STANDARD
+    20
+    CACHE STRING "")
+set(CMAKE_CXX_STANDARD_REQUIRED
+    yes
+    CACHE BOOL "")
+set(CYRILLIC_ENCODER_GENERATED_INCLUDEDIR
+    "${PROJECT_BINARY_DIR}/generated/include"
+    CACHE PATH "The include directory for generated header files.")
+
+# This is necessary for CMake to detect executables within the Python virtual
+# environment for the project.
+set(Python_FIND_VIRTUALENV
+    STANDARD
+    CACHE STRING "")
+
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS no)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+
+add_subdirectory(src)
