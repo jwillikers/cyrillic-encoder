@@ -43,7 +43,7 @@ constexpr std::string_view encode_char(
   // A compile-time hash map would make much more sense and not require sorting.
   auto const *found = std::lower_bound(
       std::begin(conversion_table), std::end(conversion_table), c,
-      [](auto const &pair, char c) { return std::get<0>(pair) < c; });
+      [](auto const &pair, char ch) { return std::get<0>(pair) < ch; });
   if (found == std::end(conversion_table) || std::get<0>(*found) != c) {
     return {};
   }

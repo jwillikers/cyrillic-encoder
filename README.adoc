@@ -15,7 +15,7 @@ A Qt application for encoding alphanumeric characters as arbitrary Cyrillic symb
 == Getting Started
 
 This sections describes how to setup the build environment required by the project.
-This project has been tested with the {cpp} compilers from GCC 10 on https://ubuntu.com/[Ubuntu] 18.04.
+This project has been tested with the {cpp} compilers GCC 10 and Clang 12 on https://ubuntu.com/[Ubuntu] 18.04.
 
 . Install the necessary package to simplify adding PPA's to the system.
 +
@@ -94,20 +94,40 @@ This project has been tested with the {cpp} compilers from GCC 10 on https://ubu
 ➜ rm ~/Downloads/cmake-*.sh
 ----
 
-//➜ echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-12 main" | sudo tee /etc/apt/sou
-//
-//wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-//
-//➜ sudo apt -y install clang-12 lldb-12 lld-12
-//
-//
-//Clang 12
-//+
-//[source,sh]
-//----
-//➜ sudo apt -y install clang-12 lld
-//----
+=== Clang 12
 
+LLVM provides Clang 12 for Ubuntu 18.04.
+To install Clang 12 and related tooling, follow these steps.
+
+. Add LLVM's repository for Clang 12 to your system.
++
+[source,sh]
+----
+➜ echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-12 main" \
+  | sudo tee /etc/apt/sources.list.d/llvm.list
+----
+
+. Trust LLVM's signing key.
++
+[source,sh]
+----
+➜ wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key  \
+  | sudo tee /etc/apt/trusted.gpg.d/llvm.key.asc > /dev/null
+----
+
+. Update your system's sources.
++
+[source,sh]
+----
+➜ sudo apt update
+----
+
+. Install Clang and friends.
++
+[source,sh]
+----
+➜ sudo apt -y install clang-12 clang-format-12 clang-tidy-12 lldb-12 lld-12
+----
 
 == Build
 
@@ -117,11 +137,20 @@ Likely, this build type will be either _Debug_ or _Release_, both of which are e
 These examples also enable several helpful options to improve performance of the build and the resulting binaries.
 These examples assume you are in the top-level directory of the project and using a build directory named `build`.
 
-Before running CMake, install the necessary dependencies with Conan.
+Before running CMake, install the necessary dependencies with Conan, using the necessary compiler profile.
 
+GCC::
++
 [source,sh]
 ----
 ➜ conan install . --install-folder build --build=missing --profile=profiles/gcc-10
+----
+
+Clang::
++
+[source,sh]
+----
+➜ conan install . --install-folder build --build=missing --profile=profiles/clang-12
 ----
 
 Release::
@@ -146,26 +175,23 @@ GCC::
   -B build -S .
 ----
 
-//Clang 11
-//+
-//--
-//[source,sh]
-//----
-//➜ cmake \
-//  -GNinja \
-//  -DCMAKE_C_COMPILER=/usr/bin/clang-11 \
-//  -DCMAKE_CXX_COMPILER=/usr/bin/clang++-11 \
-//  -DCMAKE_BUILD_TYPE=Release \
-//  -DCMAKE_UNITY_BUILD=yes \
-//  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld" \
-//  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld" \
-//  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld" \
-//  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=yes \
-//  -B build -S .
-//----
-
-//NOTE: On Ubuntu 20.10, Clang 11 compiler front-ends are installed with the suffix `-11`.
-//--
+Clang::
++
+[source,sh]
+----
+➜ cmake \
+  -GNinja \
+  -DCMAKE_C_COMPILER=/usr/bin/clang-12 \
+  -DCMAKE_CXX_COMPILER=/usr/bin/clang++-12 \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_UNITY_BUILD=yes \
+  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld" \
+  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld" \
+  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld" \
+  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=yes \
+  -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-12 \
+  -B build -S .
+----
 --
 
 Debug::
@@ -191,23 +217,24 @@ GCC::
   -B build -S .
 ----
 
-//Clang 11
-//+
-//[source,sh]
-//----
-//➜ cmake \
-//  -GNinja \
-//  -DCMAKE_C_COMPILER=/usr/bin/clang-11 \
-//  -DCMAKE_CXX_COMPILER=/usr/bin/clang++-11 \
-//  -DCMAKE_BUILD_TYPE=Debug \
-//  -DCMAKE_UNITY_BUILD=yes \
-//  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld" \
-//  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld" \
-//  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld" \
-//  -DCMAKE_C_FLAGS_DEBUG="-gsplit-dwarf" \
-//  -DCMAKE_CXX_FLAGS_DEBUG="-gsplit-dwarf" \
-//  -B build -S .
-//----
+Clang::
++
+[source,sh]
+----
+➜ cmake \
+  -GNinja \
+  -DCMAKE_C_COMPILER=/usr/bin/clang-12 \
+  -DCMAKE_CXX_COMPILER=/usr/bin/clang++-12 \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DCMAKE_UNITY_BUILD=yes \
+  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld" \
+  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld" \
+  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld" \
+  -DCMAKE_C_FLAGS_DEBUG="-gsplit-dwarf" \
+  -DCMAKE_CXX_FLAGS_DEBUG="-gsplit-dwarf" \
+  -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-12 \
+  -B build -S .
+----
 --
 
 Then build.
@@ -222,11 +249,11 @@ Then build.
 Support for Google Sanitizers is provided by the https://github.com/StableCoder/cmake-scripts[cmake-scripts] project.
 Set the `USE_SANITIZER` CMake variable to an appropriate value as documented https://github.com/StableCoder/cmake-scripts#sanitizer-builds-sanitizerscmake[here].
 
-Use the Address sanitizer like so.
+Use the Address and Undefined Behavior sanitizers like so.
 
 [source,sh]
 ----
-➜ cmake -DUSE_SANITIZER=Address -B build -S .
+➜ cmake -DUSE_SANITIZER=Address;Undefined -B build -S .
 ----
 
 == Test
@@ -242,7 +269,7 @@ The unit tests can be run with https://cmake.org/cmake/help/latest/module/CTest.
 ----
 
 . Run the tests by executing the `ctest` executable.
-
++
 [source,sh]
 ----
 ➜ ctest
