@@ -35,7 +35,7 @@ This project has been tested with the {cpp} compilers from GCC 10 on https://ubu
 +
 [source,sh]
 ----
-➜ sudo apt -y install ccache cmake gcc-10 g++-10 git ninja-build qt5-default python3 python3-pip
+➜ sudo apt -y install ccache gcc-10 g++-10 git ninja-build qt5-default python3 python3-pip
 ----
 
 . Install Python tools.
@@ -43,6 +43,48 @@ This project has been tested with the {cpp} compilers from GCC 10 on https://ubu
 [source,sh]
 ----
 ➜ python3 -m pip install --user clang-format cmakelang conan
+----
+
+. Install a newer version of CMake.
+.. Download the latest version.
++
+[source,sh]
+----
+➜ wget -LP ~/Downloads/ https://github.com/Kitware/CMake/releases/download/v3.19.5/cmake-3.19.5-Linux-x86_64.sh
+----
+
+.. Make the installer executable.
++
+[source,sh]
+----
+➜ chmod +x ~/Downloads/cmake-*.sh
+----
+
+.. Change to the `/usr/local` directory.
++
+[source,sh]
+----
+➜ cd /usr/local
+----
+
+.. Install CMake in `/usr/local`.
++
+[source,sh]
+----
+➜ sudo ~/Downloads/cmake-*.sh
+----
+
+.. Press kbd:[q] to skip reading the license.
+
+.. Enter `y` and press enter to accept the license.
+
+.. Enter `n` and press enter to install to the subdirectories in `/usr/local`.
+
+.. Remove the installer.
++
+[source,sh]
+----
+➜ rm ~/Downloads/cmake-*.sh
 ----
 
 //➜ echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-12 main" | sudo tee /etc/apt/sou
