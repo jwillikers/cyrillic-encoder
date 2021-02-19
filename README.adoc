@@ -52,7 +52,7 @@ This project has been tested with the {cpp} compilers from GCC 10 on https://ubu
 //➜ sudo apt -y install clang-12 lldb-12 lld-12
 //
 //
-//Clang 12::
+//Clang 12
 //+
 //[source,sh]
 //----
@@ -97,7 +97,7 @@ GCC::
   -B build -S .
 ----
 
-//Clang 11::
+//Clang 11
 //+
 //--
 //[source,sh]
@@ -116,7 +116,7 @@ GCC::
 //----
 
 //NOTE: On Ubuntu 20.10, Clang 11 compiler front-ends are installed with the suffix `-11`.
---
+//--
 --
 
 Debug::
@@ -142,7 +142,7 @@ GCC::
   -B build -S .
 ----
 
-//Clang 11::
+//Clang 11
 //+
 //[source,sh]
 //----
