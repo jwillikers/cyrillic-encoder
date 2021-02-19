@@ -40,10 +40,17 @@ This project has been tested with the {cpp} compilers from GCC 10 on https://ubu
 
 . Install Python tools.
 +
+--
 [source,sh]
 ----
 ➜ python3 -m pip install --user clang-format cmakelang conan
 ----
+
+[NOTE]
+====
+`~/.local/bin` will need to be on your `PATH`.
+====
+--
 
 . Install a newer version of CMake.
 .. Download the latest version.
