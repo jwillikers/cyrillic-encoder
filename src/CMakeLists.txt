@@ -1,6 +1,6 @@
 include(GenerateExportHeader)
 
-find_package(Boost 1.65 REQUIRED)
+find_package(Boost)
 
 add_library(cyrillic-encoder-encode)
 add_library(cyrillic-encoder::encode ALIAS cyrillic-encoder-encode)
@@ -25,6 +25,7 @@ target_compile_options(
           $<$<CXX_COMPILER_ID:MSVC>:/W3>)
 target_link_libraries(cyrillic-encoder-encode PRIVATE Boost::boost)
 
+find_package(Microsoft.GSL)
 find_package(Qt5 5.9 REQUIRED COMPONENTS Core Widgets)
 
 add_executable(cyrillic-encoder)
@@ -32,11 +33,11 @@ add_executable(cyrillic-encoder)
 target_sources(cyrillic-encoder PRIVATE main.cpp)
 
 target_link_libraries(
-  cyrillic-encoder PRIVATE Boost::boost cyrillic-encoder::encode Qt5::Core
-                           Qt5::Widgets)
+  cyrillic-encoder PRIVATE Boost::boost cyrillic-encoder::encode
+                           Microsoft.GSL::GSL Qt5::Core Qt5::Widgets)
 
 if(TEST_CYRILLIC_ENCODER OR CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
-  find_package(ut 1.1.8 REQUIRED)
+  find_package(ut)
 
   add_executable(cyrillic-encoder-encode-test)
   target_sources(cyrillic-encoder-encode-test PRIVATE encode.test.cpp)

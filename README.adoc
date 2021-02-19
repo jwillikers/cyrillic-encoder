@@ -189,6 +189,7 @@ Clang::
   -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld-12" \
   -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld-12" \
   -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=yes \
+  -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy-12 \
   -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-12 \
   -B build -S .
 ----
@@ -232,6 +233,7 @@ Clang::
   -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld-12" \
   -DCMAKE_C_FLAGS_DEBUG="-gsplit-dwarf" \
   -DCMAKE_CXX_FLAGS_DEBUG="-gsplit-dwarf" \
+  -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy-12 \
   -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-12 \
   -B build -S .
 ----

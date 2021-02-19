@@ -11,6 +11,7 @@
 #include <QVBoxLayout>
 #include <boost/range/adaptors.hpp>
 #include <cyrillic-encoder/encode.hpp>
+#include <gsl/gsl>
 
 int main(int argc, char *argv[]) {
   QCoreApplication::setAttribute(
@@ -77,11 +78,11 @@ int main(int argc, char *argv[]) {
     Qt::ItemFlags flags;
     flags.setFlag(Qt::ItemFlag::ItemIsEditable, false);
     latin->setFlags(flags);
-    decode_table.setItem(pair.index(), 0, latin);
+    decode_table.setItem(gsl::narrow<int>(pair.index()), 0, latin);
     auto *cyrillic =
         new QTableWidgetItem(QString(std::get<1>(pair.value()).data()));
     cyrillic->setFlags(flags);
-    decode_table.setItem(pair.index(), 1, cyrillic);
+    decode_table.setItem(gsl::narrow<int>(pair.index()), 1, cyrillic);
   }
   decode_table_layout.addWidget(&decode_table);
   encode_area_layout.addWidget(&decode_table_widget);
@@ -109,5 +110,5 @@ int main(int argc, char *argv[]) {
   window_layout.addWidget(&button_bar, 0, Qt::AlignmentFlag::AlignRight);
 
   main_window.show();
-  return app.exec();
+  return QApplication::exec();
 }
