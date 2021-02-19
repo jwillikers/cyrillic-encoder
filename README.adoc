@@ -215,6 +215,7 @@ GCC::
   -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=gold" \
   -DCMAKE_C_FLAGS_DEBUG="-gsplit-dwarf" \
   -DCMAKE_CXX_FLAGS_DEBUG="-gsplit-dwarf" \
+  -DUSE_SANITIZER="Address;Undefined" \
   -B build -S .
 ----
 
@@ -235,6 +236,7 @@ Clang::
   -DCMAKE_CXX_FLAGS_DEBUG="-gsplit-dwarf" \
   -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy-12 \
   -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-12 \
+  -DUSE_SANITIZER="Address;Undefined" \
   -B build -S .
 ----
 --
