@@ -35,14 +35,14 @@ This project has been tested with the {cpp} compilers from GCC 10 on https://ubu
 +
 [source,sh]
 ----
-➜ sudo apt -y install ccache clang-format cmake gcc-10 g++-10 git ninja-build qt5-default python3 python3-pip
+➜ sudo apt -y install ccache cmake gcc-10 g++-10 git ninja-build qt5-default python3 python3-pip
 ----
 
 . Install Python tools.
 +
 [source,sh]
 ----
-➜ python3 -m pip install --user cmakelang conan
+➜ python3 -m pip install --user clang-format cmakelang conan
 ----
 
 //➜ echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-12 main" | sudo tee /etc/apt/sou
