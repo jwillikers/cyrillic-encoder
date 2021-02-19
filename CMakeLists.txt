@@ -12,22 +12,6 @@ include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 include(CTest)
 include(FetchContent)
 
-#FetchContent_Declare(
-#    cmake-conan
-#    GIT_REPOSITORY https://github.com/conan-io/cmake-conan.git
-#    GIT_TAG v0.15)
-#FetchContent_GetProperties(cmake-conan)
-#if(NOT cmake-conan_POPULATED)
-#  FetchContent_Populate(cmake-conan)
-#  list(APPEND CMAKE_MODULE_PATH ${cmake-conan_SOURCE_DIR})
-#endif()
-#
-#include(conan)
-#
-#conan_cmake_run(REQUIRES boost/1.75.0 boost-ext-ut/1.1.8
-#                BASIC_SETUP
-#                BUILD missing)
-
 FetchContent_Declare(
   cmake-scripts
   GIT_REPOSITORY https://github.com/StableCoder/cmake-scripts
