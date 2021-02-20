@@ -12,6 +12,18 @@ endif::[]
 
 A Qt application for encoding alphanumeric characters as arbitrary Cyrillic symbols.
 
+ifdef::env-github[]
+++++
+<p align="center">
+  <img src="screenshots/Cyrillic Encoder Demo.gif?raw=true"/>
+</p>
+++++
+endif::[]
+
+ifndef::env-github[]
+image::screenshots/Cyrillic Encoder Demo.gif[Cyrillic Encoder Demo, align=center]
+endif::[]
+
 == Getting Started
 
 This sections describes how to setup the build environment required by the project.
