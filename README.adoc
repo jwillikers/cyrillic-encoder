@@ -296,7 +296,7 @@ The unit tests can be run with https://cmake.org/cmake/help/latest/module/CTest.
 The https://clang.llvm.org/docs/ClangFormat.html[clang-format] and https://cmake-format.readthedocs.io/en/latest/cmake-format.html[cmake-format] tools are used to format the source code files.
 The https://github.com/TheLartians/Format.cmake[Format.cmake] module provides build targets to simplify the use of these tools.
 
-Format the all source files by building the CMake target `fix-format`.
+Format the source files by building the CMake target `fix-format`.
 
 [source,sh]
 ----
