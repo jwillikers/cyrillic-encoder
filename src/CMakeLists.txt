@@ -42,7 +42,7 @@ if(TEST_CYRILLIC_ENCODER OR CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
   add_executable(cyrillic-encoder-encode-test)
   target_sources(cyrillic-encoder-encode-test PRIVATE encode.test.cpp)
   target_link_libraries(cyrillic-encoder-encode-test
-                        PRIVATE cyrillic-encoder::encode boost::ut)
+                        PRIVATE Boost::boost cyrillic-encoder::encode boost::ut)
   target_compile_options(
     cyrillic-encoder-encode-test
     PRIVATE $<$<CXX_COMPILER_ID:Clang>:-Werror>

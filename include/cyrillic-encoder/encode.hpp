@@ -19,8 +19,8 @@ static constexpr std::array<std::pair<char, std::string_view>, num_alphanumeric>
         {'0', {"Ѐ"}}, {'1', {"Ё"}}, {'2', {"Ђ"}}, {'3', {"Ѓ"}}, {'4', {"Є"}},
         {'5', {"Ѕ"}}, {'6', {"І"}}, {'7', {"Ї"}}, {'8', {"Ј"}}, {'9', {"Љ"}},
         {'A', {"Њ"}}, {'B', {"Ћ"}}, {'C', {"Ќ"}}, {'D', {"Ѝ"}}, {'E', {"Ў"}},
-        {'F', {"Џ"}}, {'G', {"А"}}, {'H', {"Б"}}, {'I', {"В"}}, {'J', {"Г"}},
-        {'K', {"Г"}}, {'L', {"Д"}}, {'M', {"Е"}}, {'N', {"Ж"}}, {'O', {"З"}},
+        {'F', {"Џ"}}, {'G', {"А"}}, {'H', {"Б"}}, {'I', {"В"}}, {'J', {"Ѯ"}},
+        {'K', {"Ѽ"}}, {'L', {"Д"}}, {'M', {"Е"}}, {'N', {"Ж"}}, {'O', {"З"}},
         {'P', {"И"}}, {'Q', {"Й"}}, {'R', {"К"}}, {'S', {"Л"}}, {'T', {"М"}},
         {'U', {"Н"}}, {'V', {"О"}}, {'W', {"П"}}, {'X', {"а"}}, {'Y', {"б"}},
         {'Z', {"в"}}, {'a', {"г"}}, {'b', {"д"}}, {'c', {"е"}}, {'d', {"ж"}},
@@ -55,6 +55,8 @@ constexpr std::string_view encode_char(
 // Characters which do not exist in the table are ignored.
 // The output will not contain them.
 // Currently, the conversion table must be sorted by key.
+// todo Generalize the interface here by using a C++20 range for the conversion
+// table.
 CYRILLIC_ENCODER_ENCODE_EXPORT std::string encode_string(
     std::string_view text,
     std::array<std::pair<char, std::string_view>, num_alphanumeric> const
