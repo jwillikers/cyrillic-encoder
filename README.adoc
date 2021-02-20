@@ -29,33 +29,19 @@ endif::[]
 This section describes how to setup the build environment required by the project.
 This project has been tested with the {cpp} compilers GCC 10 and Clang 12 on https://ubuntu.com/[Ubuntu] 18.04.
 
-. Install the necessary package to simplify adding PPA's to the system.
-+
-[source,sh]
-----
-➜ sudo apt -y install software-properties-common
-----
-
-. Add Ubuntu's toolchain PPA to get access to newer versions of GCC.
-+
-[source,sh]
-----
-➜ sudo add-apt-repository -uy ppa:ubuntu-toolchain-r/test
-----
-
 . Install the necessary system packages.
 +
 [source,sh]
 ----
-➜ sudo apt -y install ccache gcc-10 g++-10 git ninja-build qt5-default python3 python3-pip
+➜ sudo apt -y install ccache git ninja-build qt5-default python3 python3-pip
 ----
 
-. Install a few Python build tools.
+. Install a few necessary Python build tools.
 +
 --
 [source,sh]
 ----
-➜ python3 -m pip install --user clang-format cmakelang conan
+➜ python3 -m pip install --user cmakelang conan
 ----
 
 [NOTE]
@@ -114,10 +100,36 @@ aarch64::
 ➜ rm ~/Downloads/cmake-*.sh
 ----
 
+=== GCC
+
+Ubuntu distributes newer compiler versions to previous releases through its toolchain PPA.
+Follow the steps below to install GCC 10 on Ubuntu 18.04.
+
+. Install the necessary package to simplify adding PPA's to the system.
++
+[source,sh]
+----
+➜ sudo apt -y install software-properties-common
+----
+
+. Add Ubuntu's toolchain PPA to get access to newer versions of GCC.
++
+[source,sh]
+----
+➜ sudo add-apt-repository -uy ppa:ubuntu-toolchain-r/test
+----
+
+. Install GCC 10.
++
+[source,sh]
+----
+➜ sudo apt -y install gcc-10
+----
+
 === Clang
 
-LLVM provides Clang 12 for Ubuntu 18.04.
-To install Clang 12 and related tooling, follow these steps.
+The LLVM project provides Clang 12 for older Ubuntu releases through its own PPA.
+To install Clang 12 and related tooling, follow these instructions.
 
 . Add LLVM's repository for Clang 12 to your system.
 +
