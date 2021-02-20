@@ -314,27 +314,32 @@ This project is built on the hard work of countless open source contributors.
 Several of these projects are enumerated below.
 
 * https://asciidoctor.org/[Asciidoctor]
+* https://www.boost.org/[Boost {cpp} Libraries]
 * https://github.com/boost-ext/ut[[Boost::ext\].μt]
 * https://ccache.dev/[ccache]
 * https://github.com/TheLartians/Ccache.cmake[Ccache.cmake]
+* https://clang.llvm.org/[Clang]
 * https://clang.llvm.org/extra/clang-tidy/[Clang-Tidy]
 * https://clang.llvm.org/docs/ClangFormat.html[ClangFormat]
 * https://cmake.org/[CMake]
 * https://cmake-format.readthedocs.io/en/latest/index.html[cmakelang]
 * https://github.com/StableCoder/cmake-scripts[CMake Scripts]
+* https://gcc.gnu.org/[GCC]
 * https://git-scm.com/[Git]
+* https://github.com/microsoft/GSL[Microsoft's GSL]
 * https://github.com/TheLartians/ModernCppStarter[ModernCppStarter]
 * https://ninja-build.org/[Ninja]
+* https://www.qt.io/[Qt]
 * https://rouge.jneen.net/[Rouge]
 * https://www.ruby-lang.org/en/[Ruby]
 
 == Code of Conduct
 
-The project's Code of Conduct is available in the link:CODE_OF_CONDUCT.adoc[] file.
+The project's Code of Conduct is available in the link:CODE_OF_CONDUCT.adoc[Code of Conduct] file.
 
 == License
 
-This repository is licensed under the https://www.gnu.org/licenses/gpl-3.0.html[GPLv3], available in the link:LICENSE.adoc[] file.
+This repository is licensed under the https://www.gnu.org/licenses/gpl-3.0.html[GPLv3], available in the link:LICENSE.adoc[license file].
 
 © 2021 Jordan Williams
 
