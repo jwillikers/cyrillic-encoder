@@ -17,10 +17,28 @@ jobs:
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.config.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04]
+        config:
+        - {
+          name: "Ubuntu 18.04 GCC 10 Release",
+          os: ubuntu-18.04,
+          build_type: "Release",
+          cc: "gcc-10",
+          cxx: "g++-10",
+          generator: "Ninja",
+          ld: "gold"
+        }
+        - {
+          name: "Ubuntu 18.04 Clang 12 Release",
+          os: ubuntu-18.04,
+          build_type: "Release",
+          cc: "clang-12",
+          cxx: "clang++-12",
+          generator: "Ninja",
+          ld: "lld-12"
+        }
 
     steps:
       - uses: actions/checkout@v2
@@ -33,7 +51,7 @@ jobs:
           path: |
             ${{ env.CONAN_USER_HOME }}
             ~/.cache/pip
-          key: ${{ runner.os }}-${{ env.BUILD_TYPE }}-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('cmake/Conan.cmake') }}
+          key: ${{ runner.os }}-${{ matrix.config.cc }}-${{ matrix.config.build_type }}-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('cmake/Conan.cmake') }}
 
       - name: Install Ninja
         run: sudo apt -y install ninja-build
@@ -42,9 +60,19 @@ jobs:
         run: sudo apt -y install qt5-default
 
       - name: Install GCC 10
+        if: startsWith(matrix.config.name, 'Ubuntu 18.04 GCC 10')
+        shell: bash
         run: |
           sudo add-apt-repository -uy ppa:ubuntu-toolchain-r/test
           sudo apt -y install gcc-10
+
+      - name: Install Clang Compiler and Tools
+        if: startsWith(matrix.config.name, 'Ubuntu 18.04')
+        run: |
+          echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-12 main" | sudo tee /etc/apt/sources.list.d/llvm.list
+          wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/llvm.key.asc > /dev/null
+          sudo apt update
+          sudo apt -y install clang-12 clang-format-12 clang-tidy-12 lld-12
 
       - name: Create Build Environment
         # Some projects don't allow in-source building, so create a separate build directory
@@ -63,7 +91,7 @@ jobs:
         # We need to source the profile file to make sure conan is in PATH
         run: |
           source ~/.profile
-          conan install $GITHUB_WORKSPACE --install-folder $GITHUB_WORKSPACE/build --build=missing --profile=profiles/gcc-10
+          conan install $GITHUB_WORKSPACE --install-folder $GITHUB_WORKSPACE/build --build=missing --profile=profiles/${{ matrix.config.cc }}
 
       - name: Configure CMake
         # Use a bash shell so we can use the same syntax for environment variable
@@ -77,7 +105,19 @@ jobs:
         # We need to source the profile file to make sure conan is in PATH
         run: |
           source ~/.profile
-          cmake $GITHUB_WORKSPACE -GNinja -DCMAKE_C_COMPILER=/usr/bin/gcc-10 -DCMAKE_CXX_COMPILER=/usr/bin/g++-10 -DCMAKE_UNITY_BUILD=yes -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=gold" -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=gold" -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=gold" -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=yes -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+          cmake \
+            $GITHUB_WORKSPACE \
+            -G"${{ matrix.config.generator }}" \
+            -DCMAKE_C_COMPILER=${{ matrix.config.cc }} \
+            -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} \
+            -DCMAKE_UNITY_BUILD=yes \
+            -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=${{ matrix.config.ld }}" \
+            -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=${{ matrix.config.ld }}" \
+            -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=${{ matrix.config.ld }}" \
+            -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=yes \
+            -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy-12 \
+            -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-12 \
+            -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }}
 
       - name: Build
         working-directory: ${{github.workspace}}/build
