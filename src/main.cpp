@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
   QWidget encode_area = QWidget(&window);
   window_layout.addWidget(&encode_area);
   QHBoxLayout encode_area_layout(&encode_area);
-  QVBoxLayout encode_box(&encode_area);
+  QVBoxLayout encode_box;
   encode_area_layout.addLayout(&encode_box);
 
   QTextEdit input(&encode_area);
