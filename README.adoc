@@ -17,7 +17,7 @@ A Qt demo application for encoding alphanumeric characters as arbitrary Cyrillic
 ifdef::env-github[]
 ++++
 <p align="center">
-  <img src="screenshots/Cyrillic Encoder Demo.gif?raw=true"/>
+  <img  alt="Cyrillic Encoder Demo" src="screenshots/Cyrillic Encoder Demo.gif?raw=true"/>
 </p>
 ++++
 endif::[]
