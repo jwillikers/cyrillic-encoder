@@ -39,7 +39,7 @@ int main() {
     "should_encode_character_at_compile_time"_test = [] {
       static constexpr char input{'V'};
       static constexpr std::string_view encoded{"О"};
-      expect(constant<encoded == cyr_enc::encode_char(input)>);
+      expect(constant<encoded.compare(cyr_enc::encode_char(input)) == 0>);
     };
   };
 
