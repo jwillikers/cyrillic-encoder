@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <array>
 #include <cyrillic-encoder/export.h>
 #include <iterator>
