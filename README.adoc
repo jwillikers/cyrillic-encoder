@@ -10,6 +10,8 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
+image:https://img.shields.io/github/workflow/status/jwillikers/cyrillic-encoder/CMake[GitHub Workflow Status]
+
 A Qt demo application for encoding alphanumeric characters as arbitrary Cyrillic symbols.
 
 ifdef::env-github[]
