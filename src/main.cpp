@@ -106,7 +106,8 @@ int main(int argc, char *argv[]) {
   button_bar.layout()->addWidget(&about_qt);
   QPushButton close(QObject::tr("Close"), &button_bar);
   close.setToolTip(QObject::tr("Quit the application"));
-  QObject::connect(&close, &QPushButton::clicked, &QCoreApplication::quit);
+  QObject::connect(&close, &QPushButton::clicked, &app, &QCoreApplication::quit,
+                   Qt::ConnectionType::QueuedConnection);
   button_bar.layout()->addWidget(&close);
   window_layout.addWidget(&button_bar, 0, Qt::AlignmentFlag::AlignRight);
 
