@@ -88,7 +88,8 @@ int main(int argc, char *argv[]) {
   encode_area_layout.addWidget(&decode_table_widget);
 
   QWidget button_bar(&encode_area);
-  button_bar.setLayout(new QHBoxLayout);
+  QHBoxLayout button_bar_layout;
+  button_bar.setLayout(&button_bar_layout);
   QPushButton about(QObject::tr("About"), &button_bar);
   about.setToolTip(QObject::tr("About Cyrillic Encoder"));
   QObject::connect(&about, &QPushButton::clicked, &app, [&]() {
