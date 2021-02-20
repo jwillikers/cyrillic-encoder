@@ -66,8 +66,6 @@ This project has been tested with the {cpp} compilers GCC 10 and Clang 12 on htt
 
 . Install a newer version of CMake.
 .. Download the latest version.
-+
---
 x86_64::
 +
 [source,sh]
@@ -81,7 +79,6 @@ aarch64::
 ----
 ➜ wget -LP ~/Downloads/ https://github.com/Kitware/CMake/releases/download/v3.19.5/cmake-3.19.5-Linux-aarch64.sh
 ----
---
 
 .. Make the installer executable.
 +
@@ -117,7 +114,7 @@ aarch64::
 ➜ rm ~/Downloads/cmake-*.sh
 ----
 
-=== Clang 12
+=== Clang
 
 LLVM provides Clang 12 for Ubuntu 18.04.
 To install Clang 12 and related tooling, follow these steps.
@@ -194,13 +191,7 @@ Clang::
 --
 
 . Configure the build for either debug or release mode.
-+
---
 Release::
-+
---
-Configure a release build in the aptly named _build_ directory like so.
-
 GCC:::
 +
 [source,sh]
@@ -236,13 +227,8 @@ Clang:::
   -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-12 \
   -B build -S .
 ----
---
 
 Debug::
-+
---
-To build in debug mode, set the build type appropriately, and enable `-gsplit-dwarf` and a couple of sanitizers while you're at it.
-
 GCC:::
 +
 [source,sh]
@@ -282,8 +268,6 @@ Clang:::
   -DUSE_SANITIZER="Address;Undefined" \
   -B build -S .
 ----
---
---
 
 . Build the project with CMake.
 +
