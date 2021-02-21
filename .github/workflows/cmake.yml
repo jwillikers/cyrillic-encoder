@@ -59,13 +59,6 @@ jobs:
       - name: Install Qt
         run: sudo apt -y install qt5-default
 
-      - name: Install GCC 10
-        if: startsWith(matrix.config.name, 'Ubuntu 18.04 GCC 10')
-        shell: bash
-        run: |
-          sudo add-apt-repository -uy ppa:ubuntu-toolchain-r/test
-          sudo apt -y install gcc-10
-
       - name: Install Clang Compiler and Tools
         if: startsWith(matrix.config.name, 'Ubuntu 18.04')
         run: |
