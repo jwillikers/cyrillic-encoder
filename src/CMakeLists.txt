@@ -63,3 +63,6 @@ if(TEST_CYRILLIC_ENCODER OR CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
   set_tests_properties(cyrillic-encoder-encode-test
                        PROPERTIES LABELS "cyrillic-encoder")
 endif()
+
+include(GNUInstallDirs)
+install(TARGETS cyrillic-encoder)

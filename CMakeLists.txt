@@ -8,7 +8,6 @@ project(
   HOMEPAGE_URL https://github.com/jwillikers/cyrillic-encoder
   LANGUAGES CXX)
 
-include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
 include(CTest)
 include(FetchContent)
 

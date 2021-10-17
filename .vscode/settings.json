@@ -1,0 +1,20 @@
+{
+    "cSpell.words": [
+        "adoc",
+        "ccache",
+        "cmake",
+        "cmakelang",
+        "ctest",
+        "devel",
+        "ifdef",
+        "ifndef",
+        "INTERPROCEDURAL",
+        "libasan",
+        "libcxx",
+        "libcxxabi",
+        "libglvnd",
+        "liblsan",
+        "libtsan",
+        "libubsan"
+    ]
+}

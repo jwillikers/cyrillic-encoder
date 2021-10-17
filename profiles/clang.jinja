@@ -1,0 +1,9 @@
+[settings]
+os=Linux
+arch={{ "armv8" if platform.machine() == "aarch64" else platform.machine() }}
+compiler=clang
+compiler.version=13
+compiler.libcxx=libc++
+compiler.cppstd=17
+build_type=Debug
+
