@@ -13,8 +13,9 @@ class CyrillicEncoder(ConanFile):
     default_options = {
         "boost:i18n_backend": "icu",
         "boost:without_stacktrace": True,
+        "qt:qtwayland": True,
     }
-    scm = {"type": "git", "url": "auto", "revision": "auto" }
+    scm = {"type": "git", "url": "auto", "revision": "auto", }
     _cmake = None
 
     def configure_cmake(self):
