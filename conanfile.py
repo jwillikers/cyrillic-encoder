@@ -1,6 +1,7 @@
 from conans import ConanFile, CMake
 import os
 
+
 class CyrillicEncoder(ConanFile):
     name = "Cyrillic Encoder"
     license = "GPLv3"
