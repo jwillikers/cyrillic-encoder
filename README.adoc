@@ -35,7 +35,9 @@ These instructions are for Fedora 35.
 +
 [source,sh]
 ----
-sudo dnf -y install ccache clang clang-tools-extra cmake gcc-c++ git libasan libasan-static libcxx-devel libcxxabi-devel libglvnd-devel liblsan liblsan-static libtsan libtsan-static libubsan libubsan-static lld llvm llvm-static ninja-build perl-FindBin python3 python3-pip
+sudo dnf -y install ccache clang clang-tools-extra cmake gcc-c++ git libasan libasan-static libcxx-devel libcxxabi-devel libglvnd-devel liblsan liblsan-static libtsan libtsan-static libubsan libubsan-static lld llvm llvm-static ninja-build perl-FindBin python3 python3-pip libXScrnSaver-devel libXaw-devel libXcomposite-devel libXcursor-devel libXdamage-devel libXdmcp-devel libXft-devel libXinerama-devel libXrandr-devel lib
+Xres-devel libXtst-devel libXv-devel libXvMC-devel libXxf86vm-devel libfontenc-devel libxkbfile-devel xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel xk
+eyboard-config-devel xorg-x11-xtrans-devel
 ----
 
 . On `x86_64`, install the Perl lib module.
