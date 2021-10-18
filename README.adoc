@@ -28,7 +28,7 @@ endif::[]
 
 == Getting Started
 
-This section describes how to setup the build environment required by the project.
+This section describes how to set up the build environment required by the project.
 These instructions are for Fedora 35.
 
 . Install the necessary system packages.
