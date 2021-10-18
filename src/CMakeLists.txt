@@ -26,7 +26,7 @@ target_compile_options(
 target_link_libraries(cyrillic-encoder-encode PRIVATE Boost::boost)
 
 find_package(Microsoft.GSL)
-find_package(Qt5 5.9 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt5 5.15 REQUIRED COMPONENTS Core Widgets)
 
 add_executable(cyrillic-encoder)
 
