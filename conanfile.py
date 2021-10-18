@@ -3,7 +3,7 @@ import os
 
 
 class CyrillicEncoder(ConanFile):
-    name = "Cyrillic Encoder"
+    name = "cyrillic-encoder"
     license = "GPLv3"
     url = "https://github.com/jwillikers/cyrillic-encoder"
     description = " A demo Qt application for encoding alphanumeric characters as arbitrary Cyrillic symbols"
