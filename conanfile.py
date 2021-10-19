@@ -22,7 +22,6 @@ class CyrillicEncoder(ConanFile):
         if self._cmake is not None:
             return self._cmake
         self._cmake = CMake(self)
-        self._cmake.definitions["CMAKE_TOOLCHAIN_FILE"] = "conan_toolchain.cmake"
         self._cmake.configure()
         return self._cmake
 
