@@ -85,9 +85,7 @@ cd cyrillic-encoder
 ----
 
 . Before running CMake, install the necessary dependencies with Conan, using the necessary compiler profile.
-+
---
-GCC::
+GCC:::
 +
 [source,sh]
 ----
@@ -98,8 +96,8 @@ conan install . \
   --profile:build=profiles/gcc.jinja
 ----
 
-Clang::
-+
+Clang:::
+
 [source,sh]
 ----
 conan install . \
@@ -108,9 +106,17 @@ conan install . \
   --profile:host=profiles/clang.jinja \
   --profile:build=profiles/clang.jinja
 ----
---
 
-. Configure the build.
+. Configure and build.
+Conan:::
++
+[source,sh]
+----
+conan build . --build-folder=cmake-build-debug
+----
+
+CMake:::
+... Configure.
 +
 [source,sh]
 ----
@@ -129,7 +135,7 @@ cmake \
   -B cmake-build-debug -S .
 ----
 
-. Build the project with CMake.
+... Build.
 +
 [source,sh]
 ----
@@ -212,7 +218,6 @@ Several of these projects are enumerated below.
 * https://www.qt.io/[Qt]
 * https://rouge.jneen.net/[Rouge]
 * https://www.ruby-lang.org/en/[Ruby]
-* https://ubuntu.com/[Ubuntu]
 
 == Code of Conduct
 
