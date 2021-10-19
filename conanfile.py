@@ -34,6 +34,8 @@ class CyrillicEncoder(ConanFile):
         cmake.install()
 
     def package_info(self):
+        self.cpp_info.libs = []
+        self.cpp_info.includedirs = []
         self.env_info.PATH = os.path.join(self.package_folder, "bin")
 
 

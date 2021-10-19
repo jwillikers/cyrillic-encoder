@@ -34,7 +34,7 @@ static constexpr std::array<std::pair<char, std::string_view>, num_alphanumeric>
 // Encode the given character according to the conversion table.
 // If the character is not in the table, an empty string view is returned.
 // Currently, the conversion table must be sorted by key.
-constexpr std::string_view encode_char(
+/* constexpr */ std::string_view encode_char(
     char c,
     std::array<std::pair<char, std::string_view>, num_alphanumeric> const
         &conversion_table = sample_conversion_table) {
