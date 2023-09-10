@@ -31,7 +31,7 @@ jobs:
             generator: "Ninja",
             ld: "lld",
             profile: "profiles/gcc/11/release.jinja",
-            build_profile: "profiles/gcc/11/release.jinja"
+            build_profile: "profiles/gcc/11/release.jinja",
           }
           - {
             name: "Ubuntu 22.04 Clang 14 Release",
@@ -43,7 +43,7 @@ jobs:
             generator: "Ninja",
             ld: "lld",
             profile: "profiles/clang/14/release.jinja",
-            build_profile: "profiles/clang/14/release.jinja"
+            build_profile: "profiles/clang/14/release.jinja",
           }
 
     steps:
@@ -57,7 +57,7 @@ jobs:
           path: |
             ${{ env.CONAN_USER_HOME }}
             ~/.cache/pip
-          key: ${{ runner.os }}-${{ matrix.config.cc }}-${{ matrix.config.build_type }}-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('cmake/Conan.cmake') }}
+          key: ${{ runner.os }}-${{ matrix.config.cc }}-${{ matrix.config.build_type }}
 
       - name: Install system packages
         run: |
@@ -89,8 +89,7 @@ jobs:
         # We need to source the profile file to make sure conan is in PATH
         run: |
           . ~/.profile
-          build_type=$(conan profile get ${{ matrix.config.profile }} settings.build_type)
-          compiler=$(conan profile get ${{ matrix.config.profile }} settings.compiler)
+          build_type=$(conan profile get settings.build_type ${{ matrix.config.profile }})
           preset=$(echo "$build_type" | awk '{print tolower($0)}')
           bash -c ". $build_directory/generators/conanbuild.sh && cmake --preset $preset \
             -DCMAKE_UNITY_BUILD=yes \
@@ -106,7 +105,7 @@ jobs:
         # Execute the build. You can specify a specific target with "--target <NAME>"
         run: |
           . ~/.profile
-          build_type=$(conan profile get ${{ matrix.config.profile }} settings.build_type)
+          build_type=$(conan profile get settings.build_type ${{ matrix.config.profile }})
           build_directory="$GITHUB_WORKSPACE/build/$build_type"
           preset=$(echo "$build_type" | awk '{print tolower($0)}')
           bash -c ". $build_directory/generators/conanbuild.sh && cmake --build --preset $preset"
@@ -115,7 +114,7 @@ jobs:
         shell: bash
         run: |
           . ~/.profile
-          build_type=$(conan profile get ${{ matrix.config.profile }} settings.build_type)
+          build_type=$(conan profile get settings.build_type ${{ matrix.config.profile }})
           build_directory="$GITHUB_WORKSPACE/build/$build_type"
           preset=$(echo "$build_type" | awk '{print tolower($0)}')
           bash -c ". $build_directory/generators/conanbuild.sh && cmake --build --preset $preset --target check-format"
@@ -126,7 +125,7 @@ jobs:
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: |
           . ~/.profile
-          build_type=$(conan profile get ${{ matrix.config.profile }} settings.build_type)
+          build_type=$(conan profile get settings.build_type ${{ matrix.config.profile }})
           build_directory="$GITHUB_WORKSPACE/build/$build_type"
           preset=$(echo "$build_type" | awk '{print tolower($0)}')
           bash -c ". $build_directory/generators/conanbuild.sh && . $build_directory/generators/conanrun.sh && ctest --output-on-failure --preset $preset"
