@@ -8,28 +8,11 @@
 #include <QPushButton>
 #include <QTableWidget>
 #include <QTextEdit>
-#include <QtPlugin>
 #include <QVBoxLayout>
 #include <boost/range/adaptors.hpp>
 #include <cyrillic-encoder/encode.hpp>
+#include <cyrillic-encoder/qt_plugin_imports.h>
 #include <gsl/gsl>
-
-Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
-
-Q_IMPORT_PLUGIN(QWaylandBradientDecorationPlugin)
-
-// qwayland-egl
-Q_IMPORT_PLUGIN(DrmEglServerBufferPlugin)
-Q_IMPORT_PLUGIN(ShmServerBufferPlugin)
-Q_IMPORT_PLUGIN(QWaylandEglClientBufferPlugin)
-Q_IMPORT_PLUGIN(QWaylandEglPlatformIntegrationPlugin)
-
-// qwayland
-Q_IMPORT_PLUGIN(QWaylandFullScreenShellV1IntegrationPlugin)
-Q_IMPORT_PLUGIN(QWaylandQtShellIntegrationPlugin)
-Q_IMPORT_PLUGIN(QWaylandWlShellIntegrationPlugin)
-Q_IMPORT_PLUGIN(QWaylandXdgShellIntegrationPlugin)
-Q_IMPORT_PLUGIN(QWaylandIntegrationPlugin)
 
 int main(int argc, char *argv[]) {
   QApplication app(argc, argv);

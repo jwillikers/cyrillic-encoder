@@ -1,0 +1,8 @@
+[settings]
+os=Linux
+arch={{ "armv8" if platform.machine() == "aarch64" else platform.machine() }}
+compiler=clang
+compiler.version=14
+compiler.libcxx=libc++
+compiler.cppstd=20
+build_type=RelWithDebInfo

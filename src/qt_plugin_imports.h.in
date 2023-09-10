@@ -1,0 +1,3 @@
+#pragma once
+
+@_qt_plugin_imports@

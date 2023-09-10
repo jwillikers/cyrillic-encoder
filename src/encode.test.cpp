@@ -36,11 +36,11 @@ int main() {
       expect(std::empty(cyr_enc::encode_char(input)));
     };
 
-//    "should_encode_character_at_compile_time"_test = [] {
-//      static constexpr char input{'V'};
-//      static constexpr std::string_view encoded{"О"};
-//      expect(constant<encoded.compare(cyr_enc::encode_char(input)) == 0>);
-//    };
+    //    "should_encode_character_at_compile_time"_test = [] {
+    //      static constexpr char input{'V'};
+    //      static constexpr std::string_view encoded{"О"};
+    //      expect(constant<encoded.compare(cyr_enc::encode_char(input)) == 0>);
+    //    };
   };
 
   [[maybe_unused]] suite const encode_string = [] {

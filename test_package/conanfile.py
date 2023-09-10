@@ -13,4 +13,5 @@ class TestPackageConan(ConanFile):
         self.test_requires(self.tested_reference_str)
 
     def test(self):
-        self.run("cyrillic-encoder --version")
+        if can_run(self):
+            self.run("cyrillic-encoder --version")

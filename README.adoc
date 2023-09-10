@@ -29,43 +29,81 @@ endif::[]
 == Getting Started
 
 This section describes how to set up the build environment required by the project.
-These instructions are for Fedora 35.
+These instructions are for Fedora 38.
 
 . Install the necessary system packages.
 +
 [,sh]
 ----
-sudo dnf -y install ccache clang clang-tools-extra cmake gcc-c++ git libasan libasan-static libcxx-devel libcxxabi-devel libglvnd-devel liblsan liblsan-static libtsan libtsan-static libubsan libubsan-static lld llvm llvm-static ninja-build perl-Digest-SHA perl-FindBin perl-IPC-Cmd pre-commit python3 python3-pip libXScrnSaver-devel libXaw-devel libXcomposite-devel libXcursor-devel libXdamage-devel libXdmcp-devel libXft-devel libXinerama-devel libXrandr-devel libXres-devel libXtst-devel libXv-devel libXvMC-devel libXxf86vm-devel libfontenc-devel libuuid-devel libxkbfile-devel xcb-cursor-util-devel xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel xkeyboard-config-devel xorg-x11-xtrans-devel
+sudo dnf -y install ccache clang clang-tools-extra cmake gcc-c++ git just libasan libasan-static libcxx-devel libcxxabi-devel libglvnd-devel liblsan liblsan-static libtsan libtsan-static libubsan libubsan-static lld llvm llvm-static ninja-build perl-Digest-SHA perl-FindBin perl-IPC-Cmd pipx pre-commit pylint python3 python3-pip libXScrnSaver-devel libXaw-devel libXcomposite-devel libXcursor-devel libXdamage-devel libXdmcp-devel libXft-devel libXinerama-devel libXrandr-devel libXres-devel libXtst-devel libXv-devel libXvMC-devel libXxf86vm-devel libfontenc-devel libuuid-devel libxkbfile-devel xcb-cursor-util-devel xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel xkeyboard-config-devel xorg-x11-xtrans-devel
 ----
 
-. On `x86_64`, install the Perl lib module.
+. Install cmakelang with pipx.
 +
 [,sh]
 ----
-sudo dnf -y install perl-lib
+python3 -m pipx install cmakelang[YAML]
 ----
 
-. Install a few necessary Python build tools.
+. Place `~/.local/bin` in your `PATH`.
 +
---
 [,sh]
 ----
-python3 -m pip install --user cmakelang[YAML] conan~=1.60
+python3 -m pipx ensurepath
 ----
 
-[NOTE]
-====
-`~/.local/bin` will need to be on your `PATH`.
-====
+. Install Conan version 1.
++
+[,sh]
+----
+python3 -m pip install --user conan~=1
+----
+
+. Configure the default build and host profiles for Conan.
+
+.. Create the Conan profiles directory.
++
+[,sh]
+----
+mkdir -p ~/.conan/profiles/{clang,gcc}
+----
+
+.. Create some profiles.
+The following profiles are for Fedora 38's default versions of GCC and Clang.
++
 --
+.~/.conan/profiles/gcc/13/relwithdebinfo.jinja
+[,ini]
+----
+include::profiles/gcc/13/relwithdebinfo.jinja[]
+----
+
+.~/.conan/profiles/gcc/13/release.jinja
+[,ini]
+----
+include::profiles/gcc/13/release.jinja[]
+----
+--
+
+.. Configure the default Conan profiles and potentially some other Conan options.
++
+.~/.conan/global.conf
+[,ini]
+----
+core:default_build_profile = gcc/13/release.jinja
+core:default_profile = gcc/13/relwithdebinfo.jinja
+
+tools.cmake.cmaketoolchain:generator = Ninja
+tools.env.virtualenv:auto_use = True
+----
 
 == Build
 
 {cpp} dependencies are managed with Conan.
 When using a single configuration generator with CMake, set the appropriate build type when configuring the build.
-Likely, this build type will be either _Debug_ or _Release_, both of which are enumerated below.
+Likely, this build type will be _Debug_, _RelWithDebInfo_, or _Release_.
 These examples also enable several helpful options to improve performance of the build and the resulting binaries.
-These examples assume you are in the top-level directory of the project and using a build directory named `build`.
+These examples assume you are in the top-level directory of the project.
 
 . First, clone the source code of this repository locally.
 +
@@ -81,30 +119,14 @@ git clone https://github.com/jwillikers/cyrillic-encoder.git
 cd cyrillic-encoder
 ----
 
-. Before running CMake, install the necessary dependencies with Conan, using the necessary compiler profile.
-GCC:::
+. Before running CMake, install the necessary dependencies with Conan, using the default Conan profiles.
 +
 [,sh]
 ----
-conan install . \
-  --build missing \
-  --profile:build profiles/gcc/release.jinja \
-  --profile:host profiles/gcc/relwithdebinfo.jinja \
-  --update
+conan install . --build outdated --build cascade --update
 ----
 
-Clang:::
-
-[,sh]
-----
-conan install . \
-  --build missing \
-  --profile:build profiles/clang/release.jinja \
-  --profile:host profiles/clang/relwithdebinfo.jinja \
-  --update
-----
-
-. Configure.
+. Configure CMake.
 +
 [,sh]
 ----
@@ -129,6 +151,22 @@ cmake \
 bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake --build --preset relwithdebinfo'
 ----
 
+. Execute the tests with CTest.
+Unit tests use https://github.com/boost-ext/ut[[Boost::ext\].μt] and are written in {cpp}.
+The unit tests can be run with https://cmake.org/cmake/help/latest/module/CTest.html[CTest].
++
+[,sh]
+----
+bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && . build/RelWithDebInfo/generators/conanrun.sh && ctest --output-on-failure --preset relwithdebinfo'
+----
+
+. Run.
++
+[,sh]
+----
+bash -c '. build/RelWithDebInfo/generators/conanrun.sh && build/RelWithDebInfo/src/cyrillic-encoder'
+----
+
 === Google Sanitizers
 
 Support for Google Sanitizers is provided by the https://github.com/StableCoder/cmake-scripts[cmake-scripts] project.
@@ -141,25 +179,6 @@ Use the Address and Undefined Behavior sanitizers like so.
 bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake -DUSE_SANITIZER=Address;Undefined --preset relwithdebinfo'
 ----
 
-== Test
-
-Unit tests use https://github.com/boost-ext/ut[[Boost::ext\].μt] and are written in {cpp}.
-The unit tests can be run with https://cmake.org/cmake/help/latest/module/CTest.html[CTest].
-
-. Run the tests by executing the `ctest` executable.
-+
-[,sh]
-----
-bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && . build/RelWithDebInfo/generators/conanrun.sh && ctest --output-on-failure --preset relwithdebinfo'
-----
-
-== Run
-
-[,sh]
-----
-bash -c '. build/RelWithDebInfo/generators/conanrun.sh && build/RelWithDebInfo/src/cyrillic-encoder'
-----
-
 == Format
 
 The https://clang.llvm.org/docs/ClangFormat.html[clang-format] and https://cmake-format.readthedocs.io/en/latest/cmake-format.html[cmake-format] tools are used to format the source code files.
@@ -169,14 +188,14 @@ Format the source files by building the CMake target `fix-format`.
 
 [,sh]
 ----
-bash -c '. build/x86_64-clang/Debug/generators/conanbuild.sh && cmake --build  --preset x86_64-clang-debug --target fix-format'
+bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake --build  --preset relwithdebinfo --target fix-format'
 ----
 
 == Todo
 
+. Add justfile.
 . Add support for building with Nix as an alternative package manager.
 . Flatpak the application.
-. Add justfile.
 
 == Contributing
 

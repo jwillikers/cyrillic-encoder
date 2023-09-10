@@ -22,6 +22,7 @@ if(NOT cmake-scripts_POPULATED)
 endif()
 
 include(sanitizers)
+include(tools)
 
 set(FORMAT_CHECK_CMAKE
     yes
