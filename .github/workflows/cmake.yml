@@ -68,7 +68,7 @@ jobs:
         shell: bash
         run: |
           python3 -m pip install --upgrade pip setuptools
-          python3 -m pibionicp install conan~=1.60
+          python3 -m pip install conan~=1.60
           . ~/.profile
 
       - name: Install cmakelang
@@ -76,14 +76,13 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip setuptools
           python3 -m pip install cmakelang[YAML]
-          . ~/.profile
 
       - name: Install Conan dependencies
         shell: bash
         # We need to source the profile file to make sure conan is in PATH
         run: |
           . ~/.profile
-          conan install "$GITHUB_WORKSPACE" --build missing --profile=profiles/${{ matrix.config.cc }}
+          conan install "$GITHUB_WORKSPACE" --build missing --profile profiles/${{ matrix.config.cc }}/relwithdebinfo.jinja
 
       - name: Configure CMake
         # Use a bash shell so we can use the same syntax for environment variable
@@ -92,11 +91,9 @@ jobs:
         # We need to source the profile file to make sure conan is in PATH
         run: |
           . ~/.profile
-          arch=$(conan profile get "profiles/${{ matrix.config.cc }}/release.jinja" settings.arch)
-          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.build_type)
-          compiler=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.compiler)
-          build_directory="$GITHUB_WORKSPACE/build/$arch-$compiler/$build_type"
-          preset=$(echo "$arch-$compiler-$build_type" | awk '{print tolower($0)}')
+          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}/relwithdebinfo.jinja" settings.build_type)
+          compiler=$(conan profile get "profiles/${{ matrix.config.cc }}/relwithdebinfo.jinja" settings.compiler)
+          preset=$(echo "$build_type" | awk '{print tolower($0)}')
           . "$build_directory/generators/conanbuild.sh" && \
           cmake \
             --preset "$preset" \
@@ -116,11 +113,9 @@ jobs:
         # Execute the build. You can specify a specific target with "--target <NAME>"
         run: |
           . ~/.profile
-          arch=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.arch)
-          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.build_type)
-          compiler=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.compiler)
-          build_directory="$GITHUB_WORKSPACE/build/$arch-$compiler/$build_type"
-          preset=$(echo "$arch-$compiler-$build_type" | awk '{print tolower($0)}')
+          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}/relwithdebinfo.jinja" settings.build_type)
+          build_directory="$GITHUB_WORKSPACE/build/$build_type"
+          preset=$(echo "$build_type" | awk '{print tolower($0)}')
           . "$build_directory/generators/conanbuild.sh" && \
           cmake --build --preset "$preset"
 
@@ -128,11 +123,9 @@ jobs:
         shell: bash
         run: |
           . ~/.profile
-          arch=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.arch)
-          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.build_type)
-          compiler=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.compiler)
-          build_directory="$GITHUB_WORKSPACE/build/$arch-$compiler/$build_type"
-          preset=$(echo "$arch-$compiler-$build_type" | awk '{print tolower($0)}')
+          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}/relwithdebinfo.jinja" settings.build_type)
+          build_directory="$GITHUB_WORKSPACE/build/$build_type"
+          preset=$(echo "$build_type" | awk '{print tolower($0)}')
           . "$build_directory/generators/conanbuild.sh" && \
           cmake --build --preset "$preset" --target check-format
 
@@ -142,11 +135,9 @@ jobs:
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: |
           . ~/.profile
-          arch=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.arch)
-          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.build_type)
-          compiler=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.compiler)
-          build_directory="$GITHUB_WORKSPACE/build/$arch-$compiler/$build_type"
-          preset=$(echo "$arch-$compiler-$build_type" | awk '{print tolower($0)}')
+          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}/relwithdebinfo.jinja" settings.build_type)
+          build_directory="$GITHUB_WORKSPACE/build//$build_type"
+          preset=$(echo "$build_type" | awk '{print tolower($0)}')
           . "$build_directory/generators/conanbuild.sh" && \
           . "$build_directory/generators/conanrun.sh" && \
           ctest --output-on-failure --preset "$preset"
