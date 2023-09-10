@@ -22,27 +22,27 @@ jobs:
       matrix:
         config:
           - {
-            name: "Ubuntu 22.04 GCC 11 RelWithDebInfo",
+            name: "Ubuntu 22.04 GCC 11 Release",
             os: ubuntu-22.04,
-            build_type: "RelWithDebInfo",
+            build_type: "Release",
             compiler_version: "11",
             cc: "gcc",
             cxx: "g++",
             generator: "Ninja",
             ld: "lld",
-            profile: "profiles/gcc/11/relwithdebinfo.jinja",
+            profile: "profiles/gcc/11/release.jinja",
             build_profile: "profiles/gcc/11/release.jinja"
           }
           - {
-            name: "Ubuntu 22.04 Clang 14 RelWithDebInfo",
+            name: "Ubuntu 22.04 Clang 14 Release",
             os: ubuntu-22.04,
-            build_type: "RelWithDebInfo",
+            build_type: "Release",
             compiler_version: "14",
             cc: "clang",
             cxx: "clang++",
             generator: "Ninja",
             ld: "lld",
-            profile: "profiles/clang/14/relwithdebinfo.jinja",
+            profile: "profiles/clang/14/release.jinja",
             build_profile: "profiles/clang/14/release.jinja"
           }
 
