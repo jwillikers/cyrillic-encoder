@@ -7,7 +7,7 @@
 int main() {
   using namespace boost::ut;
 
-  [[maybe_unused]] suite const encode_char = [] {
+  [[maybe_unused]] suite static const encode_char = [] {
     "should_return_an_empty_string_given_null"_test = [] {
       static constexpr char input{'\0'};
       expect(std::empty(cyr_enc::encode_char(input)));
@@ -43,7 +43,7 @@ int main() {
     //    };
   };
 
-  [[maybe_unused]] suite const encode_string = [] {
+  [[maybe_unused]] suite static const encode_string = [] {
     "should_return_an_empty_string_given_empty_input"_test = [] {
       expect(std::empty(cyr_enc::encode_string(std::string_view{})));
     };
@@ -86,7 +86,7 @@ int main() {
     };
   };
 
-  [[maybe_unused]] suite const sample_table = [] {
+  [[maybe_unused]] suite static const sample_table = [] {
     "should_contain_unique_keys"_test = [] {
       expect(std::size(cyr_enc::sample_conversion_table) ==
              boost::size(cyr_enc::sample_conversion_table |
