@@ -22,22 +22,22 @@ jobs:
       matrix:
         config:
         - {
-          name: "Ubuntu 18.04 GCC 10 Release",
-          os: ubuntu-18.04,
+          name: "Ubuntu 22.04 GCC 11 Release",
+          os: ubuntu-22.04,
           build_type: "Release",
-          cc: "gcc-10",
-          cxx: "g++-10",
+          cc: "gcc-13",
+          cxx: "g++-13",
           generator: "Ninja",
-          ld: "gold"
+          ld: "lld"
         }
         - {
-          name: "Ubuntu 18.04 Clang 12 Release",
-          os: ubuntu-18.04,
+          name: "Ubuntu 22.04 Clang 16 Release",
+          os: ubuntu-22.04,
           build_type: "Release",
-          cc: "clang-12",
-          cxx: "clang++-12",
+          cc: "clang-16",
+          cxx: "clang++-16",
           generator: "Ninja",
-          ld: "lld-12"
+          ld: "lld-16"
         }
 
     steps:
@@ -53,61 +53,53 @@ jobs:
             ~/.cache/pip
           key: ${{ runner.os }}-${{ matrix.config.cc }}-${{ matrix.config.build_type }}-${{ hashFiles('CMakeLists.txt') }}-${{ hashFiles('cmake/Conan.cmake') }}
 
-      - name: Install Ninja
-        run: sudo apt -y install ninja-build
-
-      - name: Install Qt
-        run: sudo apt -y install qt5-default
+      - name: Install Ninja and lld
+        run: sudo apt-get -y install ninja-build lld
 
       - name: Install Clang Compiler and Tools
-        if: startsWith(matrix.config.name, 'Ubuntu 18.04')
+        if: startsWith(matrix.config.name, 'Ubuntu 22.04')
         run: |
-          echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-12 main" | sudo tee /etc/apt/sources.list.d/llvm.list
+          echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main" | sudo tee /etc/apt/sources.list.d/llvm.list
           wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/llvm.key.asc > /dev/null
-          sudo apt update
-          sudo apt -y install clang-12 clang-format-12 clang-tidy-12 lld-12
-
-      - name: Create Build Environment
-        # Some projects don't allow in-source building, so create a separate build directory
-        # We'll use this as our working directory for all subsequent commands
-        run: cmake -E make_directory ${{github.workspace}}/build
+          sudo apt-get update
+          sudo apt-get -y install clang-16 clang-format-16 clang-tidy-16 lld-16
 
       - name: Install conan
         shell: bash
         run: |
           python3 -m pip install --upgrade pip setuptools
-          python3 -m pip install conan
-          source ~/.profile
+          python3 -m pibionicp install conan~=1.60
+          . ~/.profile
 
       - name: Install cmakelang
         shell: bash
         run: |
           python3 -m pip install --upgrade pip setuptools
-          python3 -m pip install cmakelang
-          source ~/.profile
+          python3 -m pip install cmakelang[YAML]
+          . ~/.profile
 
       - name: Install Conan dependencies
         shell: bash
         # We need to source the profile file to make sure conan is in PATH
         run: |
-          source ~/.profile
-          conan install $GITHUB_WORKSPACE --install-folder $GITHUB_WORKSPACE/build --build=missing --profile=profiles/${{ matrix.config.cc }}
+          . ~/.profile
+          conan install "$GITHUB_WORKSPACE" --build missing --profile=profiles/${{ matrix.config.cc }}
 
       - name: Configure CMake
         # Use a bash shell so we can use the same syntax for environment variable
         # access regardless of the host operating system
         shell: bash
-        working-directory: ${{github.workspace}}/build
-        # Note the current convention is to use the -S and -B options here to specify source
-        # and build directories, but this is only available with CMake 3.13 and higher.
-        # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-        #
         # We need to source the profile file to make sure conan is in PATH
         run: |
-          source ~/.profile
+          . ~/.profile
+          arch=$(conan profile get "profiles/${{ matrix.config.cc }}/release.jinja" settings.arch)
+          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.build_type)
+          compiler=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.compiler)
+          build_directory="$GITHUB_WORKSPACE/build/$arch-$compiler/$build_type"
+          preset=$(echo "$arch-$compiler-$build_type" | awk '{print tolower($0)}')
+          . "$build_directory/generators/conanbuild.sh" && \
           cmake \
-            $GITHUB_WORKSPACE \
-            -G"${{ matrix.config.generator }}" \
+            --preset "$preset" \
             -DCMAKE_C_COMPILER=${{ matrix.config.cc }} \
             -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} \
             -DCMAKE_UNITY_BUILD=yes \
@@ -115,24 +107,46 @@ jobs:
             -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=${{ matrix.config.ld }}" \
             -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=${{ matrix.config.ld }}" \
             -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=yes \
-            -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy-12 \
-            -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-12 \
+            -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy-16 \
+            -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-16 \
             -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }}
 
       - name: Build
-        working-directory: ${{github.workspace}}/build
         shell: bash
-        # Execute the build.  You can specify a specific target with "--target <NAME>"
-        run: cmake --build . --config ${{ matrix.config.build_type }}
+        # Execute the build. You can specify a specific target with "--target <NAME>"
+        run: |
+          . ~/.profile
+          arch=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.arch)
+          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.build_type)
+          compiler=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.compiler)
+          build_directory="$GITHUB_WORKSPACE/build/$arch-$compiler/$build_type"
+          preset=$(echo "$arch-$compiler-$build_type" | awk '{print tolower($0)}')
+          . "$build_directory/generators/conanbuild.sh" && \
+          cmake --build --preset "$preset"
 
       - name: Check Format
-        working-directory: ${{github.workspace}}/build
         shell: bash
-        run: cmake --build . --config ${{ matrix.config.build_type }} --target check-format
+        run: |
+          . ~/.profile
+          arch=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.arch)
+          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.build_type)
+          compiler=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.compiler)
+          build_directory="$GITHUB_WORKSPACE/build/$arch-$compiler/$build_type"
+          preset=$(echo "$arch-$compiler-$build_type" | awk '{print tolower($0)}')
+          . "$build_directory/generators/conanbuild.sh" && \
+          cmake --build --preset "$preset" --target check-format
 
       - name: Test
-        working-directory: ${{github.workspace}}/build
         shell: bash
         # Execute tests defined by the CMake configuration.
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-        run: ctest -C ${{ matrix.config.build_type }}
+        run: |
+          . ~/.profile
+          arch=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.arch)
+          build_type=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.build_type)
+          compiler=$(conan profile get "profiles/${{ matrix.config.cc }}" settings.compiler)
+          build_directory="$GITHUB_WORKSPACE/build/$arch-$compiler/$build_type"
+          preset=$(echo "$arch-$compiler-$build_type" | awk '{print tolower($0)}')
+          . "$build_directory/generators/conanbuild.sh" && \
+          . "$build_directory/generators/conanrun.sh" && \
+          ctest --output-on-failure --preset "$preset"

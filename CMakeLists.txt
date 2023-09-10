@@ -14,7 +14,7 @@ include(FetchContent)
 FetchContent_Declare(
   cmake-scripts
   GIT_REPOSITORY https://github.com/StableCoder/cmake-scripts
-  GIT_TAG 20.11)
+  GIT_TAG 23.06)
 FetchContent_GetProperties(cmake-scripts)
 if(NOT cmake-scripts_POPULATED)
   FetchContent_Populate(cmake-scripts)
@@ -29,7 +29,7 @@ set(FORMAT_CHECK_CMAKE
 FetchContent_Declare(
   format
   GIT_REPOSITORY https://github.com/TheLartians/Format.cmake.git
-  GIT_TAG v1.6)
+  GIT_TAG v1.7.3)
 FetchContent_MakeAvailable(format)
 
 set(USE_CCACHE
@@ -38,7 +38,7 @@ set(USE_CCACHE
 FetchContent_Declare(
   ccache.cmake
   GIT_REPOSITORY https://github.com/TheLartians/Ccache.cmake.git
-  GIT_TAG v1.2.1)
+  GIT_TAG v1.2.4)
 FetchContent_MakeAvailable(ccache.cmake)
 
 set(BUILD_SHARED_LIBS

@@ -8,15 +8,30 @@
 #include <QPushButton>
 #include <QTableWidget>
 #include <QTextEdit>
+#include <QtPlugin>
 #include <QVBoxLayout>
 #include <boost/range/adaptors.hpp>
 #include <cyrillic-encoder/encode.hpp>
 #include <gsl/gsl>
 
-int main(int argc, char *argv[]) {
-  QCoreApplication::setAttribute(
-      Qt::ApplicationAttribute::AA_EnableHighDpiScaling);
+Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
 
+Q_IMPORT_PLUGIN(QWaylandBradientDecorationPlugin)
+
+// qwayland-egl
+Q_IMPORT_PLUGIN(DrmEglServerBufferPlugin)
+Q_IMPORT_PLUGIN(ShmServerBufferPlugin)
+Q_IMPORT_PLUGIN(QWaylandEglClientBufferPlugin)
+Q_IMPORT_PLUGIN(QWaylandEglPlatformIntegrationPlugin)
+
+// qwayland
+Q_IMPORT_PLUGIN(QWaylandFullScreenShellV1IntegrationPlugin)
+Q_IMPORT_PLUGIN(QWaylandQtShellIntegrationPlugin)
+Q_IMPORT_PLUGIN(QWaylandWlShellIntegrationPlugin)
+Q_IMPORT_PLUGIN(QWaylandXdgShellIntegrationPlugin)
+Q_IMPORT_PLUGIN(QWaylandIntegrationPlugin)
+
+int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
   QCoreApplication::setApplicationName(QObject::tr("Cyrillic Encoder"));
   QCoreApplication::setApplicationVersion(QObject::tr("0.0.1"));

@@ -4,10 +4,13 @@
         "ccache",
         "cmake",
         "cmakelang",
+        "conandata",
         "ctest",
         "devel",
+        "Flatpak",
         "ifdef",
         "ifndef",
+        "includedirs",
         "INTERPROCEDURAL",
         "libasan",
         "libcxx",
@@ -15,6 +18,11 @@
         "libglvnd",
         "liblsan",
         "libtsan",
-        "libubsan"
-    ]
+        "libubsan",
+        "qtwayland"
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "python.formatting.provider": "none"
 }

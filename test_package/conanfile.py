@@ -1,7 +1,16 @@
-from conans import ConanFile
+from conan import ConanFile
+from conan.tools.build import can_run
 
 
-class TestPackage(ConanFile):
+class TestPackageConan(ConanFile):
+    settings = "os", "arch", "compiler", "build_type"
+    generators = "VirtualBuildEnv"
+    test_type = "explicit"
+
+    def build_requirements(self):
+        # self.tool_requires(self.tested_reference_str)
+        # Temporary workaround.
+        self.test_requires(self.tested_reference_str)
 
     def test(self):
-        self.run("cyrillic-encoder --version", run_environment=True)
+        self.run("cyrillic-encoder --version")
