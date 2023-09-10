@@ -108,7 +108,7 @@ conan install . \
 +
 [,sh]
 ----
-. build/RelWithDebInfo/generators/conanbuild.sh && \
+bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && \
 cmake \
   --preset relwithdebinfo \
   -DCMAKE_UNITY_BUILD=yes \
@@ -119,15 +119,14 @@ cmake \
   -DCMAKE_CXX_FLAGS_DEBUG="-gsplit-dwarf" \
   -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
   -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format \
-  -DUSE_SANITIZER="Address;Undefined"
+  -DUSE_SANITIZER="Address;Undefined"'
 ----
 
 . Build.
 +
 [,sh]
 ----
-. build/RelWithDebInfo/generators/conanbuild.sh && \
-cmake --build --preset relwithdebinfo
+bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake --build --preset relwithdebinfo'
 ----
 
 === Google Sanitizers
@@ -170,13 +169,11 @@ Format the source files by building the CMake target `fix-format`.
 
 [,sh]
 ----
-. build/x86_64-clang/Debug/generators/conanbuild.sh && \
-cmake --build  --preset x86_64-clang-debug --target fix-format
+bash -c '. build/x86_64-clang/Debug/generators/conanbuild.sh && cmake --build  --preset x86_64-clang-debug --target fix-format'
 ----
 
 == Todo
 
-. Link Qt statically.
 . Add support for building with Nix as an alternative package manager.
 . Flatpak the application.
 . Add justfile.
