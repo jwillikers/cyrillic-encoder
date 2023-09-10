@@ -98,7 +98,7 @@ jobs:
             -DCMAKE_SHARED_LINKER_FLAGS=\"-fuse-ld=${{ matrix.config.ld }}\" \
             -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=yes \
             -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy-16 \
-            -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-16
+            -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-16"
 
       - name: Build
         shell: bash
