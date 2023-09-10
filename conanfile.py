@@ -26,8 +26,6 @@ class CyrillicEncoder(ConanFile):
 
     def requirements(self):
         self.requires("boost/1.83.0")
-        # Override conflict.
-        self.requires("icu/73.2")
         self.requires("ms-gsl/4.0.0")
         self.requires("qt/6.5.2")
 
