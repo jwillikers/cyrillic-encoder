@@ -130,3 +130,8 @@ jobs:
           build_directory="$GITHUB_WORKSPACE/build/$build_type"
           preset=$(echo "$build_type" | awk '{print tolower($0)}')
           bash -c ". $build_directory/generators/conanbuild.sh && . $build_directory/generators/conanrun.sh && ctest --output-on-failure --preset $preset"
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: cyrillic-encoder
+          path: build/Release/src/cyrillic-encoder
