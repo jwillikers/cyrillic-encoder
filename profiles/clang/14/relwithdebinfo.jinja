@@ -6,3 +6,6 @@ compiler.version=14
 compiler.libcxx=libc++
 compiler.cppstd=20
 build_type=RelWithDebInfo
+
+[conf]
+tools.build:compiler_executables={'asm': 'clang', 'c': 'clang', 'cpp': 'clang++'}
