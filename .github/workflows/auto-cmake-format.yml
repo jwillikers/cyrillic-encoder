@@ -1,0 +1,21 @@
+name: auto-cmake-format
+on: [pull_request]  # yamllint disable-line rule:truthy
+
+jobs:
+  cmake-format:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Format CMake files
+        id: cmake-format
+        uses: PuneetMatharu/cmake-format-lint-action@v1
+        with:
+          args: --in-place
+      - uses: EndBug/add-and-commit@v9
+        with:
+          author_name: CMake Robot
+          author_email: robot@jwillikers.com
+          message: ':art: Committing cmake-format changes'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
