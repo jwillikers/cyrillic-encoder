@@ -43,7 +43,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(ccache.cmake)
 
 set(BUILD_SHARED_LIBS
-    yes
+    no
     CACHE BOOL "")
 set(CMAKE_CXX_EXTENSIONS
     no
