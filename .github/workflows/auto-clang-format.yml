@@ -1,0 +1,22 @@
+name: auto-clang-format
+on: [pull_request]  # yamllint disable-line rule:truthy
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DoozyX/clang-format-lint-action@v0.16
+        with:
+          source: '.'
+          extensions: 'h,cpp,hpp'
+          clangFormatVersion: 14
+          inplace: True  # yamllint disable-line rule:truthy
+      - uses: EndBug/add-and-commit@v9
+        with:
+          author_name: Clang Robot
+          author_email: robot@jwillikers.com
+          message: ':art: Committing clang-format changes'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
