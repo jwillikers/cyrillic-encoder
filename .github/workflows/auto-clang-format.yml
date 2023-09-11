@@ -2,7 +2,7 @@ name: auto-clang-format
 on: [pull_request]  # yamllint disable-line rule:truthy
 
 jobs:
-  build:
+  clang-format:
     runs-on: ubuntu-22.04
 
     steps:
