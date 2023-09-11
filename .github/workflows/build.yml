@@ -132,5 +132,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: cyrillic-encoder
+          name: cyrillic-encoder-${{ matrix.config.cc }}
           path: build/**/src/cyrillic-encoder
