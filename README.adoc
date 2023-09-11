@@ -93,7 +93,7 @@ include::profiles/gcc/13/release.jinja[]
 core:default_build_profile = gcc/13/release.jinja
 core:default_profile = gcc/13/relwithdebinfo.jinja
 
-tools.cmake.cmaketoolchain:generator = Ninja
+tools.cmake.cmaketoolchain:generator = Ninja Multi-Config
 tools.env.virtualenv:auto_use = True
 ----
 
@@ -130,9 +130,9 @@ conan install . --build outdated --build cascade --update
 +
 [,sh]
 ----
-bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && \
+bash -c '. build/generators/conanbuild.sh && \
 cmake \
-  --preset relwithdebinfo \
+  --preset default \
   -DCMAKE_UNITY_BUILD=yes \
   -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld" \
   -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld" \
@@ -148,7 +148,7 @@ cmake \
 +
 [,sh]
 ----
-bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake --build --preset relwithdebinfo'
+bash -c '. build/generators/conanbuild.sh && cmake --build --preset relwithdebinfo'
 ----
 
 . Execute the tests with CTest.
@@ -157,14 +157,14 @@ The unit tests can be run with https://cmake.org/cmake/help/latest/module/CTest.
 +
 [,sh]
 ----
-bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && . build/RelWithDebInfo/generators/conanrun.sh && ctest --output-on-failure --preset relwithdebinfo'
+bash -c '. build/generators/conanbuild.sh && . build/generators/conanrun.sh && ctest --output-on-failure --preset relwithdebinfo'
 ----
 
 . Run.
 +
 [,sh]
 ----
-bash -c '. build/RelWithDebInfo/generators/conanrun.sh && build/RelWithDebInfo/src/cyrillic-encoder'
+bash -c '. build/generators/conanrun.sh && build/src/RelWithDebInfo/cyrillic-encoder'
 ----
 
 === Google Sanitizers
