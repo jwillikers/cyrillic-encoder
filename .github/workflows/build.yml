@@ -94,9 +94,6 @@ jobs:
           preset=$(echo "$build_type" | awk '{print tolower($0)}')
           bash -c ". $build_directory/generators/conanbuild.sh && cmake --preset $preset \
             -DCMAKE_UNITY_BUILD=yes \
-            -DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=${{ matrix.config.ld }}\" \
-            -DCMAKE_MODULE_LINKER_FLAGS=\"-fuse-ld=${{ matrix.config.ld }}\" \
-            -DCMAKE_SHARED_LINKER_FLAGS=\"-fuse-ld=${{ matrix.config.ld }}\" \
             -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
             -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format"
 
