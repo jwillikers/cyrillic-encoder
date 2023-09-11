@@ -89,9 +89,7 @@ jobs:
         # We need to source the profile file to make sure conan is in PATH
         run: |
           . ~/.profile
-          build_type=$(conan profile get settings.build_type ${{ matrix.config.profile }})
-          build_directory="$GITHUB_WORKSPACE/build/$build_type"
-          bash -c ". $build_directory/generators/conanbuild.sh && cmake --preset default \
+          bash -c ". build/generators/conanbuild.sh && cmake --preset default \
             -DCMAKE_UNITY_BUILD=yes \
             -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
             -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format"
@@ -102,9 +100,8 @@ jobs:
         run: |
           . ~/.profile
           build_type=$(conan profile get settings.build_type ${{ matrix.config.profile }})
-          build_directory="$GITHUB_WORKSPACE/build/$build_type"
           preset=$(echo "$build_type" | awk '{print tolower($0)}')
-          bash -c ". $build_directory/generators/conanbuild.sh && cmake --build --preset $preset"
+          bash -c ". build/generators/conanbuild.sh && cmake --build --preset $preset"
 
       - name: Test
         shell: bash
@@ -113,11 +110,10 @@ jobs:
         run: |
           . ~/.profile
           build_type=$(conan profile get settings.build_type ${{ matrix.config.profile }})
-          build_directory="$GITHUB_WORKSPACE/build/$build_type"
           preset=$(echo "$build_type" | awk '{print tolower($0)}')
-          bash -c ". $build_directory/generators/conanbuild.sh && . $build_directory/generators/conanrun.sh && ctest --output-on-failure --preset $preset"
+          bash -c ". build/generators/conanbuild.sh && . build/generators/conanrun.sh && ctest --output-on-failure --preset $preset"
 
       - uses: actions/upload-artifact@v3
         with:
           name: cyrillic-encoder-${{ matrix.config.cc }}
-          path: build/**/src/cyrillic-encoder
+          path: build/src/**/cyrillic-encoder
