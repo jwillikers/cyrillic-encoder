@@ -28,58 +28,25 @@ target_link_libraries(cyrillic-encoder-encode PRIVATE Boost::headers)
 find_package(Microsoft.GSL REQUIRED)
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 
-get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-if(NOT isMultiConfig)
-  set(allowedBuildTypes Debug MinSizeRel Release RelWithDebInfo)
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "${allowedBuildTypes}")
-  if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE
-        RelWithDebInfo
-        CACHE STRING "" FORCE)
-  elseif(NOT CMAKE_BUILD_TYPE IN_LIST allowedBuildTypes)
-    message(FATAL_ERROR "Unknown build type: ${CMAKE_BUILD_TYPE}")
-  endif()
-  string(TOUPPER ${CMAKE_BUILD_TYPE} _BUILD_TYPE_UPPER)
-endif()
+get_target_property(aliased_target Qt6::Core ALIASED_TARGET)
+get_target_property(_qt_core_interface_link_libraries Qt6::Core
+                    INTERFACE_LINK_LIBRARIES)
+string(REGEX MATCH [[CONAN_LIB::qt_Qt6_Core_Qt6Core.*_([A-Za-z]*)]]
+             _qt_core_target ${_qt_core_interface_link_libraries})
+set(_qt_build_type ${CMAKE_MATCH_1})
 
-if(NOT isMultiConfig)
-  if(${_BUILD_TYPE_UPPER} STREQUAL "DEBUG" OR ${_BUILD_TYPE_UPPER} STREQUAL
-                                              "RELWITHDEBINFO")
-    if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-      set(_qt_debug_suffix d)
-    elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-      set(_qt_debug_suffix _debug)
-    endif()
-  endif()
+if(NOT TARGET ${_qt_core_target})
+  message(FATAL_ERROR "Missing Conan Qt target '${_qt_core_target}'")
 endif()
-
-set(_qt_core_target CONAN_LIB::qt_Qt6_Core_Qt6Core${_qt_debug_suffix})
 
 if(TARGET ${_qt_core_target})
-  get_target_property(_qt_core_location ${_qt_core_target} LOCATION)
-  if(NOT _qt_core_location AND NOT isMultiConfig)
-    get_target_property(_qt_core_location ${_qt_core_target}
-                        LOCATION_${_BUILD_TYPE_UPPER})
-  endif()
+  get_target_property(_qt_core_location ${_qt_core_target}
+                      LOCATION_${_qt_build_type})
   if(NOT _qt_core_location)
     message(
       FATAL_ERROR
         "Could not determine the location of the '${_qt_core_target}' library.")
   endif()
-elseif(TARGET ${_qt_core_target}_${_BUILD_TYPE_UPPER})
-  get_target_property(_qt_core_location ${_qt_core_target}_${_BUILD_TYPE_UPPER}
-                      LOCATION_${_BUILD_TYPE_UPPER})
-  if(NOT _qt_core_location)
-    message(
-      FATAL_ERROR
-        "Could not determine the location of the 'CONAN_LIB::qt_Qt6Core_${_BUILD_TYPE_UPPER}' library."
-    )
-  endif()
-else()
-  message(
-    FATAL_ERROR
-      "Missing Conan Qt target. Neither 'CONAN_LIB::qt_Qt6Core' nor 'CONAN_LIB::qt_Qt6Core_${_BUILD_TYPE_UPPER}' exist."
-  )
 endif()
 
 set(_qt_static no)
