@@ -8,4 +8,7 @@ compiler.cppstd=20
 build_type=Debug
 
 [conf]
+tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
 tools.build:compiler_executables={'asm': 'gcc', 'c': 'gcc', 'cpp': 'g++'}
+
+qt/*:tools.cmake.cmaketoolchain:generator=Ninja
