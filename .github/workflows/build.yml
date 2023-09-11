@@ -97,8 +97,8 @@ jobs:
             -DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=${{ matrix.config.ld }}\" \
             -DCMAKE_MODULE_LINKER_FLAGS=\"-fuse-ld=${{ matrix.config.ld }}\" \
             -DCMAKE_SHARED_LINKER_FLAGS=\"-fuse-ld=${{ matrix.config.ld }}\" \
-            -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy-16 \
-            -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format-16"
+            -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
+            -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format"
 
       - name: Build
         shell: bash
