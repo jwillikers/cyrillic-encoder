@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Format CMake files
         id: cmake-format
-        uses: PuneetMatharu/cmake-format-lint-action@v1
+        uses: PuneetMatharu/cmake-format-lint-action@v1.0.4
         with:
           args: --in-place
       - uses: EndBug/add-and-commit@v9
