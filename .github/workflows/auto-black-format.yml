@@ -8,6 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: rickstaa/action-black@v1
+        with:
+          black_args: "."
       - uses: EndBug/add-and-commit@v9
         with:
           author_name: CMake Robot
