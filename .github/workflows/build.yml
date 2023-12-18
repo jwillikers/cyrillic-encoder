@@ -113,7 +113,7 @@ jobs:
           preset=$(echo "$build_type" | awk '{print tolower($0)}')
           bash -c ". build/generators/conanbuild.sh && . build/generators/conanrun.sh && ctest --output-on-failure --preset $preset"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: cyrillic-encoder-${{ matrix.config.cc }}
           path: build/src/**/cyrillic-encoder
