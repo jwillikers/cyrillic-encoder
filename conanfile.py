@@ -30,7 +30,7 @@ class CyrillicEncoder(ConanFile):
         self.requires("qt/6.6.1")
 
     def build_requirements(self):
-        self.test_requires("boost-ext-ut/2.0.0")
+        self.test_requires("boost-ext-ut/2.0.1")
         self.tool_requires("cmake/[~3.28]")
         self.tool_requires("ninja/[~1]")
 
