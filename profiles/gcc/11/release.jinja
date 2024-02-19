@@ -10,5 +10,5 @@ build_type=Release
 [conf]
 tools.cmake.cmaketoolchain:generator=Ninja Multi-Config
 tools.build:compiler_executables={'asm': 'gcc', 'c': 'gcc', 'cpp': 'g++'}
-
+tools.system.package_manager:mode = install
 qt/*:tools.cmake.cmaketoolchain:generator=Ninja

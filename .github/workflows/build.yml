@@ -8,8 +8,7 @@ env:
 
   # Conan cache environment variables
   CONAN_SYSREQUIRES_MODE: enabled
-  CONAN_USER_HOME: "${{ github.workspace }}/conan-cache"
-  CONAN_USER_HOME_SHORT: "${{ github.workspace }}/conan-cache/short"
+  CONAN_HOME: "${{ github.workspace }}/conan-cache"
 
 jobs:
   build:
@@ -24,7 +23,7 @@ jobs:
           - {
             name: "Ubuntu 22.04 GCC 11 Release",
             os: ubuntu-22.04,
-            build_type: "Release",
+            build_type: "release",
             compiler_version: "11",
             cc: "gcc",
             cxx: "g++",
@@ -36,7 +35,7 @@ jobs:
           - {
             name: "Ubuntu 22.04 Clang 14 Release",
             os: ubuntu-22.04,
-            build_type: "Release",
+            build_type: "release",
             compiler_version: "14",
             cc: "clang",
             cxx: "clang++",
@@ -55,14 +54,14 @@ jobs:
           cache-name: cache-conan-modules
         with:
           path: |
-            ${{ env.CONAN_USER_HOME }}
+            ${{ env.CONAN_HOME }}
             ~/.cache/pip
           key: ${{ runner.os }}-${{ matrix.config.cc }}-${{ matrix.config.build_type }}
 
       - name: Install system packages
         run: |
           sudo apt-get update
-          sudo apt-get -y install build-essential clang clang-format clang-tidy cmake g++ gcc git libc++-dev libc++abi-dev lld ninja-build pkgconf python3 python3-pip python3-venv \
+          sudo apt-get --yes install build-essential clang clang-format clang-tidy cmake g++ gcc git libc++-dev libc++abi-dev lld ninja-build pkgconf python3 python3-pip python3-venv \
             libx11-dev libx11-xcb-dev libfontenc-dev libice-dev libsm-dev libxau-dev libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxdmcp-dev libxext-dev \
             libxfixes-dev libxi-dev libxinerama-dev libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxrender-dev libxres-dev libxss-dev libxt-dev libxtst-dev \
             libxv-dev libxvmc-dev libxxf86vm-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev \
@@ -72,7 +71,7 @@ jobs:
         shell: bash
         run: |
           python3 -m pip install --upgrade pip setuptools
-          python3 -m pip install conan~=1.60
+          python3 -m pip install conan~=2.1
           python3 -m pip install cmakelang[YAML]
 
       - name: Install Conan dependencies
@@ -89,7 +88,7 @@ jobs:
         # We need to source the profile file to make sure conan is in PATH
         run: |
           . ~/.profile
-          bash -c ". build/generators/conanbuild.sh && cmake --preset default \
+          bash -c ". build/generators/conanbuild.sh && cmake --preset conan-default \
             -DCMAKE_UNITY_BUILD=yes \
             -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
             -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format"
@@ -99,9 +98,7 @@ jobs:
         # Execute the build. You can specify a specific target with "--target <NAME>"
         run: |
           . ~/.profile
-          build_type=$(conan profile get settings.build_type ${{ matrix.config.profile }})
-          preset=$(echo "$build_type" | awk '{print tolower($0)}')
-          bash -c ". build/generators/conanbuild.sh && cmake --build --preset $preset"
+          bash -c ". build/generators/conanbuild.sh && cmake --build --preset conan-${{ matrix.config.build_type }}"
 
       - name: Test
         shell: bash
@@ -109,9 +106,7 @@ jobs:
         # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
         run: |
           . ~/.profile
-          build_type=$(conan profile get settings.build_type ${{ matrix.config.profile }})
-          preset=$(echo "$build_type" | awk '{print tolower($0)}')
-          bash -c ". build/generators/conanbuild.sh && . build/generators/conanrun.sh && ctest --output-on-failure --preset $preset"
+          bash -c ". build/generators/conanbuild.sh && . build/generators/conanrun.sh && ctest --output-on-failure --preset conan-${{ matrix.config.build_type }}"
 
       - uses: actions/upload-artifact@v3
         with:
