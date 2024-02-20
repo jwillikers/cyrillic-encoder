@@ -376,6 +376,7 @@ if(TEST_CYRILLIC_ENCODER OR CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
             $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>
             $<$<CXX_COMPILER_ID:Clang>:-Wno-c99-extensions>
             $<$<CXX_COMPILER_ID:Clang>:-Wno-comma>
+            $<$<CXX_COMPILER_ID:Clang>:-Wno-ctad-maybe-unsupported>
             $<$<CXX_COMPILER_ID:Clang>:-Wno-global-constructors>
             $<$<CXX_COMPILER_ID:Clang>:-Wno-missing-variable-declarations>
             $<$<CXX_COMPILER_ID:Clang>:-Wno-newline-eof>

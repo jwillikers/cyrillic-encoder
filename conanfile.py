@@ -25,13 +25,15 @@ class CyrillicEncoder(ConanFile):
     }
 
     def requirements(self):
-        self.requires("boost/1.83.0")
+        self.requires("boost/1.84.0")
         self.requires("ms-gsl/4.0.0")
-        self.requires("qt/6.5.2")
+        self.requires("qt/6.6.1")
+        # Override dependency conflict.
+        self.requires("expat/2.6.0", override=True)
 
     def build_requirements(self):
-        self.test_requires("boost-ext-ut/1.1.9")
-        self.tool_requires("cmake/[~3.27]")
+        self.test_requires("boost-ext-ut/2.0.1")
+        self.tool_requires("cmake/[~3.28]")
         self.tool_requires("ninja/[~1]")
 
     def layout(self):

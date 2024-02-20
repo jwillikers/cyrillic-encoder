@@ -8,9 +8,9 @@ class TestPackageConan(ConanFile):
     test_type = "explicit"
 
     def build_requirements(self):
-        # self.tool_requires(self.tested_reference_str)
+        self.tool_requires(self.tested_reference_str)
         # Temporary workaround.
-        self.test_requires(self.tested_reference_str)
+        # self.test_requires(self.tested_reference_str)
 
     def test(self):
         if can_run(self):

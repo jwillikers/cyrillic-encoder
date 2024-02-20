@@ -35,7 +35,7 @@ These instructions are for Fedora 38.
 +
 [,sh]
 ----
-sudo dnf -y install ccache clang clang-tools-extra cmake gcc-c++ git just libasan libasan-static libcxx-devel libcxxabi-devel libglvnd-devel liblsan liblsan-static libtsan libtsan-static libubsan libubsan-static lld llvm llvm-static ninja-build perl-Digest-SHA perl-FindBin perl-IPC-Cmd pipx pre-commit pylint python3 python3-pip libXScrnSaver-devel libXaw-devel libXcomposite-devel libXcursor-devel libXdamage-devel libXdmcp-devel libXft-devel libXinerama-devel libXrandr-devel libXres-devel libXtst-devel libXv-devel libXvMC-devel libXxf86vm-devel libfontenc-devel libuuid-devel libxkbfile-devel xcb-cursor-util-devel xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel xkeyboard-config-devel xorg-x11-xtrans-devel
+sudo dnf --assumeyes install ccache clang clang-tools-extra cmake gcc-c++ git just libasan libasan-static libcxx-devel libcxxabi-devel libglvnd-devel liblsan liblsan-static libtsan libtsan-static libubsan libubsan-static lld llvm llvm-static ninja-build perl-Digest-SHA perl-FindBin perl-IPC-Cmd pipx pre-commit pylint python3 python3-pip libXScrnSaver-devel libXaw-devel libXcomposite-devel libXcursor-devel libXdamage-devel libXdmcp-devel libXft-devel libXinerama-devel libXrandr-devel libXres-devel libXtst-devel libXv-devel libXvMC-devel libXxf86vm-devel libfontenc-devel libuuid-devel libxkbfile-devel xcb-cursor-util-devel xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel xkeyboard-config-devel xorg-x11-xtrans-devel
 ----
 
 . Install cmakelang with pipx.
@@ -52,11 +52,11 @@ python3 -m pipx install cmakelang[YAML]
 python3 -m pipx ensurepath
 ----
 
-. Install Conan version 1.
+. Install Conan.
 +
 [,sh]
 ----
-python3 -m pip install --user conan~=1
+python3 -m pip install --user conan
 ----
 
 . Configure the default build and host profiles for Conan.
@@ -65,20 +65,20 @@ python3 -m pip install --user conan~=1
 +
 [,sh]
 ----
-mkdir -p ~/.conan/profiles/{clang,gcc}
+mkdir --parents ~/.conan2/profiles/{clang,gcc}
 ----
 
 .. Create some profiles.
 The following profiles are for Fedora 38's default versions of GCC and Clang.
 +
 --
-.~/.conan/profiles/gcc/13/relwithdebinfo.jinja
+.~/.conan2/profiles/gcc/13/relwithdebinfo.jinja
 [,ini]
 ----
 include::profiles/gcc/13/relwithdebinfo.jinja[]
 ----
 
-.~/.conan/profiles/gcc/13/release.jinja
+.~/.conan2/profiles/gcc/13/release.jinja
 [,ini]
 ----
 include::profiles/gcc/13/release.jinja[]
@@ -87,14 +87,15 @@ include::profiles/gcc/13/release.jinja[]
 
 .. Configure the default Conan profiles and potentially some other Conan options.
 +
-.~/.conan/global.conf
+.~/.conan2/global.conf
 [,ini]
 ----
 core:default_build_profile = gcc/13/release.jinja
 core:default_profile = gcc/13/relwithdebinfo.jinja
 
 tools.cmake.cmaketoolchain:generator = Ninja Multi-Config
-tools.env.virtualenv:auto_use = True
+tools.system.package_manager:mode = install
+tools.system.package_manager:sudo = True
 ----
 
 == Build
@@ -123,7 +124,7 @@ cd cyrillic-encoder
 +
 [,sh]
 ----
-conan install . --build outdated --build cascade --update
+conan install . --build missing --update
 ----
 
 . Configure CMake.
@@ -132,7 +133,7 @@ conan install . --build outdated --build cascade --update
 ----
 bash -c '. build/generators/conanbuild.sh && \
 cmake \
-  --preset default \
+  --preset conan-default \
   -DCMAKE_UNITY_BUILD=yes \
   -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld" \
   -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld" \
@@ -148,7 +149,7 @@ cmake \
 +
 [,sh]
 ----
-bash -c '. build/generators/conanbuild.sh && cmake --build --preset relwithdebinfo'
+bash -c '. build/generators/conanbuild.sh && cmake --build --preset conan-relwithdebinfo'
 ----
 
 . Execute the tests with CTest.
@@ -157,7 +158,7 @@ The unit tests can be run with https://cmake.org/cmake/help/latest/module/CTest.
 +
 [,sh]
 ----
-bash -c '. build/generators/conanbuild.sh && . build/generators/conanrun.sh && ctest --output-on-failure --preset relwithdebinfo'
+bash -c '. build/generators/conanbuild.sh && . build/generators/conanrun.sh && ctest --output-on-failure --preset conan-relwithdebinfo'
 ----
 
 . Run.
@@ -176,7 +177,7 @@ Use the Address and Undefined Behavior sanitizers like so.
 
 [,sh]
 ----
-bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake -DUSE_SANITIZER=Address;Undefined --preset relwithdebinfo'
+bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake -DUSE_SANITIZER=Address;Undefined --preset conan-relwithdebinfo'
 ----
 
 == Format
@@ -188,12 +189,11 @@ Format the source files by building the CMake target `fix-format`.
 
 [,sh]
 ----
-bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake --build  --preset relwithdebinfo --target fix-format'
+bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake --build  --preset conan-relwithdebinfo --target fix-format'
 ----
 
 == Todo
 
-. Add justfile.
 . Add support for building with Nix as an alternative package manager.
 . Flatpak the application.
 
@@ -239,7 +239,7 @@ The project's Code of Conduct is available in the link:CODE_OF_CONDUCT.adoc[Code
 
 This repository is licensed under the https://www.gnu.org/licenses/gpl-3.0.html[GPLv3], available in the link:LICENSE.adoc[license file].
 
-© 2021-2023 Jordan Williams
+© 2021-2024 Jordan Williams
 
 == Authors
 
