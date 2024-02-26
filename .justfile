@@ -78,3 +78,10 @@ clean-build preset="conan-default": && (full-build preset)
     rm -rf $build_directory
 
 alias cb := clean-build
+
+alias u := update
+
+update:
+    #!/usr/bin/env nu
+    ^pre-commit autoupdate
+    ^conan lock create . --lockfile-clean --update
