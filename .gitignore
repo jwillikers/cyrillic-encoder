@@ -146,7 +146,6 @@ fabric.properties
 
 # Conan
 
-conan.lock
 conanbuildinfo.txt
 conaninfo.txt
 graph_info.json

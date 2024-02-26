@@ -60,45 +60,6 @@ python3 -m pipx ensurepath
 python3 -m pip install --user conan
 ----
 
-. Configure the default build and host profiles for Conan.
-
-.. Create the Conan profiles directory.
-+
-[,sh]
-----
-mkdir --parents ~/.conan2/profiles/{clang,gcc}
-----
-
-.. Create some profiles.
-The following profiles are for Fedora 38's default versions of GCC and Clang.
-+
---
-.~/.conan2/profiles/gcc/13/relwithdebinfo.jinja
-[,ini]
-----
-include::profiles/gcc/13/relwithdebinfo.jinja[]
-----
-
-.~/.conan2/profiles/gcc/13/release.jinja
-[,ini]
-----
-include::profiles/gcc/13/release.jinja[]
-----
---
-
-.. Configure the default Conan profiles and potentially some other Conan options.
-+
-.~/.conan2/global.conf
-[,ini]
-----
-core:default_build_profile = gcc/13/release.jinja
-core:default_profile = gcc/13/relwithdebinfo.jinja
-
-tools.cmake.cmaketoolchain:generator = Ninja Multi-Config
-tools.system.package_manager:mode = install
-tools.system.package_manager:sudo = True
-----
-
 == Build
 
 {cpp} dependencies are managed with Conan.
@@ -121,11 +82,15 @@ git clone https://github.com/jwillikers/cyrillic-encoder.git
 cd cyrillic-encoder
 ----
 
-. Before running CMake, install the necessary dependencies with Conan, using the default Conan profiles.
+. Before running CMake, install the necessary dependencies with Conan, using the default Conan profile.
 +
 [,sh]
 ----
-conan install . --build missing --update
+conan install . \
+  --profile:build profiles/default.jinja \
+  --profile:host profiles/default.jinja \
+  --build missing \
+  --update
 ----
 
 . Configure CMake.
@@ -167,6 +132,18 @@ bash -c '. build/generators/conanbuild.sh && . build/generators/conanrun.sh && c
 [,sh]
 ----
 bash -c '. build/generators/conanrun.sh && build/src/RelWithDebInfo/cyrillic-encoder'
+----
+
+== Update the Conan Lockfile
+
+The Conan dependencies are pinned to specific versions and recipe revisions in the `conan.lock` file.
+Update the lockfile with this command.
+
+. Generate a fresh lockfile.
++
+[,sh]
+----
+conan lock create . --lockfile-clean --update
 ----
 
 === Google Sanitizers
