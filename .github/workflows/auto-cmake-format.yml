@@ -3,7 +3,7 @@ on: [pull_request]  # yamllint disable-line rule:truthy
 
 jobs:
   cmake-format:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
