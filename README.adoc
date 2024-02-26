@@ -11,6 +11,7 @@ ifdef::env-github[]
 endif::[]
 
 image:https://github.com/jwillikers/cyrillic-encoder/actions/workflows/build.yml/badge.svg[GitHub Workflow Status, link=https://github.com/jwillikers/cyrillic-encoder/actions/workflows/build.yml]
+image:https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json[Ruff, link=https://github.com/astral-sh/ruff]
 
 A Qt demo application for encoding alphanumeric characters as arbitrary Cyrillic symbols.
 
@@ -35,7 +36,7 @@ These instructions are for Fedora 38.
 +
 [,sh]
 ----
-sudo dnf --assumeyes install ccache clang clang-tools-extra cmake gcc-c++ git just libasan libasan-static libcxx-devel libcxxabi-devel libglvnd-devel liblsan liblsan-static libtsan libtsan-static libubsan libubsan-static lld llvm llvm-static ninja-build perl-Digest-SHA perl-FindBin perl-IPC-Cmd pipx pre-commit pylint python3 python3-pip libXScrnSaver-devel libXaw-devel libXcomposite-devel libXcursor-devel libXdamage-devel libXdmcp-devel libXft-devel libXinerama-devel libXrandr-devel libXres-devel libXtst-devel libXv-devel libXvMC-devel libXxf86vm-devel libfontenc-devel libuuid-devel libxkbfile-devel xcb-cursor-util-devel xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel xkeyboard-config-devel xorg-x11-xtrans-devel
+sudo dnf --assumeyes install ccache clang clang-tools-extra cmake gcc-c++ git just libasan libasan-static libcxx-devel libcxxabi-devel libglvnd-devel liblsan liblsan-static libtsan libtsan-static libubsan libubsan-static lld llvm llvm-static ninja-build perl-Digest-SHA perl-FindBin perl-IPC-Cmd pipx pre-commit python3 python3-pip libXScrnSaver-devel libXaw-devel libXcomposite-devel libXcursor-devel libXdamage-devel libXdmcp-devel libXft-devel libXinerama-devel libXrandr-devel libXres-devel libXtst-devel libXv-devel libXvMC-devel libXxf86vm-devel libfontenc-devel libuuid-devel libxkbfile-devel xcb-cursor-util-devel xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel xkeyboard-config-devel xorg-x11-xtrans-devel
 ----
 
 . Install cmakelang with pipx.
