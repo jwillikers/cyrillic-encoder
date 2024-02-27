@@ -10,22 +10,10 @@ permissions:
   pull-requests: write
 
 jobs:
-  clang-format:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: DoozyX/clang-format-lint-action@v0.16
-        with:
-          source: '.'
-          extensions: 'h,cpp,hpp'
-          clangFormatVersion: 17
-          inplace: True  # yamllint disable-line rule:truthy
-      - uses: reviewdog/action-suggester@v1
-        with:
-          tool_name: ruff
   cmake-format:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Format CMake files
         id: cmake-format
         uses: PuneetMatharu/cmake-format-lint-action@v1.0.4
@@ -34,6 +22,18 @@ jobs:
       - uses: reviewdog/action-suggester@v1
         with:
           tool_name: ruff
+  cpp-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: file
+          format-review: true
+          tidy-review: true
   just:
     runs-on: ubuntu-latest
     steps:
