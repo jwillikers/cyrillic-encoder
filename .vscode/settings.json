@@ -25,6 +25,7 @@
         "includedirs",
         "INTERPROCEDURAL",
         "justfile",
+        "justfiles",
         "keysyms",
         "libasan",
         "libcxx",

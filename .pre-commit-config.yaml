@@ -27,6 +27,18 @@ repos:
       - id: pretty-format-json
         exclude: ^.vscode/.*\.json$
       - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: just
+        entry: just --fmt --unstable
+        files: |
+          (?x)^(
+            .justfile|
+            justfile
+          )$
+        language: system
+        name: just
+        pass_filenames: false
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.2.2
     hooks:
