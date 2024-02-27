@@ -173,6 +173,7 @@ bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake --build  --pre
 
 == Todo
 
+. Switch from CMake to Meson.
 . Use Renovate to automatically update pre-commit hooks and eventually Conan when it is supported.
 . Add support for building with Nix as an alternative package manager.
 . Flatpak the application.
