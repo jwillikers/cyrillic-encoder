@@ -11,6 +11,11 @@ jobs:
         with:
           python-version: "3.11"
       - uses: chartboost/ruff-action@v1
+        with:
+          args: format
+      - uses: chartboost/ruff-action@v1
+        with:
+          args: check --fix
       - uses: EndBug/add-and-commit@v9
         with:
           author_name: CMake Robot

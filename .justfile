@@ -80,6 +80,7 @@ clean-build preset="conan-default": && (full-build preset)
 alias cb := clean-build
 
 alias u := update
+alias up := update
 
 update:
     #!/usr/bin/env nu
