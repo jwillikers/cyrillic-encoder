@@ -62,7 +62,7 @@ purge preset="conan-relwithdebinfo":
     rm --force --recursive $build_directory
 
 # Perform each of the necessary build commands in sequence.
-full-build preset="conan-default": (conan-install) && (build preset)
+full-build preset="conan-default": conan-install && (build preset)
     #!/usr/bin/env nu
     let configure_preset = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get buildPresets } | flatten | where name == "{{ preset }}" | first | get configurePreset)
     let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == $configure_preset | first | get binaryDir)
