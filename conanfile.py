@@ -45,7 +45,7 @@ class CyrillicEncoder(ConanFile):
         update_conandata(self, {"sources": {"commit": scm_commit, "url": scm_url}})
 
     def source(self):
-        git = Git( self )
+        git = Git(self)
         sources = self.conan_data["sources"]
         git.fetch_commit(sources["url"], sources["commit"])
 
