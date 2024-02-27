@@ -1,6 +1,10 @@
 name: Build
 
-on: [push]  # yamllint disable-line rule:truthy
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["main"]
 
 env:
   # Workaround issues building the Qt 6 Conan package with newer versions of GCC.
