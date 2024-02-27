@@ -53,16 +53,16 @@ clean preset="conan-relwithdebinfo": (build preset "clean")
 rm-cmake-cache preset="conan-relwithdebinfo":
     #!/usr/bin/env nu
     let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == "{{ preset }}" | first | get binaryDir)
-    rm -f ($build_directory | path join CMakeCache.txt)
+    rm --force ($build_directory | path join CMakeCache.txt)
 
 # Wipe away the build directory.
 purge preset="conan-relwithdebinfo":
     #!/usr/bin/env nu
     let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == "{{ preset }}" | first | get binaryDir)
-    rm -rf $build_directory
+    rm --force --recursive $build_directory
 
 # Perform each of the necessary build commands in sequence.
-full-build preset="conan-default": (conan-install) && (build preset)
+full-build preset="conan-default": conan-install && (build preset)
     #!/usr/bin/env nu
     let configure_preset = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get buildPresets } | flatten | where name == "{{ preset }}" | first | get configurePreset)
     let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == $configure_preset | first | get binaryDir)
@@ -75,10 +75,9 @@ clean-build preset="conan-default": && (full-build preset)
     #!/usr/bin/env nu
     let configure_preset = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get buildPresets } | flatten | where name == "{{ preset }}" | first | get configurePreset)
     let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == $configure_preset | first | get binaryDir)
-    rm -rf $build_directory
+    rm --force --recursive $build_directory
 
 alias cb := clean-build
-
 alias u := update
 alias up := update
 
