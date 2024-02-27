@@ -78,7 +78,6 @@ clean-build preset="conan-default": && (full-build preset)
     rm --force --recursive $build_directory
 
 alias cb := clean-build
-
 alias u := update
 alias up := update
 
