@@ -4,55 +4,44 @@ find_package(Boost REQUIRED COMPONENTS headers)
 
 add_library(cyrillic-encoder-encode)
 add_library(cyrillic-encoder::encode ALIAS cyrillic-encoder-encode)
+
+set_target_properties(
+    cyrillic-encoder-encode
+    PROPERTIES DLL_NAME_WITH_SOVERSION yes
+               EXPORT_NAME encode
+               SOVERSION 1
+               VERSION 1.0.0
+)
+
 generate_export_header(
   cyrillic-encoder-encode EXPORT_FILE_NAME
   ${CYRILLIC_ENCODER_GENERATED_INCLUDEDIR}/cyrillic-encoder/export.h)
-target_include_directories(
-  cyrillic-encoder-encode
-  INTERFACE $<BUILD_INTERFACE:${CYRILLIC_ENCODER_GENERATED_INCLUDEDIR}>
-            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-  PRIVATE ${CYRILLIC_ENCODER_GENERATED_INCLUDEDIR} ${CMAKE_SOURCE_DIR}/include)
+
 target_sources(cyrillic-encoder-encode PRIVATE encode.cpp)
+
+target_sources(cyrillic-encoder-encode
+  PUBLIC
+  FILE_SET HEADERS
+  BASE_DIRS
+  ${cyrillic-encoder_SOURCE_DIR}/include
+  ${CYRILLIC_ENCODER_GENERATED_INCLUDEDIR}
+  FILES
+  ${cyrillic-encoder_SOURCE_DIR}/include/cyrillic-encoder/encode.hpp
+  ${CYRILLIC_ENCODER_GENERATED_INCLUDEDIR}/cyrillic-encoder/export.h
+)
+
 target_compile_options(
   cyrillic-encoder-encode
-  PRIVATE $<$<CXX_COMPILER_ID:Clang>:-Werror>
+  PRIVATE
           $<$<CXX_COMPILER_ID:Clang>:-Weverything>
           $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>
           $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>
-          $<$<CXX_COMPILER_ID:GNU>:-Werror>
           $<$<CXX_COMPILER_ID:GNU>:-Wall>
-          $<$<CXX_COMPILER_ID:MSVC>:/WX>
           $<$<CXX_COMPILER_ID:MSVC>:/W3>)
 target_link_libraries(cyrillic-encoder-encode PRIVATE Boost::headers)
 
 find_package(Microsoft.GSL REQUIRED)
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
-
-get_target_property(aliased_target Qt6::Core ALIASED_TARGET)
-get_target_property(_qt_core_interface_link_libraries Qt6::Core
-                    INTERFACE_LINK_LIBRARIES)
-string(REGEX MATCH [[CONAN_LIB::qt_Qt6_Core_Qt6Core.*_([A-Za-z]*)]]
-             _qt_core_target ${_qt_core_interface_link_libraries})
-set(_qt_build_type ${CMAKE_MATCH_1})
-
-if(NOT TARGET ${_qt_core_target})
-  message(FATAL_ERROR "Missing Conan Qt target '${_qt_core_target}'")
-endif()
-
-if(TARGET ${_qt_core_target})
-  get_target_property(_qt_core_location ${_qt_core_target}
-                      LOCATION_${_qt_build_type})
-  if(NOT _qt_core_location)
-    message(
-      FATAL_ERROR
-        "Could not determine the location of the '${_qt_core_target}' library.")
-  endif()
-endif()
-
-set(_qt_static no)
-if(_qt_core_location MATCHES "${CMAKE_STATIC_LIBRARY_SUFFIX}$")
-  set(_qt_static yes)
-endif()
 
 if(_qt_static)
   cmake_path(GET _qt_core_location PARENT_PATH _qt_libdir)
@@ -360,17 +349,26 @@ target_link_libraries(
   cyrillic-encoder PRIVATE Boost::headers cyrillic-encoder::encode
                            Microsoft.GSL::GSL Qt6::Core Qt6::Widgets)
 
-if(TEST_CYRILLIC_ENCODER OR CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+target_compile_options(
+  cyrillic-encoder
+  PRIVATE
+          $<$<CXX_COMPILER_ID:Clang>:-Weverything>
+          $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>
+          $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>
+          $<$<CXX_COMPILER_ID:GNU>:-Wall>
+          $<$<CXX_COMPILER_ID:MSVC>:/W3>)
+
+if(CYRILLIC_ENCODER_ENABLE_TESTING)
   find_package(ut)
 
   add_executable(cyrillic-encoder-encode-test)
   target_sources(cyrillic-encoder-encode-test PRIVATE encode.test.cpp)
   target_link_libraries(
     cyrillic-encoder-encode-test
-    PRIVATE Boost::headers cyrillic-encoder::encode boost-ext-ut::ut)
+    PRIVATE Boost::headers cyrillic-encoder::encode Boost::ut)
   target_compile_options(
     cyrillic-encoder-encode-test
-    PRIVATE $<$<CXX_COMPILER_ID:Clang>:-Werror>
+    PRIVATE
             $<$<CXX_COMPILER_ID:Clang>:-Weverything>
             $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>
             $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>
@@ -380,9 +378,7 @@ if(TEST_CYRILLIC_ENCODER OR CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
             $<$<CXX_COMPILER_ID:Clang>:-Wno-global-constructors>
             $<$<CXX_COMPILER_ID:Clang>:-Wno-missing-variable-declarations>
             $<$<CXX_COMPILER_ID:Clang>:-Wno-newline-eof>
-            $<$<CXX_COMPILER_ID:GNU>:-Werror>
             $<$<CXX_COMPILER_ID:GNU>:-Wall>
-            $<$<CXX_COMPILER_ID:MSVC>:/WX>
             $<$<CXX_COMPILER_ID:MSVC>:/W3>)
   add_test(NAME cyrillic-encoder-encode-test
            COMMAND cyrillic-encoder-encode-test)
@@ -392,5 +388,17 @@ endif()
 
 clang_tidy(-header-filter='${CMAKE_PROJECT_SOURCE_DIR}/*')
 
-include(GNUInstallDirs)
-install(TARGETS cyrillic-encoder)
+install(
+    TARGETS cyrillic-encoder-encode cyrillic-encoder
+    EXPORT cyrillic-encoder
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            COMPONENT CyrillicEncoder_Runtime
+            NAMELINK_COMPONENT CyrillicEncoder_Development
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT CyrillicEncoder_Runtime
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            COMPONENT CyrillicEncoder_Development
+            FILE_SET HEADERS
+            COMPONENT CyrillicEncoder_Development
+    INCLUDES
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)

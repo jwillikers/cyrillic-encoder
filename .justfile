@@ -1,87 +1,34 @@
-set shell := ["nu", "-c"]
-
 default: build
 
-# Install dependencies with Conan.
-conan-install *flags="--build missing --update":
-    #!/usr/bin/env nu
-    ^conan install . {{ flags }}
+alias f := format
+alias fmt := format
 
-alias con := conan-install
-alias conan := conan-install
+format:
+    just --fmt --unstable
 
-# Configure CMake.
-configure preset="conan-default":
-    #!/usr/bin/env nu
-    let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == "{{ preset }}" | first | get binaryDir)
-    ^bash -c $'. ($build_directory)/generators/conanbuild.sh && cmake --preset {{ preset }}'
+configure build_type="RelWithDebInfo":
+    cmake \
+        -GNinja \
+        -DCMAKE_BUILD_TYPE="{{ build_type }}" \
+        -DCMAKE_CXX_CLANG_TIDY=clang-tidy \
+        -DCLANG_FORMAT_PROGRAM=clang-format \
+        -DCMAKE_LINKER_TYPE=MOLD \
+        -B build \
+        -S .
 
-alias c := configure
+build:
+    cmake --build build
 
-# Build the given target.
-build preset="conan-relwithdebinfo" target="all":
-    #!/usr/bin/env nu
-    let configure_preset = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get buildPresets } | flatten | where name == "{{ preset }}" | first | get configurePreset)
-    let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == $configure_preset | first | get binaryDir)
-    ^bash -c $'. ($build_directory)/generators/conanbuild.sh && cmake --build --preset {{ preset }} --target {{ target }}'
+test: build
+    ctest --output-on-failure --test-dir build
 
-alias b := build
+all build_type="RelWithDebInfo": (configure build_type) build test
 
-# Run the application.
-run preset="conan-relwithdebinfo" *flags="": (build preset)
-    #!/usr/bin/env nu
-    let configure_preset = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get buildPresets } | flatten | where name == "{{ preset }}" | first | get configurePreset)
-    let configuration = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get buildPresets } | flatten | where name == "{{ preset }}" | first | get configuration)
-    let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == $configure_preset | first | get binaryDir)
-    ^bash -c $'. ($build_directory)/generators/conanrun.sh && ($build_directory)/src/($configuration)/cyrillic-encoder {{ flags }}'
+run: build
+    build/src/cyrillic-encoder
 
-alias r := run
-
-# Run unit tests with CTest.
-test preset="conan-relwithdebinfo" *flags="--output-on-failure":
-    #!/usr/bin/env nu
-    let configure_preset = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get testPresets } | flatten | where name == "{{ preset }}" | first | get configurePreset)
-    let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == $configure_preset | first | get binaryDir)
-    ^bash -c $'. ($build_directory)/generators/conanbuild.sh && . ($build_directory)/generators/conanrun.sh && ctest {{ flags }} --preset {{ preset }}'
-
-alias t := test
-
-# Build the clean target.
-clean preset="conan-relwithdebinfo": (build preset "clean")
-
-# Remove the CMake cache.
-rm-cmake-cache preset="conan-relwithdebinfo":
-    #!/usr/bin/env nu
-    let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == "{{ preset }}" | first | get binaryDir)
-    rm --force ($build_directory | path join CMakeCache.txt)
-
-# Wipe away the build directory.
-purge preset="conan-relwithdebinfo":
-    #!/usr/bin/env nu
-    let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == "{{ preset }}" | first | get binaryDir)
-    rm --force --recursive $build_directory
-
-# Perform each of the necessary build commands in sequence.
-full-build preset="conan-default": conan-install && (build preset)
-    #!/usr/bin/env nu
-    let configure_preset = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get buildPresets } | flatten | where name == "{{ preset }}" | first | get configurePreset)
-    let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == $configure_preset | first | get binaryDir)
-    ^bash -c $'. ($build_directory)/generators/conanbuild.sh && cmake --preset ($configure_preset)'
-
-alias f := full-build
-
-# Perform each of the necessary build commands in sequence after wiping away the build directory.
-clean-build preset="conan-default": && (full-build preset)
-    #!/usr/bin/env nu
-    let configure_preset = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get buildPresets } | flatten | where name == "{{ preset }}" | first | get configurePreset)
-    let build_directory = ((open CMakeUserPresets.json | get include) | each {|x| open $x | get configurePresets } | flatten | where name == $configure_preset | first | get binaryDir)
-    rm --force --recursive $build_directory
-
-alias cb := clean-build
-alias u := update
-alias up := update
+package:
+    nix build
 
 update:
-    #!/usr/bin/env nu
-    ^pre-commit autoupdate
-    ^conan lock create . --lockfile-clean --update
+    nix flake update

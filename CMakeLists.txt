@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.29)
+set(CMAKE_POLICY_DEFAULT_CMP0168 NEW)
 
 project(
   cyrillic-encoder
@@ -8,18 +9,40 @@ project(
   HOMEPAGE_URL https://github.com/jwillikers/cyrillic-encoder
   LANGUAGES CXX)
 
+set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS yes)
+
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS no)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+
+if(DEFINED CMAKE_CXX_STANDARD)
+    if(CMAKE_CXX_STANDARD EQUAL 98 OR CMAKE_CXX_STANDARD LESS 20)
+        message(FATAL_ERROR "This project requires at least C++20")
+    endif()
+else()
+    set(CMAKE_CXX_STANDARD 20)
+endif()
+set(CMAKE_CXX_STANDARD_REQUIRED yes)
+if(NOT DEFINED CMAKE_CXX_EXTENSIONS)
+    set(CMAKE_CXX_EXTENSIONS no)
+endif()
+
 set(BUILD_SHARED_LIBS
     no
     CACHE BOOL "")
-set(CMAKE_CXX_EXTENSIONS
-    no
-    CACHE BOOL "")
-set(CMAKE_CXX_STANDARD
-    20
-    CACHE STRING "")
-set(CMAKE_CXX_STANDARD_REQUIRED
+set(CMAKE_COMPILE_WARNING_AS_ERROR
+    ${PROJECT_IS_TOP_LEVEL}
+    CACHE BOOL "Treat compiler warnings as errors"
+)
+
+set(CMAKE_MSVC_RUNTIME_LIBRARY
+    "$<$<CONFIG:Debug>:MultiThreadedDebugDLL>"
+    CACHE STRING ""
+)
+set(CMAKE_OPTIMIZE_DEPENDENCIES
     yes
-    CACHE BOOL "")
+    CACHE BOOL ""
+)
 set(CYRILLIC_ENCODER_GENERATED_INCLUDEDIR
     "${PROJECT_BINARY_DIR}/generated/include"
     CACHE PATH "The include directory for generated header files.")
@@ -29,10 +52,6 @@ set(CYRILLIC_ENCODER_GENERATED_INCLUDEDIR
 set(Python_FIND_VIRTUALENV
     STANDARD
     CACHE STRING "")
-
-set(CMAKE_CXX_VISIBILITY_PRESET hidden)
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS no)
-set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(NOT isMultiConfig)
@@ -58,9 +77,14 @@ else()
   message(SEND_ERROR "IPO is not supported: ${output}")
 endif()
 
+set(CYRILLIC_ENCODER_ENABLE_TESTING ${PROJECT_IS_TOP_LEVEL} CACHE BOOL "")
+set(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT ${PROJECT_IS_TOP_LEVEL} CACHE BOOL "")
+
 include(CTest)
 include(FetchContent)
+include(GNUInstallDirs)
 
+if(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT)
 FetchContent_Declare(
   cmake-scripts
   GIT_REPOSITORY https://github.com/StableCoder/cmake-scripts
@@ -91,5 +115,9 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/TheLartians/Ccache.cmake.git
   GIT_TAG v1.2.4)
 FetchContent_MakeAvailable(ccache.cmake)
+else()
+function(clang_tidy)
+endfunction()
+endif()
 
 add_subdirectory(src)

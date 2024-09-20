@@ -1,32 +1,39 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
   };
-
-  outputs = { self, nixpkgs }:
-  let
-    pkgs = nixpkgs.legacyPackages.x86_64-linux;
-  in {
-    # This is our new package for end-users
-    packages.x86_64-linux.default = pkgs.qt6Packages.callPackage ./build.nix {};
-
-    devShells.x86_64-linux.default = pkgs.mkShell {
-      # The shell references this package to provide its dependencies
-      inputsFrom = [ self.packages.x86_64-linux.default ];
-      buildInputs = with pkgs; [
-        gdb
-
-        # this is for the shellhook portion
-        qt6.wrapQtAppsHook
-        makeWrapper
-        bashInteractive
-      ];
-      # set the environment variables that unpatched Qt apps expect
-      shellHook = ''
-        bashdir=$(mktemp -d)
-        makeWrapper "$(type -p bash)" "$bashdir/bash" "''${qtWrapperArgs[@]}"
-        exec "$bashdir/bash"
-      '';
-    };
-  };
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem
+      (system:
+         let
+          overlays = [];
+          pkgs = import nixpkgs {
+            inherit system overlays;
+          };
+          nativeBuildInputs = with pkgs; [
+            clang-tools
+            cmake
+            fish
+            just
+            mold-wrapped
+            ninja
+            qt6.wrapQtAppsHook
+          ];
+          buildInputs = with pkgs; [
+            boost
+            microsoft-gsl
+            qt6.qtbase
+            qt6.qtwayland
+            ut
+          ];
+        in
+        with pkgs;
+        {
+          packages.default = qt6Packages.callPackage ./default.nix {};
+          devShells.default = mkShell {
+            inherit buildInputs nativeBuildInputs;
+          };
+        }
+      );
 }

@@ -33,41 +33,12 @@ endif::[]
 This section describes how to set up the build environment required by the project.
 These instructions are for Fedora 38.
 
-. Install the necessary system packages.
+. Install https://lix.systems[Lix].
 +
 [,sh]
 ----
-sudo dnf --assumeyes install ccache clang clang-tools-extra cmake gcc-c++ git just libasan libasan-static libcxx-devel libcxxabi-devel libglvnd-devel liblsan liblsan-static libtsan libtsan-static libubsan libubsan-static lld llvm llvm-static ninja-build perl-Digest-SHA perl-FindBin perl-IPC-Cmd pipx pre-commit python3 python3-pip libXScrnSaver-devel libXaw-devel libXcomposite-devel libXcursor-devel libXdamage-devel libXdmcp-devel libXft-devel libXinerama-devel libXrandr-devel libXres-devel libXtst-devel libXv-devel libXvMC-devel libXxf86vm-devel libfontenc-devel libuuid-devel libxkbfile-devel xcb-cursor-util-devel xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel xkeyboard-config-devel xorg-x11-xtrans-devel
+curl -sSf -L https://install.lix.systems/lix | sh -s -- install
 ----
-
-. Install cmakelang with pipx.
-+
-[,sh]
-----
-python3 -m pipx install cmakelang[YAML]
-----
-
-. Place `~/.local/bin` in your `PATH`.
-+
-[,sh]
-----
-python3 -m pipx ensurepath
-----
-
-. Install Conan.
-+
-[,sh]
-----
-python3 -m pip install --user conan
-----
-
-== Build
-
-{cpp} dependencies are managed with Conan.
-When using a single configuration generator with CMake, set the appropriate build type when configuring the build.
-Likely, this build type will be _Debug_, _RelWithDebInfo_, or _Release_.
-These examples also enable several helpful options to improve performance of the build and the resulting binaries.
-These examples assume you are in the top-level directory of the project.
 
 . First, clone the source code of this repository locally.
 +
@@ -83,93 +54,67 @@ git clone https://github.com/jwillikers/cyrillic-encoder.git
 cd cyrillic-encoder
 ----
 
-. Before running CMake, install the necessary dependencies with Conan, using the default Conan profile.
+. Run with `nix run`.
 +
 [,sh]
 ----
-conan install . \
-  --profile:build profiles/default.jinja \
-  --profile:host profiles/default.jinja \
-  --build missing \
-  --update
+nix run
 ----
 
-. Configure CMake.
+== Development
+
+. Enter a development shell with the `nix develop` command.
 +
 [,sh]
 ----
-bash -c '. build/generators/conanbuild.sh && \
-cmake \
-  --preset conan-default \
-  -DCMAKE_UNITY_BUILD=yes \
-  -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld" \
-  -DCMAKE_MODULE_LINKER_FLAGS="-fuse-ld=lld" \
-  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld" \
-  -DCMAKE_C_FLAGS_DEBUG="-gsplit-dwarf" \
-  -DCMAKE_CXX_FLAGS_DEBUG="-gsplit-dwarf" \
-  -DCMAKE_CXX_CLANG_TIDY=/usr/bin/clang-tidy \
-  -DCLANG_FORMAT_PROGRAM=/usr/bin/clang-format \
-  -DUSE_SANITIZER="Address;Undefined"'
+nix develop --command fish
 ----
 
-. Build.
+. Use `just` to perform common tasks.
+The `just all` command will run the CMake configure step, then build, and run the tests.
 +
 [,sh]
 ----
-bash -c '. build/generators/conanbuild.sh && cmake --build --preset conan-relwithdebinfo'
+just all
 ----
 
-. Execute the tests with CTest.
-Unit tests use https://github.com/boost-ext/ut[[Boost::ext\].μt] and are written in {cpp}.
-The unit tests can be run with https://cmake.org/cmake/help/latest/module/CTest.html[CTest].
+. Exit the development shell with the `just exit` command.
 +
 [,sh]
 ----
-bash -c '. build/generators/conanbuild.sh && . build/generators/conanrun.sh && ctest --output-on-failure --preset conan-relwithdebinfo'
+exit
 ----
 
-. Run.
+. Update the flake with the `nix flake update` or `just update` commands.
 +
 [,sh]
 ----
-bash -c '. build/generators/conanrun.sh && build/src/RelWithDebInfo/cyrillic-encoder'
+just update
 ----
 
-== Update the Conan Lockfile
+// === Google Sanitizers
 
-The Conan dependencies are pinned to specific versions and recipe revisions in the `conan.lock` file.
-Update the lockfile with this command.
+// Support for Google Sanitizers is provided by the https://github.com/StableCoder/cmake-scripts[cmake-scripts] project.
+// Set the `USE_SANITIZER` CMake variable to an appropriate value as documented https://github.com/StableCoder/cmake-scripts#sanitizer-builds-sanitizerscmake[here].
 
-. Generate a fresh lockfile.
-+
-[,sh]
-----
-conan lock create . --lockfile-clean --update
-----
+// Use the Address and Undefined Behavior sanitizers like so.
 
-=== Google Sanitizers
+// [,sh]
+// ----
+// bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake -DUSE_SANITIZER=Address;Undefined --preset conan-relwithdebinfo'
+// ----
 
-Support for Google Sanitizers is provided by the https://github.com/StableCoder/cmake-scripts[cmake-scripts] project.
-Set the `USE_SANITIZER` CMake variable to an appropriate value as documented https://github.com/StableCoder/cmake-scripts#sanitizer-builds-sanitizerscmake[here].
+// == Format
 
-Use the Address and Undefined Behavior sanitizers like so.
+// The https://clang.llvm.org/docs/ClangFormat.html[clang-format] and https://cmake-format.readthedocs.io/en/latest/cmake-format.html[cmake-format] tools are used to format the source code files.
+// The https://github.com/TheLartians/Format.cmake[Format.cmake] module provides build targets to simplify the use of these tools.
 
-[,sh]
-----
-bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake -DUSE_SANITIZER=Address;Undefined --preset conan-relwithdebinfo'
-----
+// Format the source files by building the CMake target `fix-format`.
 
-== Format
-
-The https://clang.llvm.org/docs/ClangFormat.html[clang-format] and https://cmake-format.readthedocs.io/en/latest/cmake-format.html[cmake-format] tools are used to format the source code files.
-The https://github.com/TheLartians/Format.cmake[Format.cmake] module provides build targets to simplify the use of these tools.
-
-Format the source files by building the CMake target `fix-format`.
-
-[,sh]
-----
-bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake --build  --preset conan-relwithdebinfo --target fix-format'
-----
+// [,sh]
+// ----
+// bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake --build  --preset conan-relwithdebinfo --target fix-format'
+// ----
 
 == Todo
 
