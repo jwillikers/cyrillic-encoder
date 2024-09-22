@@ -51,5 +51,5 @@ Checks: >
   -llvmlibc-*,
   -bugprone-suspicious-include
 WarningsAsErrors: '*'
-HeaderFilterRegex: ''
+HeaderFilterRegex: 'include/cyrillic-encoder/|src/'
 FormatStyle: 'llvm'

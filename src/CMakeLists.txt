@@ -386,8 +386,6 @@ if(CYRILLIC_ENCODER_ENABLE_TESTING)
                        PROPERTIES LABELS "cyrillic-encoder")
 endif()
 
-clang_tidy(-header-filter='${CMAKE_PROJECT_SOURCE_DIR}/*')
-
 install(
     TARGETS cyrillic-encoder-encode cyrillic-encoder
     EXPORT cyrillic-encoder

@@ -107,8 +107,6 @@ FetchContent_Declare(
   GIT_TAG v1.2.4)
 FetchContent_MakeAvailable(ccache.cmake)
 else()
-function(clang_tidy)
-endfunction()
 endif()
 
 add_subdirectory(src)
