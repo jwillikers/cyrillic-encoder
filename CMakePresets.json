@@ -21,7 +21,6 @@
             "name": "lint",
             "hidden": true,
             "cacheVariables": {
-                "CLANG_FORMAT_PROGRAM": "clang-format",
                 "CMAKE_CXX_CLANG_TIDY": "clang-tidy",
                 "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "include-what-you-use"
             }

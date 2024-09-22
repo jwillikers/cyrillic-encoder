@@ -3,7 +3,12 @@ default: build
 alias f := format
 alias fmt := format
 
-format:
+format: just-fmt clang-format
+
+clang-format:
+    clang-format -i include/**.hpp src/**.{c,h}pp
+
+just-fmt:
     just --fmt --unstable
 
 alias c := configure

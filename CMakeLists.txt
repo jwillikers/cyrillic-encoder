@@ -98,15 +98,6 @@ endif()
 include(sanitizers)
 include(tools)
 
-set(FORMAT_CHECK_CMAKE
-    yes
-    CACHE BOOL "")
-FetchContent_Declare(
-  format
-  GIT_REPOSITORY https://github.com/TheLartians/Format.cmake.git
-  GIT_TAG v1.7.3)
-FetchContent_MakeAvailable(format)
-
 set(USE_CCACHE
     yes
     CACHE BOOL "")
