@@ -16,11 +16,7 @@ jobs:
         with:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-      - name: Configure
-        run: nix develop --command just configure
       - name: Build
-        run: nix develop --command just build
-      - name: Test
-        run: nix develop --command just test
+        run: nix develop --command just workflow ci
       - name: Build the Nix package
         run: nix build

@@ -15,6 +15,8 @@
             clang-tools
             cmake
             fish
+            gdb
+            include-what-you-use
             just
             mold-wrapped
             ninja

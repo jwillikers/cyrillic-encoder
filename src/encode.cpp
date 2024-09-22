@@ -1,3 +1,8 @@
+#include <array>
+#include <string>
+#include <string_view>
+#include <utility>
+
 #include <boost/range/adaptors.hpp>
 #include <boost/range/numeric.hpp>
 #include <cyrillic-encoder/encode.hpp>

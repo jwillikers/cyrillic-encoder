@@ -63,6 +63,15 @@ nix run
 
 == Development
 
+Everything can be built locally through Nix using the `nix develop` command.
+
+To run the developer CMake workflow for the project, use the `dev` preset.
+
+[,sh]
+----
+nix develop --command cmake --workflow --preset dev
+----
+
 . Enter a development shell with the `nix develop` command.
 +
 [,sh]
@@ -71,11 +80,11 @@ nix develop --command fish
 ----
 
 . Use `just` to perform common tasks.
-The `just all` command will run the CMake configure step, then build, and run the tests.
+The `just workflow` command will run the CMake configure step, then build, and run the tests.
 +
 [,sh]
 ----
-just all
+just workflow
 ----
 
 . Exit the development shell with the `just exit` command.
