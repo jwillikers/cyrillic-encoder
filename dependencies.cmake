@@ -3,7 +3,7 @@ include(FetchContent)
 FetchContent_Declare(
   cmake-scripts
   GIT_REPOSITORY https://github.com/StableCoder/cmake-scripts
-  GIT_TAG 23.06)
+  GIT_TAG 24.08.1)
 
 set(USE_CCACHE
     yes
@@ -11,7 +11,7 @@ set(USE_CCACHE
 FetchContent_Declare(
   ccache.cmake
   GIT_REPOSITORY https://github.com/TheLartians/Ccache.cmake.git
-  GIT_TAG v1.2.4)
+  GIT_TAG v1.2.5)
 
 FetchContent_GetProperties(cmake-scripts)
 if(NOT cmake-scripts_POPULATED)
