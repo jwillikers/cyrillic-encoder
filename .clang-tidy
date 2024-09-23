@@ -32,6 +32,7 @@ Checks: >
   -hicpp-vararg,
   -llvm-*,
   -objc-*,
+  -readability-avoid-unconditional-preprocessor-if,
   -readability-else-after-return,
   -readability-implicit-bool-conversion,
   -readability-named-parameter,

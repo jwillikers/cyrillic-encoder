@@ -12,6 +12,7 @@
             inherit system overlays;
           };
           nativeBuildInputs = with pkgs; [
+            ccache
             clang-tools
             cmake
             fish

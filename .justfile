@@ -28,8 +28,8 @@ test preset="dev": build
 
 alias w := workflow
 
-workflow preset="dev":
-    cmake --workflow --preset {{ preset }}
+workflow preset="dev" *flags="":
+    cmake --workflow --preset {{ preset }} {{ flags }}
 
 alias r := run
 

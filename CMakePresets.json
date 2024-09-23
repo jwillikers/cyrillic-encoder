@@ -19,11 +19,7 @@
         },
         {
             "name": "lint",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_CXX_CLANG_TIDY": "clang-tidy",
-                "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "include-what-you-use"
-            }
+            "hidden": true
         },
         {
             "name": "clang",
@@ -92,8 +88,10 @@
             "inherits": ["default"],
             "cacheVariables": {
                 "CMAKE_COMPILE_WARNING_AS_ERROR": false,
-                "CYRILLIC_ENCODER_ENABLE_TESTING": false,
-                "CYRILLIC_ENCODER_ENABLE_FETCHCONTENT": false
+                "CYRILLIC_ENCODER_ENABLE_FETCHCONTENT": false,
+                "CYRILLIC_ENCODER_ENABLE_CLANG_TIDY": false,
+                "CYRILLIC_ENCODER_ENABLE_IWYU": false,
+                "CYRILLIC_ENCODER_ENABLE_TESTING": false
             }
         },
         {

@@ -33,11 +33,15 @@ target_sources(cyrillic-encoder-encode
 target_compile_options(
   cyrillic-encoder-encode
   PRIVATE
-          $<$<CXX_COMPILER_ID:Clang>:-Weverything>
-          $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>
-          $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>
+          $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Weverything>
+          $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat>
+          $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat-pedantic>
           $<$<CXX_COMPILER_ID:GNU>:-Wall>
-          $<$<CXX_COMPILER_ID:MSVC>:/W3>)
+          $<$<CXX_COMPILER_ID:MSVC>:/Wall>
+          $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<OR:$<CONFIG:MinSizeRel,Release,RelWithDebInfo>>>:/wd4710> # function not inlined
+          $<$<CXX_COMPILER_ID:MSVC>:/wd4820> # padding
+          $<$<CXX_COMPILER_ID:MSVC>:/wd5045> # Spectre mitigation
+)
 target_link_libraries(cyrillic-encoder-encode PRIVATE Boost::headers)
 
 find_package(Microsoft.GSL REQUIRED)
@@ -352,11 +356,15 @@ target_link_libraries(
 target_compile_options(
   cyrillic-encoder
   PRIVATE
-          $<$<CXX_COMPILER_ID:Clang>:-Weverything>
-          $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>
-          $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>
+          $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Weverything>
+          $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat>
+          $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat-pedantic>
           $<$<CXX_COMPILER_ID:GNU>:-Wall>
-          $<$<CXX_COMPILER_ID:MSVC>:/W3>)
+          $<$<CXX_COMPILER_ID:MSVC>:/Wall>
+          $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<OR:$<CONFIG:MinSizeRel,Release,RelWithDebInfo>>>:/wd4710> # function not inlined
+          $<$<CXX_COMPILER_ID:MSVC>:/wd4820> # padding
+          $<$<CXX_COMPILER_ID:MSVC>:/wd5045> # Spectre mitigation
+)
 
 if(CYRILLIC_ENCODER_ENABLE_TESTING)
   find_package(ut)
@@ -369,17 +377,21 @@ if(CYRILLIC_ENCODER_ENABLE_TESTING)
   target_compile_options(
     cyrillic-encoder-encode-test
     PRIVATE
-            $<$<CXX_COMPILER_ID:Clang>:-Weverything>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-c99-extensions>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-comma>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-ctad-maybe-unsupported>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-global-constructors>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-missing-variable-declarations>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-newline-eof>
+            $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Weverything>
+            $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat>
+            $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat-pedantic>
+            $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c99-extensions>
+            $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-comma>
+            $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-ctad-maybe-unsupported>
+            $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-global-constructors>
+            $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-missing-variable-declarations>
+            $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-newline-eof>
+            $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-readability-avoid-unconditional-preprocessor-if>
             $<$<CXX_COMPILER_ID:GNU>:-Wall>
-            $<$<CXX_COMPILER_ID:MSVC>:/W3>)
+          $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<OR:$<CONFIG:MinSizeRel,Release,RelWithDebInfo>>>:/wd4710> # function not inlined
+          $<$<CXX_COMPILER_ID:MSVC>:/wd4820> # padding
+          $<$<CXX_COMPILER_ID:MSVC>:/wd5045> # Spectre mitigation
+)
   add_test(NAME cyrillic-encoder-encode-test
            COMMAND cyrillic-encoder-encode-test)
   set_tests_properties(cyrillic-encoder-encode-test

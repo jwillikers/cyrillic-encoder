@@ -1,18 +1,29 @@
 #include <QApplication>
-#include <QHBoxLayout>
+#include <QBoxLayout>
+#include <QChar>
+#include <QCoreApplication>
 #include <QHeaderView>
 #include <QLabel>
+#include <QLayout>
+#include <QList>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QObject>
 #include <QPushButton>
+#include <QString>
+#include <QStringList>
 #include <QTableWidget>
 #include <QTextEdit>
-#include <QVBoxLayout>
+#include <qobjectdefs.h>
+#include <Qt>
+#include <QWidget>
 #include <boost/range/adaptors.hpp>
 #include <cyrillic-encoder/encode.hpp>
-#include <cyrillic-encoder/qt_plugin_imports.h>
+#include <cyrillic-encoder/qt_plugin_imports.h> // IWYU pragma: keep
 #include <gsl/gsl>
+#include <string>
+#include <string_view>
+#include <utility>
 
 int main(int argc, char *argv[]) {
   QApplication app(argc, argv);
