@@ -95,11 +95,16 @@ option(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT
 
 if(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY)
   find_program(CLANG_TIDY_EXECUTABLE clang-tidy REQUIRED)
-  find_program(RUN_CLANG_TIDY_EXECUTABLE run-clang-tidy REQUIRED)
-  add_custom_target(
-    cyrillic-encoder-clang-tidy-check
-    COMMAND ${RUN_CLANG_TIDY_EXECUTABLE} -clang-tidy-binary
-            ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR})
+  set(CMAKE_C_CLANG_TIDY ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR})
+  set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR})
+  file(
+    WRITE ${CMAKE_CURRENT_BINARY_DIR}/.clang-tidy
+    """
+---
+Checks: >
+  -misc-include-cleaner
+InheritParentConfig: true
+""")
 endif()
 
 if(CYRILLIC_ENCODER_ENABLE_IWYU)

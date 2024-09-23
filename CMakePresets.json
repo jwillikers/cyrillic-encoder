@@ -14,8 +14,7 @@
       "name": "ci",
       "targets": [
         "all",
-        "all_verify_interface_header_sets",
-        "cyrillic-encoder-clang-tidy-check"
+        "all_verify_interface_header_sets"
       ]
     },
     {
@@ -79,13 +78,9 @@
       "name": "msvc-clang"
     },
     {
-      "configuration": "RelWithDebInfo",
       "configurePreset": "dev",
-      "name": "dev",
-      "targets": [
-        "all",
-        "cyrillic-encoder-clang-tidy-check"
-      ]
+      "inherits": "default",
+      "name": "dev"
     },
     {
       "configurePreset": "dev-clang",
