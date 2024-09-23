@@ -13,14 +13,14 @@
 #include <QString>
 #include <QTableWidget>
 #include <QTextEdit>
-#include <qobjectdefs.h>
+#include <QWidget>
 #include <Qt>
 #include <QtContainerFwd>
-#include <QWidget>
 #include <boost/range/adaptors.hpp>
 #include <cyrillic-encoder/encode.hpp>
 #include <cyrillic-encoder/qt_plugin_imports.h> // IWYU pragma: keep
 #include <gsl/narrow>
+#include <qobjectdefs.h>
 #include <string> // IWYU pragma: keep
 #include <string_view>
 #include <utility>

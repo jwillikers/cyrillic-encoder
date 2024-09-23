@@ -1,9 +1,9 @@
-#include <string>
 #include <boost/range/adaptors.hpp>
 #include <boost/range/algorithm_ext.hpp>
 #include <boost/range/size.hpp>
 #include <boost/ut.hpp>
 #include <cyrillic-encoder/encode.hpp>
+#include <string>
 #include <string_view>
 
 int main() {
