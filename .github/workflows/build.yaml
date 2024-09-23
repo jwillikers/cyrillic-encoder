@@ -26,7 +26,7 @@ jobs:
           string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
           message("::set-output name=timestamp::${current_date}")
       - name: ccache cache files
-        uses: actions/cache@v4.0.2
+        uses: actions/cache@v4
         with:
           key: ${{ matrix.compiler }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
           path: .ccache
