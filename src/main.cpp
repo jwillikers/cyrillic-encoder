@@ -11,17 +11,17 @@
 #include <QObject>
 #include <QPushButton>
 #include <QString>
-#include <QStringList>
 #include <QTableWidget>
 #include <QTextEdit>
 #include <qobjectdefs.h>
 #include <Qt>
+#include <QtContainerFwd>
 #include <QWidget>
 #include <boost/range/adaptors.hpp>
 #include <cyrillic-encoder/encode.hpp>
 #include <cyrillic-encoder/qt_plugin_imports.h> // IWYU pragma: keep
-#include <gsl/gsl>
-#include <string>
+#include <gsl/narrow>
+#include <string> // IWYU pragma: keep
 #include <string_view>
 #include <utility>
 
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
   headers.append(QObject::tr("Cyrillic"));
   decode_table.setHorizontalHeaderLabels(headers);
   decode_table.verticalHeader()->setVisible(false);
-  for (auto const &pair :
+  for (auto const pair :
        cyr_enc::sample_conversion_table | boost::adaptors::indexed()) {
     auto *latin = new QTableWidgetItem(QString(std::get<0>(pair.value())));
     Qt::ItemFlags flags;

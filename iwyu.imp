@@ -15,12 +15,7 @@
     {"symbol": ["boost::iterators::detail::iterator_facade_base", "private", "<boost/range/adaptors.hpp>", "public"] },
 
     # Microsoft GSL
-    {"include": ["@<gsl/.*>", "private", "<gsl/gsl>", "public"] },
-
-    # Qt
-    {"symbol": ["QStringList", "private", "<QStringList>", "public"] },
-    {"symbol": ["QStringList", "private", "<QtContainerFwd>", "public"] },
-    {"symbol": ["QStringList", "private", "<qtcontainerfwd.h>", "public"] },
+    {"include": ["@<gsl/.*>", "public", "<gsl/gsl>", "public"] },
 
     # Cyrillic Encoder
     {"symbol": ["std::array", "private", "<array>", "public"] },

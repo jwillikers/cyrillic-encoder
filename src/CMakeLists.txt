@@ -386,12 +386,11 @@ if(CYRILLIC_ENCODER_ENABLE_TESTING)
             $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-global-constructors>
             $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-missing-variable-declarations>
             $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-newline-eof>
-            $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-readability-avoid-unconditional-preprocessor-if>
             $<$<CXX_COMPILER_ID:GNU>:-Wall>
-          $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<OR:$<CONFIG:MinSizeRel,Release,RelWithDebInfo>>>:/wd4710> # function not inlined
-          $<$<CXX_COMPILER_ID:MSVC>:/wd4820> # padding
-          $<$<CXX_COMPILER_ID:MSVC>:/wd5045> # Spectre mitigation
-)
+            $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<OR:$<CONFIG:MinSizeRel,Release,RelWithDebInfo>>>:/wd4710> # function not inlined
+            $<$<CXX_COMPILER_ID:MSVC>:/wd4820> # padding
+            $<$<CXX_COMPILER_ID:MSVC>:/wd5045> # Spectre mitigation
+  )
   add_test(NAME cyrillic-encoder-encode-test
            COMMAND cyrillic-encoder-encode-test)
   set_tests_properties(cyrillic-encoder-encode-test

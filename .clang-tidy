@@ -1,6 +1,7 @@
 ---
 Checks: >
   *,
+  -altera-unroll-loops,
   -android-*,
   -bugprone-bool-pointer-implicit-conversion,
   -bugprone-exception-escape,-cert-env33-c,
