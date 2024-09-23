@@ -12,10 +12,16 @@
             inherit system overlays;
           };
           nativeBuildInputs = with pkgs; [
+            ccache
+            clang
             clang-tools
             cmake
             fish
+            gdb
+            include-what-you-use
             just
+            lldb
+            llvm
             mold-wrapped
             ninja
             qt6.wrapQtAppsHook

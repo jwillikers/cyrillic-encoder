@@ -1,6 +1,7 @@
 ---
 Checks: >
   *,
+  -altera-unroll-loops,
   -android-*,
   -bugprone-bool-pointer-implicit-conversion,
   -bugprone-exception-escape,-cert-env33-c,
@@ -32,6 +33,7 @@ Checks: >
   -hicpp-vararg,
   -llvm-*,
   -objc-*,
+  -readability-avoid-unconditional-preprocessor-if,
   -readability-else-after-return,
   -readability-implicit-bool-conversion,
   -readability-named-parameter,
@@ -51,5 +53,5 @@ Checks: >
   -llvmlibc-*,
   -bugprone-suspicious-include
 WarningsAsErrors: '*'
-HeaderFilterRegex: ''
+HeaderFilterRegex: 'include/cyrillic-encoder/|src/'
 FormatStyle: 'llvm'

@@ -6,12 +6,11 @@ add_library(cyrillic-encoder-encode)
 add_library(cyrillic-encoder::encode ALIAS cyrillic-encoder-encode)
 
 set_target_properties(
-    cyrillic-encoder-encode
-    PROPERTIES DLL_NAME_WITH_SOVERSION yes
-               EXPORT_NAME encode
-               SOVERSION 1
-               VERSION 1.0.0
-)
+  cyrillic-encoder-encode
+  PROPERTIES DLL_NAME_WITH_SOVERSION yes
+             EXPORT_NAME encode
+             SOVERSION 1
+             VERSION 1.0.0)
 
 generate_export_header(
   cyrillic-encoder-encode EXPORT_FILE_NAME
@@ -19,25 +18,31 @@ generate_export_header(
 
 target_sources(cyrillic-encoder-encode PRIVATE encode.cpp)
 
-target_sources(cyrillic-encoder-encode
-  PUBLIC
-  FILE_SET HEADERS
-  BASE_DIRS
-  ${cyrillic-encoder_SOURCE_DIR}/include
-  ${CYRILLIC_ENCODER_GENERATED_INCLUDEDIR}
-  FILES
-  ${cyrillic-encoder_SOURCE_DIR}/include/cyrillic-encoder/encode.hpp
-  ${CYRILLIC_ENCODER_GENERATED_INCLUDEDIR}/cyrillic-encoder/export.h
-)
+target_sources(
+  cyrillic-encoder-encode
+  PUBLIC FILE_SET
+         HEADERS
+         BASE_DIRS
+         ${cyrillic-encoder_SOURCE_DIR}/include
+         ${CYRILLIC_ENCODER_GENERATED_INCLUDEDIR}
+         FILES
+         ${cyrillic-encoder_SOURCE_DIR}/include/cyrillic-encoder/encode.hpp
+         ${CYRILLIC_ENCODER_GENERATED_INCLUDEDIR}/cyrillic-encoder/export.h)
 
 target_compile_options(
   cyrillic-encoder-encode
   PRIVATE
-          $<$<CXX_COMPILER_ID:Clang>:-Weverything>
-          $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>
-          $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>
-          $<$<CXX_COMPILER_ID:GNU>:-Wall>
-          $<$<CXX_COMPILER_ID:MSVC>:/W3>)
+    $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Weverything>
+    $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat>
+    $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat-pedantic>
+    $<$<CXX_COMPILER_ID:GNU>:-Wall>
+    $<$<CXX_COMPILER_ID:MSVC>:/Wall>
+    $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<OR:$<CONFIG:MinSizeRel,Release,RelWithDebInfo>>>:/wd4710> # function
+                                                                                                # not
+                                                                                                # inlined
+    $<$<CXX_COMPILER_ID:MSVC>:/wd4820> # padding
+    $<$<CXX_COMPILER_ID:MSVC>:/wd5045> # Spectre mitigation
+)
 target_link_libraries(cyrillic-encoder-encode PRIVATE Boost::headers)
 
 find_package(Microsoft.GSL REQUIRED)
@@ -352,11 +357,17 @@ target_link_libraries(
 target_compile_options(
   cyrillic-encoder
   PRIVATE
-          $<$<CXX_COMPILER_ID:Clang>:-Weverything>
-          $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>
-          $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>
-          $<$<CXX_COMPILER_ID:GNU>:-Wall>
-          $<$<CXX_COMPILER_ID:MSVC>:/W3>)
+    $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Weverything>
+    $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat>
+    $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat-pedantic>
+    $<$<CXX_COMPILER_ID:GNU>:-Wall>
+    $<$<CXX_COMPILER_ID:MSVC>:/Wall>
+    $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<OR:$<CONFIG:MinSizeRel,Release,RelWithDebInfo>>>:/wd4710> # function
+                                                                                                # not
+                                                                                                # inlined
+    $<$<CXX_COMPILER_ID:MSVC>:/wd4820> # padding
+    $<$<CXX_COMPILER_ID:MSVC>:/wd5045> # Spectre mitigation
+)
 
 if(CYRILLIC_ENCODER_ENABLE_TESTING)
   find_package(ut)
@@ -364,41 +375,52 @@ if(CYRILLIC_ENCODER_ENABLE_TESTING)
   add_executable(cyrillic-encoder-encode-test)
   target_sources(cyrillic-encoder-encode-test PRIVATE encode.test.cpp)
   target_link_libraries(
-    cyrillic-encoder-encode-test
-    PRIVATE Boost::headers cyrillic-encoder::encode Boost::ut)
+    cyrillic-encoder-encode-test PRIVATE Boost::headers Boost::ut
+                                         cyrillic-encoder::encode)
   target_compile_options(
     cyrillic-encoder-encode-test
     PRIVATE
-            $<$<CXX_COMPILER_ID:Clang>:-Weverything>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-c++98-compat-pedantic>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-c99-extensions>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-comma>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-ctad-maybe-unsupported>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-global-constructors>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-missing-variable-declarations>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-newline-eof>
-            $<$<CXX_COMPILER_ID:GNU>:-Wall>
-            $<$<CXX_COMPILER_ID:MSVC>:/W3>)
+      $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Weverything>
+      $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat>
+      $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c++98-compat-pedantic>
+      $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-c99-extensions>
+      $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-comma>
+      $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-ctad-maybe-unsupported>
+      $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-global-constructors>
+      $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-missing-variable-declarations>
+      $<$<CXX_COMPILER_ID:AppleClang,Clang>:-Wno-newline-eof>
+      $<$<CXX_COMPILER_ID:GNU>:-Wall>
+      $<$<AND:$<CXX_COMPILER_ID:MSVC>,$<OR:$<CONFIG:MinSizeRel,Release,RelWithDebInfo>>>:/wd4710> # function
+                                                                                                  # not
+                                                                                                  # inlined
+      $<$<CXX_COMPILER_ID:MSVC>:/wd4820> # padding
+      $<$<CXX_COMPILER_ID:MSVC>:/wd5045> # Spectre mitigation
+  )
   add_test(NAME cyrillic-encoder-encode-test
            COMMAND cyrillic-encoder-encode-test)
   set_tests_properties(cyrillic-encoder-encode-test
                        PROPERTIES LABELS "cyrillic-encoder")
+  if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(cyrillic-encoder-encoder-dir
+        "$<SHELL_PATH:$<TARGET_FILE_DIR:cyrillic-encoder::encode>>")
+    set_property(
+      TEST cyrillic-encoder-encode-test
+      APPEND
+      PROPERTY ENVIRONMENT_MODIFICATION
+               PATH=path_list_prepend:${cyrillic-encoder-encoder-dir})
+  endif()
 endif()
 
-clang_tidy(-header-filter='${CMAKE_PROJECT_SOURCE_DIR}/*')
-
 install(
-    TARGETS cyrillic-encoder-encode cyrillic-encoder
-    EXPORT cyrillic-encoder
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            COMPONENT CyrillicEncoder_Runtime
-            NAMELINK_COMPONENT CyrillicEncoder_Development
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT CyrillicEncoder_Runtime
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-            COMPONENT CyrillicEncoder_Development
-            FILE_SET HEADERS
-            COMPONENT CyrillicEncoder_Development
-    INCLUDES
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
+  TARGETS cyrillic-encoder-encode cyrillic-encoder
+  EXPORT cyrillic-encoder
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+          COMPONENT CyrillicEncoder_Runtime
+          NAMELINK_COMPONENT CyrillicEncoder_Development
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT CyrillicEncoder_Runtime
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+          COMPONENT CyrillicEncoder_Development
+          FILE_SET HEADERS
+          COMPONENT CyrillicEncoder_Development
+  INCLUDES
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

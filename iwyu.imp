@@ -1,0 +1,25 @@
+[
+    {"symbol": ["std::begin", "private", "<iterator>", "public"] },
+    {"symbol": ["std::begin", "private", "<array>", "public"] },
+    {"symbol": ["std::end", "private", "<iterator>", "public"] },
+    {"symbol": ["std::end", "private", "<array>", "public"] },
+
+    # Boost
+    {"include": ["@<boost/iterator/.*>", "private", "<boost/iterator.hpp>", "public"] },
+    {"include": ["@<boost/range/adaptor/.*>", "private", "<boost/range/adaptors.hpp>", "public"] },
+    {"include": ["@<boost/range/algorithm_ext/.*>", "private", "<boost/range/algorithm_ext.hpp>", "public"] },
+
+    {"symbol": ["boost::iterators::operator!=", "private", "<boost/iterator/iterator_facade.hpp>", "private"] },
+    {"symbol": ["boost::iterators::operator!=", "private", "<boost/range/adaptors.hpp>", "public"] },
+    {"symbol": ["boost::iterators::detail::iterator_facade_base", "private", "<boost/iterator/iterator_facade.hpp>", "private"] },
+    {"symbol": ["boost::iterators::detail::iterator_facade_base", "private", "<boost/range/adaptors.hpp>", "public"] },
+
+    # Microsoft GSL
+    {"include": ["@<gsl/.*>", "public", "<gsl/gsl>", "public"] },
+
+    # Cyrillic Encoder
+    {"symbol": ["std::array", "private", "<array>", "public"] },
+    {"symbol": ["std::array", "private", "<boost/range/adaptors.hpp>", "public"] },
+    {"symbol": ["std::pair", "private", "<array>", "public"] },
+    {"symbol": ["std::pair", "private", "<boost/range/adaptors.hpp>", "public"] },
+]

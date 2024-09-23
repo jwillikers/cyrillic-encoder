@@ -71,8 +71,14 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+# VSCode
+.cache/
+
 # JetBrains IDEs
 .idea/
 
 # Nix
 result
+
+# direnv
+.direnv/

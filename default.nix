@@ -31,8 +31,7 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-GNinja"
+    "--preset=minimal"
     "-DCMAKE_LINKER_TYPE=MOLD"
-    "-DCYRILLIC_ENCODER_ENABLE_FETCHCONTENT=no"
   ];
 }

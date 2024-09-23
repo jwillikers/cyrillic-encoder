@@ -9,40 +9,47 @@ project(
   HOMEPAGE_URL https://github.com/jwillikers/cyrillic-encoder
   LANGUAGES CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS yes)
 set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS yes)
+
+if(PROJECT_IS_TOP_LEVEL AND CMAKE_EXPORT_COMPILE_COMMANDS)
+  list(APPEND CMAKE_C_STANDARD_INCLUDE_DIRECTORIES
+       ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES})
+  list(REMOVE_DUPLICATES CMAKE_C_STANDARD_INCLUDE_DIRECTORIES)
+  list(APPEND CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES
+       ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
+  list(REMOVE_DUPLICATES CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES)
+endif()
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS no)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 if(DEFINED CMAKE_CXX_STANDARD)
-    if(CMAKE_CXX_STANDARD EQUAL 98 OR CMAKE_CXX_STANDARD LESS 20)
-        message(FATAL_ERROR "This project requires at least C++20")
-    endif()
+  if(CMAKE_CXX_STANDARD EQUAL 98 OR CMAKE_CXX_STANDARD LESS 20)
+    message(FATAL_ERROR "This project requires at least C++20")
+  endif()
 else()
-    set(CMAKE_CXX_STANDARD 20)
+  set(CMAKE_CXX_STANDARD 20)
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED yes)
 if(NOT DEFINED CMAKE_CXX_EXTENSIONS)
-    set(CMAKE_CXX_EXTENSIONS no)
+  set(CMAKE_CXX_EXTENSIONS no)
 endif()
 
 set(BUILD_SHARED_LIBS
-    no
+    yes
     CACHE BOOL "")
 set(CMAKE_COMPILE_WARNING_AS_ERROR
     ${PROJECT_IS_TOP_LEVEL}
-    CACHE BOOL "Treat compiler warnings as errors"
-)
+    CACHE BOOL "Treat compiler warnings as errors")
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY
     "$<$<CONFIG:Debug>:MultiThreadedDebugDLL>"
-    CACHE STRING ""
-)
+    CACHE STRING "")
 set(CMAKE_OPTIMIZE_DEPENDENCIES
     yes
-    CACHE BOOL ""
-)
+    CACHE BOOL "")
 set(CYRILLIC_ENCODER_GENERATED_INCLUDEDIR
     "${PROJECT_BINARY_DIR}/generated/include"
     CACHE PATH "The include directory for generated header files.")
@@ -77,47 +84,53 @@ else()
   message(SEND_ERROR "IPO is not supported: ${output}")
 endif()
 
-set(CYRILLIC_ENCODER_ENABLE_TESTING ${PROJECT_IS_TOP_LEVEL} CACHE BOOL "")
-set(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT ${PROJECT_IS_TOP_LEVEL} CACHE BOOL "")
+option(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY "Enable Clang-Tidy"
+       ${PROJECT_IS_TOP_LEVEL})
+option(CYRILLIC_ENCODER_ENABLE_IWYU "Enable include-what-you-use"
+       ${PROJECT_IS_TOP_LEVEL})
+
+option(CYRILLIC_ENCODER_ENABLE_TESTING "Build tests" ${PROJECT_IS_TOP_LEVEL})
+option(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT
+       "Enable fetching external dependencies" ${PROJECT_IS_TOP_LEVEL})
+
+if(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY)
+  find_program(CLANG_TIDY_EXECUTABLE clang-tidy REQUIRED)
+  set(CMAKE_C_CLANG_TIDY ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR})
+  set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR})
+  file(
+    WRITE ${CMAKE_CURRENT_BINARY_DIR}/.clang-tidy
+    """
+---
+Checks: >
+  -misc-include-cleaner
+InheritParentConfig: true
+""")
+endif()
+
+if(CYRILLIC_ENCODER_ENABLE_IWYU)
+  find_program(INCLUDE_WHAT_YOU_USE_EXECUTABLE include-what-you-use REQUIRED)
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE
+      ${INCLUDE_WHAT_YOU_USE_EXECUTABLE}
+      -w
+      -Xiwyu
+      --error
+      -Xiwyu
+      --experimental=clang_mappings
+      -Xiwyu
+      --comment_style=long
+      -Xiwyu
+      --mapping_file=${CMAKE_CURRENT_SOURCE_DIR}/iwyu.imp
+      -Xiwyu
+      --max_line_length=1200
+      # -Xiwyu --verbose=7
+      CACHE STRING "Include-what-you-use command")
+endif()
 
 include(CTest)
-include(FetchContent)
 include(GNUInstallDirs)
 
 if(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT)
-FetchContent_Declare(
-  cmake-scripts
-  GIT_REPOSITORY https://github.com/StableCoder/cmake-scripts
-  GIT_TAG 23.06)
-FetchContent_GetProperties(cmake-scripts)
-if(NOT cmake-scripts_POPULATED)
-  FetchContent_Populate(cmake-scripts)
-  list(APPEND CMAKE_MODULE_PATH ${cmake-scripts_SOURCE_DIR})
-endif()
-
-include(sanitizers)
-include(tools)
-
-set(FORMAT_CHECK_CMAKE
-    yes
-    CACHE BOOL "")
-FetchContent_Declare(
-  format
-  GIT_REPOSITORY https://github.com/TheLartians/Format.cmake.git
-  GIT_TAG v1.7.3)
-FetchContent_MakeAvailable(format)
-
-set(USE_CCACHE
-    yes
-    CACHE BOOL "")
-FetchContent_Declare(
-  ccache.cmake
-  GIT_REPOSITORY https://github.com/TheLartians/Ccache.cmake.git
-  GIT_TAG v1.2.4)
-FetchContent_MakeAvailable(ccache.cmake)
-else()
-function(clang_tidy)
-endfunction()
+  include(dependencies.cmake)
 endif()
 
 add_subdirectory(src)

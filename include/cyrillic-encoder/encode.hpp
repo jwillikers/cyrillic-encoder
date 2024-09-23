@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <array>
 #include <cyrillic-encoder/export.h>
-#include <iterator>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -35,17 +34,19 @@ static constexpr std::array<std::pair<char, std::string_view>, num_alphanumeric>
 // If the character is not in the table, an empty string view is returned.
 // Currently, the conversion table must be sorted by key.
 static constexpr std::string_view encode_char(
-    char c,
+    char character,
     std::array<std::pair<char, std::string_view>, num_alphanumeric> const
         &conversion_table = sample_conversion_table) {
   // This implementation uses a binary search to locate the character mapping.
   // This isn't necessary for the limited size of the sample table.
   // However, it scales better.
   // A compile-time hash map would make much more sense and not require sorting.
-  auto const *found = std::lower_bound(
-      std::begin(conversion_table), std::end(conversion_table), c,
-      [](auto const &pair, char ch) { return std::get<0>(pair) < ch; });
-  if (found == std::end(conversion_table) || std::get<0>(*found) != c) {
+  auto const *found =
+      std::lower_bound(std::begin(conversion_table), std::end(conversion_table),
+                       character, [](auto const &pair, char the_character) {
+                         return std::get<0>(pair) < the_character;
+                       });
+  if (found == std::end(conversion_table) || std::get<0>(*found) != character) {
     return {};
   }
   return std::get<1>(*found);

@@ -3,32 +3,54 @@ default: build
 alias f := format
 alias fmt := format
 
-format:
+format: just-fmt clang-format
+
+clang-format:
+    clang-format -i include/cyrillic-encoder/*.hpp src/*.cpp
+
+just-fmt:
     just --fmt --unstable
 
-configure build_type="RelWithDebInfo":
-    cmake \
-        -GNinja \
-        -DCMAKE_BUILD_TYPE="{{ build_type }}" \
-        -DCMAKE_CXX_CLANG_TIDY=clang-tidy \
-        -DCLANG_FORMAT_PROGRAM=clang-format \
-        -DCMAKE_LINKER_TYPE=MOLD \
-        -B build \
-        -S .
+alias c := configure
 
-build:
-    cmake --build build
+configure preset="dev":
+    cmake --preset {{ preset }} -DCMAKE_LINKER_TYPE=MOLD
 
-test: build
-    ctest --output-on-failure --test-dir build
+alias b := build
 
-all build_type="RelWithDebInfo": (configure build_type) build test
+build preset="dev":
+    cmake --build --preset {{ preset }}
 
-run: build
+alias t := test
+
+test preset="dev": build
+    ctest --preset {{ preset }}
+
+alias w := workflow
+
+workflow preset="dev" *flags="":
+    cmake --workflow --preset {{ preset }} {{ flags }}
+
+alias r := run
+
+# todo Parse build directory from preset.
+run preset="dev": (build preset)
     build/src/cyrillic-encoder
+
+alias d := debug
+
+# todo Parse build directory from preset.
+debug preset="dev" debugger="gdb": (build preset)
+    {{ debugger }} build/src/cyrillic-encoder
+
+alias p := package
+alias pack := package
 
 package:
     nix build
+
+alias u := update
+alias up := package
 
 update:
     nix flake update

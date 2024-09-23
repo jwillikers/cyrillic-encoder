@@ -8,6 +8,9 @@ on:  # yamllint disable-line rule:truthy
 
 jobs:
   build:
+    strategy:
+      matrix:
+        compiler: [clang, gcc]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,11 +19,32 @@ jobs:
         with:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-      - name: Configure
-        run: nix develop --command just configure
+      - name: Prepare ccache timestamp
+        id: ccache_cache_timestamp
+        shell: cmake -P {0}
+        run: |
+          string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
+          message("::set-output name=timestamp::${current_date}")
+      - name: ccache cache files
+        uses: actions/cache@v4
+        with:
+          key: ${{ matrix.compiler }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+          path: .ccache
+          # This avoids the size of the cache increasing after every run.
+          restore-keys: |
+              ${{ matrix.compiler }}-ccache-
+          save-always: true
       - name: Build
-        run: nix develop --command just build
-      - name: Test
-        run: nix develop --command just test
+        run: nix develop --command just workflow ci-${{ matrix.compiler }}
+
+  package-nix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@V28
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
       - name: Build the Nix package
         run: nix build
