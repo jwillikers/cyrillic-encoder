@@ -18,7 +18,15 @@ jobs:
         id: cmake-format
         uses: PuneetMatharu/cmake-format-lint-action@v1.0.4
         with:
-          args: --in-place --check
+          args: --check
+  clang-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DoozyX/clang-format-lint-action@v0.18.1
+        with:
+          source: '.'
+          extensions: 'hpp,cpp'
   just:
     runs-on: ubuntu-latest
     steps:
