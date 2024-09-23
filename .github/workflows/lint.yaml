@@ -18,7 +18,7 @@ jobs:
         id: cmake-format
         uses: PuneetMatharu/cmake-format-lint-action@v1.0.4
         with:
-          args: --in-place
+          args: --in-place --check
   cpp-linter:
     runs-on: ubuntu-latest
     steps:
