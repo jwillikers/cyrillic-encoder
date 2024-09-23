@@ -41,9 +41,11 @@ static constexpr std::string_view encode_char(
   // This isn't necessary for the limited size of the sample table.
   // However, it scales better.
   // A compile-time hash map would make much more sense and not require sorting.
-  auto const *found = std::lower_bound(
-      std::begin(conversion_table), std::end(conversion_table), character,
-      [](auto const &pair, char the_character) { return std::get<0>(pair) < the_character; });
+  auto const *found =
+      std::lower_bound(std::begin(conversion_table), std::end(conversion_table),
+                       character, [](auto const &pair, char the_character) {
+                         return std::get<0>(pair) < the_character;
+                       });
   if (found == std::end(conversion_table) || std::get<0>(*found) != character) {
     return {};
   }

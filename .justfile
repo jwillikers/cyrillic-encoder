@@ -6,7 +6,7 @@ alias fmt := format
 format: just-fmt clang-format
 
 clang-format:
-    clang-format -i include/**.hpp src/**.{c,h}pp
+    clang-format -i include/cyrillic-encoder/*.hpp src/*.cpp
 
 just-fmt:
     just --fmt --unstable

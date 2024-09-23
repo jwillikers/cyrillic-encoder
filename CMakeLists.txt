@@ -13,10 +13,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS yes)
 set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS yes)
 
 if(PROJECT_IS_TOP_LEVEL AND CMAKE_EXPORT_COMPILE_COMMANDS)
-    list(APPEND CMAKE_C_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES})
-    list(REMOVE_DUPLICATES CMAKE_C_STANDARD_INCLUDE_DIRECTORIES)
-    list(APPEND CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
-    list(REMOVE_DUPLICATES CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES)
+  list(APPEND CMAKE_C_STANDARD_INCLUDE_DIRECTORIES
+       ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES})
+  list(REMOVE_DUPLICATES CMAKE_C_STANDARD_INCLUDE_DIRECTORIES)
+  list(APPEND CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES
+       ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
+  list(REMOVE_DUPLICATES CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES)
 endif()
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
@@ -24,15 +26,15 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS no)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 if(DEFINED CMAKE_CXX_STANDARD)
-    if(CMAKE_CXX_STANDARD EQUAL 98 OR CMAKE_CXX_STANDARD LESS 20)
-        message(FATAL_ERROR "This project requires at least C++20")
-    endif()
+  if(CMAKE_CXX_STANDARD EQUAL 98 OR CMAKE_CXX_STANDARD LESS 20)
+    message(FATAL_ERROR "This project requires at least C++20")
+  endif()
 else()
-    set(CMAKE_CXX_STANDARD 20)
+  set(CMAKE_CXX_STANDARD 20)
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED yes)
 if(NOT DEFINED CMAKE_CXX_EXTENSIONS)
-    set(CMAKE_CXX_EXTENSIONS no)
+  set(CMAKE_CXX_EXTENSIONS no)
 endif()
 
 set(BUILD_SHARED_LIBS
@@ -40,17 +42,14 @@ set(BUILD_SHARED_LIBS
     CACHE BOOL "")
 set(CMAKE_COMPILE_WARNING_AS_ERROR
     ${PROJECT_IS_TOP_LEVEL}
-    CACHE BOOL "Treat compiler warnings as errors"
-)
+    CACHE BOOL "Treat compiler warnings as errors")
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY
     "$<$<CONFIG:Debug>:MultiThreadedDebugDLL>"
-    CACHE STRING ""
-)
+    CACHE STRING "")
 set(CMAKE_OPTIMIZE_DEPENDENCIES
     yes
-    CACHE BOOL ""
-)
+    CACHE BOOL "")
 set(CYRILLIC_ENCODER_GENERATED_INCLUDEDIR
     "${PROJECT_BINARY_DIR}/generated/include"
     CACHE PATH "The include directory for generated header files.")
@@ -85,30 +84,41 @@ else()
   message(SEND_ERROR "IPO is not supported: ${output}")
 endif()
 
-option(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY "Enable Clang-Tidy" ${PROJECT_IS_TOP_LEVEL})
-option(CYRILLIC_ENCODER_ENABLE_IWYU "Enable include-what-you-use" ${PROJECT_IS_TOP_LEVEL})
+option(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY "Enable Clang-Tidy"
+       ${PROJECT_IS_TOP_LEVEL})
+option(CYRILLIC_ENCODER_ENABLE_IWYU "Enable include-what-you-use"
+       ${PROJECT_IS_TOP_LEVEL})
 
 option(CYRILLIC_ENCODER_ENABLE_TESTING "Build tests" ${PROJECT_IS_TOP_LEVEL})
-option(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT "Enable fetching external dependencies" ${PROJECT_IS_TOP_LEVEL})
+option(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT
+       "Enable fetching external dependencies" ${PROJECT_IS_TOP_LEVEL})
 
 if(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY)
   find_program(CLANG_TIDY_EXECUTABLE clang-tidy REQUIRED)
-  set(CMAKE_C_CLANG_TIDY ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR})
-  set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR})
+  find_program(RUN_CLANG_TIDY_EXECUTABLE run-clang-tidy REQUIRED)
+  add_custom_target(
+    cyrillic-encoder-clang-tidy-check
+    COMMAND ${RUN_CLANG_TIDY_EXECUTABLE} -clang-tidy-binary
+            ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR})
 endif()
 
 if(CYRILLIC_ENCODER_ENABLE_IWYU)
   find_program(INCLUDE_WHAT_YOU_USE_EXECUTABLE include-what-you-use REQUIRED)
-  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE ${INCLUDE_WHAT_YOU_USE_EXECUTABLE}
-    -w
-    -Xiwyu --error
-    -Xiwyu --experimental=clang_mappings
-    -Xiwyu --comment_style=long
-    -Xiwyu --mapping_file=${CMAKE_CURRENT_SOURCE_DIR}/iwyu.imp
-    -Xiwyu --max_line_length=1200
-    # -Xiwyu --verbose=7
-    CACHE STRING "Include-what-you-use command"
-  )
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE
+      ${INCLUDE_WHAT_YOU_USE_EXECUTABLE}
+      -w
+      -Xiwyu
+      --error
+      -Xiwyu
+      --experimental=clang_mappings
+      -Xiwyu
+      --comment_style=long
+      -Xiwyu
+      --mapping_file=${CMAKE_CURRENT_SOURCE_DIR}/iwyu.imp
+      -Xiwyu
+      --max_line_length=1200
+      # -Xiwyu --verbose=7
+      CACHE STRING "Include-what-you-use command")
 endif()
 
 include(CTest)
