@@ -373,7 +373,7 @@ if(CYRILLIC_ENCODER_ENABLE_TESTING)
   target_sources(cyrillic-encoder-encode-test PRIVATE encode.test.cpp)
   target_link_libraries(
     cyrillic-encoder-encode-test
-    PRIVATE Boost::headers cyrillic-encoder::encode Boost::ut)
+    PRIVATE Boost::headers Boost::ut cyrillic-encoder::encode)
   target_compile_options(
     cyrillic-encoder-encode-test
     PRIVATE
@@ -395,6 +395,13 @@ if(CYRILLIC_ENCODER_ENABLE_TESTING)
            COMMAND cyrillic-encoder-encode-test)
   set_tests_properties(cyrillic-encoder-encode-test
                        PROPERTIES LABELS "cyrillic-encoder")
+  if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(cyrillic-encoder-encoder-dir "$<SHELL_PATH:$<TARGET_FILE_DIR:cyrillic-encoder::encode>>")
+    set_property(TEST cyrillic-encoder-encode-test APPEND PROPERTY
+      ENVIRONMENT_MODIFICATION
+      PATH=path_list_prepend:${cyrillic-encoder-encoder-dir}
+    )
+  endif()
 endif()
 
 install(
