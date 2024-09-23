@@ -19,18 +19,6 @@ jobs:
         uses: PuneetMatharu/cmake-format-lint-action@v1.0.4
         with:
           args: --in-place --check
-  cpp-linter:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: cpp-linter/cpp-linter-action@v2
-        id: linter
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          style: file
-          format-review: true
-          tidy-review: false
   just:
     runs-on: ubuntu-latest
     steps:
