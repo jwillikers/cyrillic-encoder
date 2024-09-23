@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Format CMake files
         id: cmake-format
-        uses: PuneetMatharu/cmake-format-lint-action@v1
+        uses: PuneetMatharu/cmake-format-lint-action@v1.0.4
         with:
           args: --in-place --check
   cpp-linter:
@@ -30,7 +30,7 @@ jobs:
         with:
           style: file
           format-review: true
-          tidy-review: true
+          tidy-review: false
   just:
     runs-on: ubuntu-latest
     steps:
@@ -47,4 +47,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: karancode/yamllint-github-action@v2
+      - uses: karancode/yamllint-github-action@v2.1.1
