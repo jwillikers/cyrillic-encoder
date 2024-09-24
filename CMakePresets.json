@@ -140,6 +140,9 @@
       "name": "default"
     },
     {
+      "cacheVariables": {
+        "ENABLE_ASAN": true
+      },
       "hidden": true,
       "name": "lint"
     },

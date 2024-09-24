@@ -141,4 +141,8 @@ include(GNUInstallDirs)
 include(cmake/UseCompilerCache.cmake)
 usecompilercache()
 
+if(PROJECT_IS_TOP_LEVEL)
+    include(cmake/Sanitizers.cmake)
+endif()
+
 add_subdirectory(src)

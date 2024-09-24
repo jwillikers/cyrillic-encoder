@@ -3,6 +3,7 @@
         "aarch",
         "adoc",
         "armv",
+        "ASAN",
         "assumeyes",
         "autofix",
         "Bradient",
