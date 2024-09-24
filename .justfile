@@ -18,8 +18,8 @@ configure preset="dev":
 
 alias b := build
 
-build preset="dev":
-    cmake --build --preset {{ preset }}
+build preset="dev" target="all":
+    cmake --build --preset {{ preset }} --target {{ target }}
 
 alias t := test
 
