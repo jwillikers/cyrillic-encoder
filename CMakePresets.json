@@ -256,8 +256,8 @@
       "cacheVariables": {
         "CMAKE_COMPILE_WARNING_AS_ERROR": false,
         "CYRILLIC_ENCODER_ENABLE_CLANG_TIDY": false,
-        "CYRILLIC_ENCODER_ENABLE_FETCHCONTENT": false,
         "CYRILLIC_ENCODER_ENABLE_IWYU": false,
+        "CYRILLIC_ENCODER_ENABLE_SPLIT_DWARF": false,
         "CYRILLIC_ENCODER_ENABLE_TESTING": false
       },
       "displayName": "Minimal",

@@ -82,12 +82,12 @@ endif()
 
 include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag("-gsplit-dwarf" HAVE_SPLIT_DWARF)
-if(HAVE_SPLIT_DWARF)
+option(CYRILLIC_ENCODER_ENABLE_SPLIT_DWARF "Split dwarf debug information out of object files" ${HAVE_SPLIT_DWARF})
+if(CYRILLIC_ENCODER_ENABLE_SPLIT_DWARF)
     add_compile_options("$<$<CONFIG:Debug,RelWithDebInfo>:-gsplit-dwarf>")
 endif()
 
 option(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY "Enable Clang-Tidy" ${PROJECT_IS_TOP_LEVEL})
-option(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT "Enable fetching external dependencies" ${PROJECT_IS_TOP_LEVEL})
 option(CYRILLIC_ENCODER_ENABLE_IWYU "Enable include-what-you-use" ${PROJECT_IS_TOP_LEVEL})
 option(CYRILLIC_ENCODER_ENABLE_TESTING "Build tests" ${PROJECT_IS_TOP_LEVEL})
 
@@ -100,7 +100,7 @@ endif()
 
 if(NOT PROJECT_IS_TOP_LEVEL)
     mark_as_advanced(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY CYRILLIC_ENCODER_ENABLE_COVERAGE_CLANG
-                     CYRILLIC_ENCODER_ENABLE_FETCHCONTENT CYRILLIC_ENCODER_ENABLE_IWYU CYRILLIC_ENCODER_ENABLE_TESTING)
+                     CYRILLIC_ENCODER_ENABLE_IWYU CYRILLIC_ENCODER_ENABLE_TESTING)
 endif()
 
 if(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY)
@@ -138,9 +138,7 @@ endif()
 
 include(CTest)
 include(GNUInstallDirs)
-
-if(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT)
-    include(dependencies.cmake)
-endif()
+include(cmake/UseCompilerCache.cmake)
+usecompilercache()
 
 add_subdirectory(src)
