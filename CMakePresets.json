@@ -229,6 +229,9 @@
       "name": "coverage-clang"
     },
     {
+      "cacheVariables": {
+        "CMAKE_INTERPROCEDURAL_OPTIMIZATION": false
+      },
       "displayName": "Developer",
       "inherits": [
         "default",
