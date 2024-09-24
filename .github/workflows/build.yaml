@@ -14,11 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Nix
-        uses: cachix/install-nix-action@V28
-        with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - uses: DeterminateSystems/flake-checker-action@v9
       - name: Prepare ccache timestamp
         id: ccache_cache_timestamp
         shell: cmake -P {0}
@@ -85,7 +83,7 @@ jobs:
         # Don't run for dependabot unless you fix PR comment permissions
         if: ${{ github.actor != 'dependabot[bot]'}}
         with:
-          artifact_download_workflow_names: "coverage,schedule"
+          artifact_download_workflow_names: "build,schedule"
           badge: true
           fail_on_negative_difference: true
           file_coverage_error_min: 40
