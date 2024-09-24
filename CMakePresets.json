@@ -175,9 +175,17 @@
       "displayName": "Continuous Integration",
       "inherits": [
         "default",
-        "lint"
+        "lint",
+        "mold"
       ],
       "name": "ci"
+    },
+    {
+      "cacheVariables": {
+        "CMAKE_LINKER_TYPE": "MOLD"
+      },
+      "hidden": true,
+      "name": "mold"
     },
     {
       "displayName": "Continuous Integration - Clang",
@@ -238,7 +246,8 @@
       "displayName": "Developer",
       "inherits": [
         "default",
-        "lint"
+        "lint",
+        "mold"
       ],
       "name": "dev"
     },

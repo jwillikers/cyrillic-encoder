@@ -14,7 +14,7 @@ just-fmt:
 alias c := configure
 
 configure preset="dev":
-    cmake --preset {{ preset }} -DCMAKE_LINKER_TYPE=MOLD
+    cmake --preset {{ preset }}
 
 alias b := build
 
