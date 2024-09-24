@@ -16,6 +16,7 @@
             clang
             clang-tools
             cmake
+            cmake-format
             fish
             gdb
             include-what-you-use
