@@ -33,6 +33,7 @@
         "justfiles",
         "keysyms",
         "libasan",
+        "libc",
         "libcxx",
         "libcxxabi",
         "libfontenc",

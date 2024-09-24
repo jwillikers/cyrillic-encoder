@@ -147,7 +147,10 @@
       "binaryDir": "build-clang",
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "clang++",
-        "CMAKE_C_COMPILER": "clang"
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_EXE_LINKER_FLAGS": "-stdlib=libc++ -lc++abi",
+        "CMAKE_MODULE_LINKER_FLAGS": "-stdlib=libc++ -lc++abi",
+        "CMAKE_SHARED_LINKER_FLAGS": "-stdlib=libc++ -lc++abi"
       },
       "inherits": [
         "default"

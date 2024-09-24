@@ -22,6 +22,7 @@
             include-what-you-use
             just
             lcov
+            libcxx
             lldb
             llvm
             mold-wrapped
