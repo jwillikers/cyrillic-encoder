@@ -12,12 +12,14 @@
             inherit system overlays;
           };
           nativeBuildInputs = with pkgs; [
+            appstream
             ccache
             clang
             clang-tools
             cmake
             cmake-format
             fish
+            flatpak-builder
             gdb
             include-what-you-use
             just

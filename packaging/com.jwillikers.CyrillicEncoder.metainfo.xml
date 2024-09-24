@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2024 Jordan Williams <jordan@jwillikers.com> -->
+<component type="desktop-application">
+  <id>com.jwillikers.CyrillicEncoder</id>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>GPL-3.0-only</project_license>
+  <content_rating type="oars-1.1" />
+  <name>Cyrillic Encoder</name>
+  <summary>Convert characters to Cyrillic letters</summary>
+  <developer id="com.jwillikers">
+    <name>Jordan Williams</name>
+  </developer>
+  <update_contact>jordan@jwillikers.com</update_contact>
+  <description>
+    <p>A demo Qt application which converts characters to Cyrillic letters.</p>
+  </description>
+  <launchable type="desktop-id">com.jwillikers.CyrillicEncoder.desktop</launchable>
+  <url type="bugtracker">https://github.com/jwillikers/cyrillic-encoder/issues</url>
+  <url type="homepage">https://github.com/jwillikers/cyrillic-encoder</url>
+  <url type="vcs-browser">https://github.com/jwillikers/cyrillic-encoder</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/jwillikers/cyrillic-encoder/blob/main/screenshots/Cyrillic%20Encoder%20Demo.gif</image>
+      <caption>Conversion of characters to arbitrary Cyrillic letters</caption>
+    </screenshot>
+  </screenshots>
+  <!-- <provides>
+    <binary>cyrillic-encoder</binary>
+  </provides> -->
+  <releases>
+    <release version="0.0.1" date="2024-09-24">
+      <description>
+        <p>
+          Initial release.
+        </p>
+      </description>
+    </release>
+  </releases>
+</component>

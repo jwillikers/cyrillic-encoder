@@ -1,3 +1,18 @@
+if(PROJECT_IS_TOP_LEVEL)
+    install(
+        FILES com.jwillikers.CyrillicEncoder.desktop
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/application/
+        COMPONENT CyrillicEncoder_Flatpak)
+    install(
+        FILES com.jwillikers.CyrillicEncoder.metainfo.xml
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo/
+        COMPONENT CyrillicEncoder_Flatpak)
+    install(
+        FILES com.jwillikers.CyrillicEncoder.svg
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps/
+        COMPONENT CyrillicEncoder_Flatpak)
+endif()
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set(CPACK_GENERATOR "ZIP")
 else()

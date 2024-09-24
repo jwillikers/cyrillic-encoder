@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - https://github.com/SVG-Edit/svgedit-->
+ <defs>
+  <linearGradient id="svg_5">
+   <stop id="jq_stop_779" offset="0" stop-color="#ffffff"/>
+   <stop id="jq_stop_4117" offset="1" stop-color="#000000"/>
+  </linearGradient>
+ </defs>
+ <g class="layer">
+  <title>Layer 1</title>
+  <ellipse cx="255.5" cy="257.67" fill="#d8cdcd" id="svg_2" rx="250.5" ry="252" stroke="url(#svg_5)" stroke-opacity="0" stroke-width="5" transform="matrix(1, 0, 0, 1, 0, 0)"/>
+  <text fill="#003f7f" font-family="Serif" font-size="424" id="svg_3" stroke="#aaa4a4" stroke-dasharray="null" stroke-linecap="null" stroke-linejoin="null" stroke-width="0" text-anchor="middle" x="247" xml:space="preserve" y="363">Д</text>
+ </g>
+</svg>

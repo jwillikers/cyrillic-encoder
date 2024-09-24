@@ -82,3 +82,8 @@ result
 
 # direnv
 .direnv/
+
+# Flatpak
+.flatpak-builder/
+build-dir/
+repo/
