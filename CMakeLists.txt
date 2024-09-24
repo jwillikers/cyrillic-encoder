@@ -70,15 +70,9 @@ if(NOT isMultiConfig)
     string(TOUPPER ${CMAKE_BUILD_TYPE} _BUILD_TYPE_UPPER)
 endif()
 
-include(CheckIPOSupported)
-check_ipo_supported(RESULT result OUTPUT output)
-if(result)
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION
-        yes
-        CACHE BOOL "")
-else()
-    message(SEND_ERROR "IPO is not supported: ${output}")
-endif()
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION
+    yes
+    CACHE BOOL "")
 
 include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag("-gsplit-dwarf" HAVE_SPLIT_DWARF)
