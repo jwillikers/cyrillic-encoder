@@ -420,7 +420,7 @@ if(CYRILLIC_ENCODER_ENABLE_TESTING)
     add_custom_command(
       OUTPUT ${PROJECT_BINARY_DIR}/merged.profdata
       COMMAND
-        ${LLVM_PROFDATA_EXECUTABLE} merge -sparse
+        ${LLVM_PROFDATA_EXECUTABLE} merge --sparse
         --output=${PROJECT_BINARY_DIR}/merged.profdata
         ${CMAKE_CURRENT_BINARY_DIR}/profiling/test.*.profraw
       COMMENT "Merging Clang's source-based coverage results"
@@ -430,7 +430,10 @@ if(CYRILLIC_ENCODER_ENABLE_TESTING)
       OUTPUT ${PROJECT_BINARY_DIR}/coverage.info
       COMMAND
         ${LLVM_COV_EXECUTABLE} export --format=lcov
+        --ignore-filename-regex=.*\\.test\\.cpp
         --instr-profile=${PROJECT_BINARY_DIR}/merged.profdata
+        --object=$<TARGET_FILE:cyrillic-encoder>
+        --object=$<TARGET_FILE:cyrillic-encoder::encode>
         --object=$<TARGET_FILE:cyrillic-encoder-encode-test> >
         ${PROJECT_BINARY_DIR}/coverage.info
       DEPENDS ${PROJECT_BINARY_DIR}/merged.profdata
@@ -455,7 +458,7 @@ if(CYRILLIC_ENCODER_ENABLE_TESTING)
     add_custom_target(
       cyrillic-encoder_generate-html-clang-coverage
       COMMAND ${GENHTML_EXECUTABLE} ${PROJECT_BINARY_DIR}/coverage.info
-              --demangle.cpp --output-directory ${PROJECT_BINARY_DIR}/coverage
+              --demangle-cpp --output-directory ${PROJECT_BINARY_DIR}/coverage
       DEPENDS ${PROJECT_BINARY_DIR}/coverage.info
       COMMENT "Generating HTML from Clang's source-based coverage"
       WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
