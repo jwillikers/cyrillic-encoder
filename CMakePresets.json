@@ -172,9 +172,17 @@
       "displayName": "Continuous Integration",
       "inherits": [
         "default",
-        "lint"
+        "lint",
+        "mold"
       ],
       "name": "ci"
+    },
+    {
+      "cacheVariables": {
+        "CMAKE_LINKER_TYPE": "MOLD"
+      },
+      "hidden": true,
+      "name": "mold"
     },
     {
       "displayName": "Continuous Integration - Clang",
@@ -229,10 +237,14 @@
       "name": "coverage-clang"
     },
     {
+      "cacheVariables": {
+        "CMAKE_INTERPROCEDURAL_OPTIMIZATION": false
+      },
       "displayName": "Developer",
       "inherits": [
         "default",
-        "lint"
+        "lint",
+        "mold"
       ],
       "name": "dev"
     },
@@ -256,8 +268,8 @@
       "cacheVariables": {
         "CMAKE_COMPILE_WARNING_AS_ERROR": false,
         "CYRILLIC_ENCODER_ENABLE_CLANG_TIDY": false,
-        "CYRILLIC_ENCODER_ENABLE_FETCHCONTENT": false,
         "CYRILLIC_ENCODER_ENABLE_IWYU": false,
+        "CYRILLIC_ENCODER_ENABLE_SPLIT_DWARF": false,
         "CYRILLIC_ENCODER_ENABLE_TESTING": false
       },
       "displayName": "Minimal",
