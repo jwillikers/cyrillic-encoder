@@ -140,3 +140,7 @@ if(PROJECT_IS_TOP_LEVEL)
 endif()
 
 add_subdirectory(src)
+
+if(PROJECT_IS_TOP_LEVEL)
+    add_subdirectory(packaging)
+endif()
