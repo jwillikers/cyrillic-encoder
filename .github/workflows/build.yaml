@@ -83,7 +83,7 @@ jobs:
         # Don't run for dependabot unless you fix PR comment permissions
         if: ${{ github.actor != 'dependabot[bot]'}}
         with:
-          artifact_download_workflow_names: "coverage,schedule"
+          artifact_download_workflow_names: "build,schedule"
           badge: true
           fail_on_negative_difference: true
           file_coverage_error_min: 40
