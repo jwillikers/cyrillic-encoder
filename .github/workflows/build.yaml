@@ -36,7 +36,6 @@ jobs:
           save-always: true
       - name: Build
         run: nix develop --command just workflow ci-${{ matrix.compiler }}
-
   package-nix:
     runs-on: ubuntu-latest
     steps:
@@ -48,3 +47,53 @@ jobs:
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
       - name: Build the Nix package
         run: nix build
+
+  coverage:
+    permissions:
+      pull-requests: write
+    strategy:
+      matrix:
+        compiler: [clang]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@V28
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Prepare ccache timestamp
+        id: ccache_cache_timestamp
+        shell: cmake -P {0}
+        run: |
+          string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
+          message("::set-output name=timestamp::${current_date}")
+      - name: ccache cache files
+        uses: actions/cache@v4
+        with:
+          key: coverage-${{ matrix.compiler }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+          path: .ccache
+          # This avoids the size of the cache increasing after every run.
+          restore-keys: |
+              coverage-${{ matrix.compiler }}-ccache-
+          save-always: true
+      - name: Generate Coverage
+        run: nix develop --command just workflow coverage-${{ matrix.compiler }}
+      - name: Code Coverage Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: build-coverage-${{ matrix.compiler }}/cobertura.xml
+          badge: true
+          # fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          # thresholds: '60 80'
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md

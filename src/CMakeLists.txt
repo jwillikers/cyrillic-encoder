@@ -409,6 +409,57 @@ if(CYRILLIC_ENCODER_ENABLE_TESTING)
       PROPERTY ENVIRONMENT_MODIFICATION
                PATH=path_list_prepend:${cyrillic-encoder-encoder-dir})
   endif()
+
+  # Coverage
+  if(CYRILLIC_ENCODER_ENABLE_COVERAGE_CLANG)
+    find_program(LLVM_COV_EXECUTABLE llvm-cov REQUIRED)
+    find_program(LLVM_PROFDATA_EXECUTABLE llvm-profdata REQUIRED)
+    find_program(GENHTML_EXECUTABLE genhtml REQUIRED)
+    find_program(LCOV_COBERTURA_EXECUTABLE lcov_cobertura REQUIRED)
+
+    add_custom_command(
+      OUTPUT ${PROJECT_BINARY_DIR}/merged.profdata
+      COMMAND
+        ${LLVM_PROFDATA_EXECUTABLE} merge -sparse
+        --output=${PROJECT_BINARY_DIR}/merged.profdata
+        ${CMAKE_CURRENT_BINARY_DIR}/profiling/test.*.profraw
+      COMMENT "Merging Clang's source-based coverage results"
+      WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+
+    add_custom_command(
+      OUTPUT ${PROJECT_BINARY_DIR}/coverage.info
+      COMMAND
+        ${LLVM_COV_EXECUTABLE} export --format=lcov
+        --instr-profile=${PROJECT_BINARY_DIR}/merged.profdata
+        --object=$<TARGET_FILE:cyrillic-encoder-encode-test> >
+        ${PROJECT_BINARY_DIR}/coverage.info
+      DEPENDS ${PROJECT_BINARY_DIR}/merged.profdata
+      COMMENT
+        "Exporting Clang's source-based coverage results in the lcov format"
+      WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+
+    add_custom_command(
+      OUTPUT ${PROJECT_BINARY_DIR}/cobertura.xml
+      COMMAND
+        ${LCOV_COBERTURA_EXECUTABLE} ${PROJECT_BINARY_DIR}/coverage.info
+        --demangle --base-dir ${PROJECT_SOURCE_DIR} --output
+        ${PROJECT_BINARY_DIR}/cobertura.xml
+      DEPENDS ${PROJECT_BINARY_DIR}/coverage.info
+      COMMENT
+        "Generating Cobertura XML from Clang's source-based coverage results"
+      WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+
+    add_custom_target(cyrillic-encoder_generate-cobertura-clang-coverage
+                      DEPENDS ${PROJECT_BINARY_DIR}/cobertura.xml)
+
+    add_custom_target(
+      cyrillic-encoder_generate-html-clang-coverage
+      COMMAND ${GENHTML_EXECUTABLE} ${PROJECT_BINARY_DIR}/coverage.info
+              --demangle.cpp --output-directory ${PROJECT_BINARY_DIR}/coverage
+      DEPENDS ${PROJECT_BINARY_DIR}/coverage.info
+      COMMENT "Generating HTML from Clang's source-based coverage"
+      WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+  endif()
 endif()
 
 install(

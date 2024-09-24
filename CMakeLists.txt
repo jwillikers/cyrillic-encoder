@@ -86,12 +86,27 @@ endif()
 
 option(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY "Enable Clang-Tidy"
        ${PROJECT_IS_TOP_LEVEL})
-option(CYRILLIC_ENCODER_ENABLE_IWYU "Enable include-what-you-use"
-       ${PROJECT_IS_TOP_LEVEL})
-
-option(CYRILLIC_ENCODER_ENABLE_TESTING "Build tests" ${PROJECT_IS_TOP_LEVEL})
 option(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT
        "Enable fetching external dependencies" ${PROJECT_IS_TOP_LEVEL})
+option(CYRILLIC_ENCODER_ENABLE_IWYU "Enable include-what-you-use"
+       ${PROJECT_IS_TOP_LEVEL})
+option(CYRILLIC_ENCODER_ENABLE_TESTING "Build tests" ${PROJECT_IS_TOP_LEVEL})
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  option(CYRILLIC_ENCODER_ENABLE_COVERAGE_CLANG
+         "Enable Clang source-based coverage" ${PROJECT_IS_TOP_LEVEL})
+else()
+  option(CYRILLIC_ENCODER_ENABLE_COVERAGE_CLANG
+         "Enable Clang source-based coverage" no)
+  mark_as_advanced(CYRILLIC_ENCODER_ENABLE_COVERAGE_CLANG)
+endif()
+
+if(NOT PROJECT_IS_TOP_LEVEL)
+  mark_as_advanced(
+    CYRILLIC_ENCODER_ENABLE_CLANG_TIDY CYRILLIC_ENCODER_ENABLE_COVERAGE_CLANG
+    CYRILLIC_ENCODER_ENABLE_FETCHCONTENT CYRILLIC_ENCODER_ENABLE_IWYU
+    CYRILLIC_ENCODER_ENABLE_TESTING)
+endif()
 
 if(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY)
   find_program(CLANG_TIDY_EXECUTABLE clang-tidy REQUIRED)
@@ -99,12 +114,12 @@ if(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY)
   set(CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR})
   file(
     WRITE ${CMAKE_CURRENT_BINARY_DIR}/.clang-tidy
-    """
+    "
 ---
 Checks: >
   -misc-include-cleaner
 InheritParentConfig: true
-""")
+")
 endif()
 
 if(CYRILLIC_ENCODER_ENABLE_IWYU)

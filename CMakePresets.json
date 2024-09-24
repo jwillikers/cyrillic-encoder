@@ -9,6 +9,30 @@
       ]
     },
     {
+      "configuration": "Debug",
+      "configurePreset": "coverage-clang",
+      "name": "coverage-clang",
+      "targets": [
+        "all"
+      ]
+    },
+    {
+      "configuration": "Debug",
+      "configurePreset": "coverage-clang",
+      "name": "coverage-clang-cobertura-report",
+      "targets": [
+        "cyrillic-encoder_generate-cobertura-clang-coverage"
+      ]
+    },
+    {
+      "configuration": "Debug",
+      "configurePreset": "coverage-clang",
+      "name": "coverage-clang-html-report",
+      "targets": [
+        "cyrillic-encoder_generate-html-clang-coverage"
+      ]
+    },
+    {
       "configuration": "RelWithDebInfo",
       "configurePreset": "ci",
       "name": "ci",
@@ -188,6 +212,27 @@
       "name": "ci-msvc-clang"
     },
     {
+      "binaryDir": "build-coverage-clang",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": {
+          "type": "STRING",
+          "value": "Debug"
+        },
+        "CMAKE_CXX_FLAGS": "-fcoverage-mapping -fprofile-instr-generate",
+        "CMAKE_C_FLAGS": "-fcoverage-mapping -fprofile-instr-generate",
+        "CYRILLIC_ENCODER_ENABLE_COVERAGE_CLANG": true
+      },
+      "displayName": "Coverage - Clang",
+      "environment": {
+        "LLVM_PROFILE_FILE": "profiling/test.%p.profraw"
+      },
+      "inherits": [
+        "ci",
+        "clang"
+      ],
+      "name": "coverage-clang"
+    },
+    {
       "displayName": "Developer",
       "inherits": [
         "default",
@@ -327,6 +372,11 @@
       "name": "clang"
     },
     {
+      "configurePreset": "coverage-clang",
+      "inherits": "default",
+      "name": "coverage-clang"
+    },
+    {
       "configurePreset": "gcc",
       "inherits": "default",
       "name": "gcc"
@@ -383,6 +433,27 @@
         {
           "name": "ci",
           "type": "test"
+        }
+      ]
+    },
+    {
+      "name": "coverage-clang",
+      "steps": [
+        {
+          "name": "coverage-clang",
+          "type": "configure"
+        },
+        {
+          "name": "coverage-clang",
+          "type": "build"
+        },
+        {
+          "name": "coverage-clang",
+          "type": "test"
+        },
+        {
+          "name": "coverage-clang-cobertura-report",
+          "type": "build"
         }
       ]
     },

@@ -20,10 +20,12 @@
             gdb
             include-what-you-use
             just
+            lcov
             lldb
             llvm
             mold-wrapped
             ninja
+            python311Packages.lcov-cobertura
             qt6.wrapQtAppsHook
           ];
           buildInputs = with pkgs; [
