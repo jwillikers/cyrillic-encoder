@@ -80,6 +80,12 @@ else()
     message(SEND_ERROR "IPO is not supported: ${output}")
 endif()
 
+include(CheckCXXCompilerFlag)
+check_cxx_compiler_flag("-gsplit-dwarf" HAVE_SPLIT_DWARF)
+if(HAVE_SPLIT_DWARF)
+    add_compile_options("$<$<CONFIG:Debug,RelWithDebInfo>:-gsplit-dwarf>")
+endif()
+
 option(CYRILLIC_ENCODER_ENABLE_CLANG_TIDY "Enable Clang-Tidy" ${PROJECT_IS_TOP_LEVEL})
 option(CYRILLIC_ENCODER_ENABLE_FETCHCONTENT "Enable fetching external dependencies" ${PROJECT_IS_TOP_LEVEL})
 option(CYRILLIC_ENCODER_ENABLE_IWYU "Enable include-what-you-use" ${PROJECT_IS_TOP_LEVEL})
