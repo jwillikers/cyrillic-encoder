@@ -9,7 +9,7 @@ name: Format Just
       - '**/justfile'
 
 jobs:
-  just:
+  format-just:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
