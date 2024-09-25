@@ -29,8 +29,10 @@
             llvm
             mold-wrapped
             ninja
+            nushell
             python311Packages.lcov-cobertura
             qt6.wrapQtAppsHook
+            yamllint
           ];
           buildInputs = with pkgs; [
             boost

@@ -1,0 +1,18 @@
+name: Check MetaInfo
+"on":
+  pull_request:
+    branches: ["main"]
+    paths:
+      - .github/workflows/lint/metainfo.yaml
+      - flake.lock
+      - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
+
+jobs:
+  metainfo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Check the MetaInfo file
+        run: nix develop --command appstream-util validate packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
