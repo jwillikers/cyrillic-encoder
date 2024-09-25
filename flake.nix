@@ -30,6 +30,7 @@
             mold-wrapped
             ninja
             nushell
+            pre-commit
             python311Packages.lcov-cobertura
             qt6.wrapQtAppsHook
             yamllint
