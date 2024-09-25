@@ -13,6 +13,7 @@
           };
           nativeBuildInputs = with pkgs; [
             appstream
+            appstream-glib
             ccache
             clang
             clang-tools
