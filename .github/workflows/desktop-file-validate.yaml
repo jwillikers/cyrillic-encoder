@@ -3,7 +3,7 @@ name: Check desktop file
   pull_request:
     branches: ["main"]
     paths:
-      - .github/workflows/lint/desktop.yaml
+      - .github/workflows/desktop-file-validate.yaml
       - flake.lock
       - packaging/com.jwillikers.CyrillicEncoder.desktop
 

@@ -3,7 +3,7 @@ name: Format CMake files
   pull_request:
     branches: ["main"]
     paths:
-      - .github/workflows/format/cmake-format.yaml
+      - .github/workflows/cmake-format.yaml
       - flake.lock
       - '**/.cmake-format.json'
       - '**.cmake'

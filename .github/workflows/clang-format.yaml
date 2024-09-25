@@ -1,19 +1,20 @@
-name: Format Just
+name: Format C++ code
 "on":
   pull_request:
     branches: ["main"]
     paths:
-      - .github/workflows/format/just.yaml
+      - .github/workflows/clang-format.yaml
       - flake.lock
-      - '**/.justfile'
-      - '**/justfile'
+      - '**/.clang-format'
+      - '**.cpp'
+      - '**.hpp'
 
 jobs:
-  just:
+  clang-format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v14
       - uses: DeterminateSystems/magic-nix-cache-action@v8
-      - name: Format justfile
-        run: nix develop --command just --check --fmt --unstable
+      - name: Check C++ formatting
+        run: nix develop --command nu --commands 'clang-format --Werror **/*.cpp **/*.hpp'
