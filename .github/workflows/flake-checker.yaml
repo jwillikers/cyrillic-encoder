@@ -7,7 +7,7 @@ name: Check Nix Flake
       - flake.lock
 
 jobs:
-  check-flake:
+  flake-checker:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

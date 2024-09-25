@@ -1,14 +1,14 @@
-name: Check MetaInfo
+name: Validate MetaInfo
 "on":
   pull_request:
     branches: ["main"]
     paths:
-      - .github/workflows/metainfo-validate.yaml
+      - .github/workflows/appstream-util-validate.yaml
       - flake.lock
       - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
 
 jobs:
-  metainfo:
+  appstream-util-validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

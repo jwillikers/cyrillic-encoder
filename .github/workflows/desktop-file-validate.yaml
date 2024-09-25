@@ -8,7 +8,7 @@ name: Check desktop file
       - packaging/com.jwillikers.CyrillicEncoder.desktop
 
 jobs:
-  desktop-file:
+  desktop-file-validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
