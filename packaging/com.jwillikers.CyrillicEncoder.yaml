@@ -55,6 +55,13 @@ modules:
       - type: dir
         path: ..
         skip:
-          - build/
-          - build-dir/
-          - repo/
+          - .cache
+          - .direnv
+          - .github
+          - .vscode
+          - build
+          - build-clang
+          - build-gcc
+          - build-coverage-clang
+          - build-dir
+          - repo
