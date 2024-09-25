@@ -5,6 +5,7 @@ name: Build
     branches: ["main"]
   push:
     branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   build:
