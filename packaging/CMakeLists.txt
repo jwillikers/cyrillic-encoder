@@ -1,6 +1,6 @@
 install(
     FILES com.jwillikers.CyrillicEncoder.desktop
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/application/
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/
     COMPONENT CyrillicEncoder_Flatpak)
 install(
     FILES com.jwillikers.CyrillicEncoder.metainfo.xml
