@@ -6,5 +6,5 @@ Comment=Convert characters to Cyrillic letters
 Icon=com.jwillikers.CyrillicEncoder
 StartupWMClass=CyrillicEncoder
 Terminal=false
-Categories=Amusement;Education;Qt;Translation
+Categories=Amusement;Education;Qt
 Keywords=cyrillic;demo
