@@ -33,7 +33,7 @@ endif::[]
 This section describes how to set up the build environment required by the project.
 These instructions are for Fedora 38.
 
-. Install https://lix.systems[Lix].
+. Install an implementation of Nix, such as https://lix.systems[Lix] used here.
 +
 [,sh]
 ----
@@ -63,74 +63,82 @@ nix run
 
 == Development
 
-Everything can be built locally through Nix using the `nix develop` command.
+https://nixos.org/[Nix] is used to manage all of the necessary dependencies.
+The `nix develop` command can be used to enter or run commands in an environment with all of the necessary dependencies.
+For convenience, direnv can be used to automatically load this environment when entering the project's directory.
+The https://marketplace.visualstudio.com/items?itemName=mkhl.direnv[mkhl.direnv VSCode extension] integrates this environment in VSCode for development.
+The repository contains configuration for https://pre-commit.com/[pre-commit], which can be used to automate formatting and various checks when committing changes.
 
-To run the developer CMake workflow for the project, use the `dev` preset.
-
-[,sh]
-----
-nix develop --command cmake --workflow --preset dev
-----
-
-. Enter a development shell with the `nix develop` command.
+. Install direnv for your system according to the https://direnv.net/docs/installation.html[direnv installation instructions].
 +
 [,sh]
 ----
-nix develop --command fish
+sudo rpm-ostree install direnv
 ----
 
-. Use `just` to perform common tasks.
-The `just workflow` command will run the CMake configure step, then build, and run the tests.
+. Integrate direnv with your shell by following the instructions on the https://direnv.net/docs/hook.html[direnv Setup page].
+
+. Permit the direnv configuration in the repository.
 +
 [,sh]
 ----
-just workflow
+direnv allow
 ----
 
-. Exit the development shell with the `just exit` command.
+. Run `pre-commit install` to configure pre-commit hooks in the repository.
 +
 [,sh]
 ----
-exit
+pre-commit install
 ----
 
-. Update the flake with the `nix flake update` or `just update` commands.
+. The https://just.systems/[just] command runner can be used to perform common tasks, such as building the project and running tests.
+The `workflow`, or `w`, subcommand can be used to easily run the default developer workflow.
+This will configure the CMake build, build everything, and run the tests.
 +
 [,sh]
 ----
-just update
+just w
 ----
 
-// === Google Sanitizers
+=== Workflows
 
-// Support for Google Sanitizers is provided by the https://github.com/StableCoder/cmake-scripts[cmake-scripts] project.
-// Set the `USE_SANITIZER` CMake variable to an appropriate value as documented https://github.com/StableCoder/cmake-scripts#sanitizer-builds-sanitizerscmake[here].
+https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html[CMake presets] are used to simplify common configurations and tasks.
+The workflow presets perform sets of tasks in a specific order.
+The presets of most interest to developers are `dev` and `dev-clang`.
+These perform the configure, build, and test steps.
+The former uses the default compiler, oftentimes GCC, and the latter uses Clang.
+In addition to these two workflows, the `ci-gcc`, `ci-clang`, and `coverage-clang` presets can be used to perform the exact workflows used in CI.
+The following command demonstrates how to execute the workflow for the `dev` preset.
 
-// Use the Address and Undefined Behavior sanitizers like so.
+[,sh]
+----
+cmake --workflow --preset dev
+----
 
-// [,sh]
-// ----
-// bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake -DUSE_SANITIZER=Address;Undefined --preset conan-relwithdebinfo'
-// ----
+=== Flatpak
 
-// == Format
+Cyrillic Encoder can be built locally as a https://flatpak.org/[Flatpak].
+I might get around to setting up a Flatpak remote using GitHub Pages for easy installation someday.
+Follow these instructions to build the Flatpak.
 
-// The https://clang.llvm.org/docs/ClangFormat.html[clang-format] and https://cmake-format.readthedocs.io/en/latest/cmake-format.html[cmake-format] tools are used to format the source code files.
-// The https://github.com/TheLartians/Format.cmake[Format.cmake] module provides build targets to simplify the use of these tools.
+. Add the Flathub remote to the user's Flatpak installation.
++
+[,sh]
+----
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+----
 
-// Format the source files by building the CMake target `fix-format`.
-
-// [,sh]
-// ----
-// bash -c '. build/RelWithDebInfo/generators/conanbuild.sh && cmake --build  --preset conan-relwithdebinfo --target fix-format'
-// ----
+. Use the `just flatpak` command to build the Flatpak.
++
+[,sh]
+----
+just flatpak
+----
 
 == Todo
 
 . Switch from CMake to Meson.
-. Use Renovate to automatically update pre-commit hooks and eventually Conan when it is supported.
-. Add support for building with Nix as an alternative package manager.
-. Flatpak the application.
 
 == Contributing
 
@@ -150,21 +158,15 @@ Several of these projects are enumerated below.
 * https://clang.llvm.org/[Clang]
 * https://clang.llvm.org/extra/clang-tidy/[Clang-Tidy]
 * https://clang.llvm.org/docs/ClangFormat.html[ClangFormat]
-* https://conan.io/[Conan]
 * https://cmake.org/[CMake]
 * https://cmake-format.readthedocs.io/en/latest/index.html[cmakelang]
-* https://github.com/StableCoder/cmake-scripts[CMake Scripts]
-* https://www.debian.org/[Debian]
 * https://gcc.gnu.org/[GCC]
 * https://git-scm.com/[Git]
 * https://www.linuxfoundation.org/[Linux]
 * https://github.com/microsoft/GSL[Microsoft's GSL]
 * https://github.com/TheLartians/ModernCppStarter[ModernCppStarter]
 * https://ninja-build.org/[Ninja]
-* https://www.python.org/[Python]
 * https://www.qt.io/[Qt]
-* https://rouge.jneen.net/[Rouge]
-* https://www.ruby-lang.org/en/[Ruby]
 
 == Code of Conduct
 
