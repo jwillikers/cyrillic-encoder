@@ -84,6 +84,7 @@ result
 .direnv/
 
 # Flatpak
+.flatpak/
 .flatpak-builder/
 build-dir/
 repo/
