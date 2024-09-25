@@ -6,10 +6,22 @@ install(
     FILES com.jwillikers.CyrillicEncoder.metainfo.xml
     DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo/
     COMPONENT CyrillicEncoder_Flatpak)
-install(
-    FILES com.jwillikers.CyrillicEncoder.svg
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps/
-    COMPONENT CyrillicEncoder_Flatpak)
+set(ICON_SIZES
+    16
+    22
+    32
+    48
+    64
+    128
+    256
+    512)
+foreach(ICON_SIZE IN LISTS ICON_SIZES)
+    install(
+        FILES com.jwillikers.CyrillicEncoder.${ICON_SIZE}x${ICON_SIZE}.png
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${ICON_SIZE}x${ICON_SIZE}/apps/
+        RENAME com.jwillikers.CyrillicEncoder.png
+        COMPONENT CyrillicEncoder_Flatpak)
+endforeach()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set(CPACK_GENERATOR "ZIP")
