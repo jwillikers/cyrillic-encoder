@@ -1,4 +1,4 @@
-name: Format Just
+name: Format justfiles
 "on":
   pull_request:
     branches: ["main"]
