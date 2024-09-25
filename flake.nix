@@ -25,6 +25,7 @@
             include-what-you-use
             just
             lcov
+            librsvg
             lldb
             llvm
             mold-wrapped
