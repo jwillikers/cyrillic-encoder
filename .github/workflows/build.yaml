@@ -55,11 +55,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Nix
-        uses: cachix/install-nix-action@V28
-        with:
-          extra_nix_config: |
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - uses: DeterminateSystems/nix-installer-action@v14
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
       - name: Prepare ccache timestamp
         id: ccache_cache_timestamp
         shell: cmake -P {0}
