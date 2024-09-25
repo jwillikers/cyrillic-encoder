@@ -1,10 +1,9 @@
 [Desktop Entry]
 Type=Application
 Name=Cyrillic Encoder
-Exec=/usr/bin/cyrillic-encoder
+Exec=cyrillic-encoder
 Comment=Convert characters to Cyrillic letters
 Icon=com.jwillikers.CyrillicEncoder
-StartupWMClass=CyrillicEncoder
 Terminal=false
 Categories=Amusement;Education;Qt
 Keywords=cyrillic;demo
