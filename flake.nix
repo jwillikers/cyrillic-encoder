@@ -18,6 +18,7 @@
             clang-tools
             cmake
             cmake-format
+            desktop-file-utils
             fish
             flatpak-builder
             gdb
