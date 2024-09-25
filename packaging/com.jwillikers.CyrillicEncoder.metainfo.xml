@@ -12,7 +12,10 @@
   </developer>
   <update_contact>jordan@jwillikers.com</update_contact>
   <description>
-    <p>A demo Qt application which converts characters to Cyrillic letters.</p>
+    <p>
+      A demo Qt application which converts characters to Cyrillic letters.
+      The application performs a one-to-one conversion of a single Latin character to a Cyrillic character.
+    </p>
   </description>
   <launchable type="desktop-id">com.jwillikers.CyrillicEncoder.desktop</launchable>
   <url type="bugtracker">https://github.com/jwillikers/cyrillic-encoder/issues</url>
@@ -24,9 +27,6 @@
       <caption>Conversion of characters to arbitrary Cyrillic letters</caption>
     </screenshot>
   </screenshots>
-  <!-- <provides>
-    <binary>cyrillic-encoder</binary>
-  </provides> -->
   <releases>
     <release version="0.0.1" date="2024-09-24">
       <description>
