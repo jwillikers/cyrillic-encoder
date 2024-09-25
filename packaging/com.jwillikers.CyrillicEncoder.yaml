@@ -1,0 +1,67 @@
+id: com.jwillikers.CyrillicEncoder
+runtime: org.kde.Platform
+runtime-version: '6.7'
+sdk: org.kde.Sdk
+command: cyrillic-encoder
+finish-args:
+  - --socket=wayland
+modules:
+  - name: boost
+    buildsystem: cmake-ninja
+    cleanup:
+      - '*'
+    sources:
+      - type: archive
+        url: https://github.com/boostorg/boost/releases/download/boost-1.86.0/boost-1.86.0-cmake.tar.xz
+        sha256: 2c5ec5edcdff47ff55e27ed9560b0a0b94b07bd07ed9928b476150e16b0efc57
+        x-checker-data:
+          type: anitya
+          project-id: 6845
+          stable-only: true
+          url-template: https://github.com/boostorg/boost/releases/download/boost-$version/boost-$version-cmake.tar.xz
+  - name: boost-ut
+    buildsystem: cmake-ninja
+    cleanup:
+      - '*'
+    sources:
+      - type: git
+        url: https://github.com/boost-ext/ut.git
+        commit: 6a4deddc306e0134f7d3229ebb06bf1f7ae913ab
+        tag: v2.1.0
+        x-checker-data:
+          type: git
+          tag-pattern: "^v([\\d.]+)$"
+  - name: microsoft-gsl
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DGSL_TEST=no
+    cleanup:
+      - '*'
+    sources:
+      - type: git
+        url: https://github.com/microsoft/GSL.git
+        commit: a3534567187d2edc428efd3f13466ff75fe5805c
+        tag: v4.0.0
+        x-checker-data:
+          type: git
+          tag-pattern: "^v([\\d.]+)$"
+  - name: cyrillic-encoder
+    buildsystem: simple
+    build-commands:
+      - cmake --workflow --preset flatpak
+      - cmake --install build --component CyrillicEncoder_Runtime --prefix="${FLATPAK_DEST}"
+      - cmake --install build --component CyrillicEncoder_Flatpak --prefix="${FLATPAK_DEST}"
+    sources:
+      - type: dir
+        path: ..
+        skip:
+          - .cache
+          - .direnv
+          - .github
+          - .vscode
+          - build
+          - build-clang
+          - build-gcc
+          - build-coverage-clang
+          - build-dir
+          - repo

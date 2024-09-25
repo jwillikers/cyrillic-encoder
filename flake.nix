@@ -12,22 +12,30 @@
             inherit system overlays;
           };
           nativeBuildInputs = with pkgs; [
+            appstream
+            appstream-glib
             ccache
             clang
             clang-tools
             cmake
             cmake-format
+            desktop-file-utils
             fish
+            flatpak-builder
             gdb
             include-what-you-use
             just
             lcov
+            librsvg
             lldb
             llvm
             mold-wrapped
             ninja
+            nushell
+            pre-commit
             python311Packages.lcov-cobertura
             qt6.wrapQtAppsHook
+            yamllint
           ];
           buildInputs = with pkgs; [
             boost

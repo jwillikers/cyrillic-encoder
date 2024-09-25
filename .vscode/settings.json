@@ -2,11 +2,13 @@
     "cSpell.words": [
         "aarch",
         "adoc",
+        "anitya",
         "armv",
         "ASAN",
         "assumeyes",
         "autofix",
         "Bradient",
+        "buildsystem",
         "ccache",
         "cmake",
         "cmakelang",
@@ -19,18 +21,24 @@
         "ctest",
         "DCLANG",
         "DCMAKE",
+        "DCYRILLIC",
         "devel",
+        "DGSL",
+        "direnv",
         "ensurepath",
         "fcoverage",
         "Flatpak",
         "fontconfig",
         "fprofile",
+        "googletest",
         "ifdef",
         "ifndef",
         "includedirs",
         "INTERPROCEDURAL",
+        "IWYU",
         "justfile",
         "justfiles",
+        "jwillikers",
         "keysyms",
         "libasan",
         "libc",
@@ -71,5 +79,18 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
-    "python.formatting.provider": "none"
+    "python.formatting.provider": "none",
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true,
+        "**/.hg/store/**": true,
+        "**/.flatpak-builder/**": true,
+        "**/.ruff_cache/**": true,
+        "**/build-dir/**": true,
+        "**/build/**": true,
+        "**/repo/**": true,
+        ".flatpak/**": true,
+        "_build/**": true
+    }
 }

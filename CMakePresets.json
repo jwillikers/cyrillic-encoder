@@ -44,6 +44,11 @@
       "name": "ci-clang"
     },
     {
+      "configurePreset": "flatpak",
+      "inherits": "default",
+      "name": "flatpak"
+    },
+    {
       "configurePreset": "ci-gcc",
       "inherits": "ci",
       "name": "ci-gcc"
@@ -266,6 +271,18 @@
     },
     {
       "cacheVariables": {
+        "CMAKE_COMPILE_WARNING_AS_ERROR": true,
+        "CYRILLIC_ENCODER_ENABLE_SPLIT_DWARF": false,
+        "CYRILLIC_ENCODER_ENABLE_TESTING": true
+      },
+      "displayName": "Flatpak",
+      "inherits": [
+        "minimal"
+      ],
+      "name": "flatpak"
+    },
+    {
+      "cacheVariables": {
         "CMAKE_COMPILE_WARNING_AS_ERROR": false,
         "CYRILLIC_ENCODER_ENABLE_CLANG_TIDY": false,
         "CYRILLIC_ENCODER_ENABLE_IWYU": false,
@@ -343,6 +360,11 @@
       "configurePreset": "ci",
       "inherits": "default",
       "name": "ci"
+    },
+    {
+      "configurePreset": "flatpak",
+      "inherits": "default",
+      "name": "flatpak"
     },
     {
       "configurePreset": "ci-clang",
@@ -648,6 +670,23 @@
         },
         {
           "name": "dev-clang",
+          "type": "test"
+        }
+      ]
+    },
+    {
+      "name": "flatpak",
+      "steps": [
+        {
+          "name": "flatpak",
+          "type": "configure"
+        },
+        {
+          "name": "flatpak",
+          "type": "build"
+        },
+        {
+          "name": "flatpak",
           "type": "test"
         }
       ]

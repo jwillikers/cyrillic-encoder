@@ -2,7 +2,7 @@ name: "schedule"
 "on":
   workflow_dispatch:
   schedule:
-    - cron: "0 0 1 * *"
+    - cron: "0 0 3 * *" # run on the 3rd of every month
 
 jobs:
   coverage-main-branch:
@@ -14,7 +14,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v14
       - uses: DeterminateSystems/magic-nix-cache-action@v8
-      - uses: DeterminateSystems/flake-checker-action@v9
       - name: Prepare ccache timestamp
         id: ccache_cache_timestamp
         shell: cmake -P {0}

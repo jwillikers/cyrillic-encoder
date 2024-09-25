@@ -54,3 +54,6 @@ alias up := package
 
 update:
     nix flake update
+
+flatpak:
+    flatpak-builder --user --install --install-deps-from=flathub --force-clean --repo=repo build-dir packaging/com.jwillikers.CyrillicEncoder.yaml
