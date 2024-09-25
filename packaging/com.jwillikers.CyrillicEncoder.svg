@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="512"
-   height="512"
-   viewBox="0 0 512 512"
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
    version="1.1"
    id="svg1"
    inkscape:version="1.3.2 (091e20ef0f, 2023-11-25)"
@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="px"
-     inkscape:zoom="1.1484375"
-     inkscape:cx="255.56463"
-     inkscape:cy="255.12925"
+     inkscape:zoom="18.375"
+     inkscape:cx="15.972789"
+     inkscape:cy="16"
      inkscape:window-width="1536"
      inkscape:window-height="792"
      inkscape:window-x="0"
@@ -39,22 +39,11 @@
      inkscape:groupmode="layer"
      id="layer1">
     <ellipse
-       style="fill:#cacaca;fill-opacity:0.36739233"
+       style="fill:#2b4b97;stroke:none;fill-opacity:1"
        id="path1"
-       cx="256.19217"
-       cy="255.41666"
-       rx="250.06973"
-       ry="246.54251" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:453.333px;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2b2f97;fill-opacity:1;stroke:#534949;stroke-opacity:1"
-       x="99.023827"
-       y="352.51361"
-       id="text1"><tspan
-         sodipodi:role="line"
-         id="tspan1"
-         x="99.023827"
-         y="352.51361"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:453.33300781px;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#2b2f97;fill-opacity:1;stroke:#534949;stroke-opacity:1">Д</tspan></text>
+       cx="16.010311"
+       cy="16.150085"
+       rx="14.328763"
+       ry="14.636905" />
   </g>
 </svg>
