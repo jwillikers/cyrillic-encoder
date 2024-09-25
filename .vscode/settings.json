@@ -23,6 +23,7 @@
         "DCMAKE",
         "DCYRILLIC",
         "devel",
+        "direnv",
         "ensurepath",
         "fcoverage",
         "Flatpak",
