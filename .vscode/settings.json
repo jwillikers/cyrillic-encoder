@@ -67,6 +67,7 @@
         "Scrn",
         "toolset",
         "virtualenv",
+        "Werror",
         "Xcomposite",
         "Xcursor",
         "Xdamage",
