@@ -25,25 +25,17 @@ repos:
     hooks:
       - id: cmake-format
         entry: nix develop --command cmake-format --in-place
-        files: |
-          (?x)^(
-            CMakeLists.txt|
-            .*\.cmake|
-            .*/CMakeLists.txt
-          )$
         language: system
         name: cmake-format
         pass_filenames: true
+        types: [file, cmake]
       - id: clang-format
         entry: nix develop --command clang-format -i -Werror
-        files: |
-          (?x)^(
-            .*\.cpp|
-            .*\.hpp
-          )$
         language: system
         name: clang-format
         pass_filenames: true
+        types: [file]
+        types_or: [c, c++]
       - id: just
         entry: nix develop --command just --fmt --unstable
         files: |
@@ -56,11 +48,7 @@ repos:
         pass_filenames: false
       - id: yamllint
         entry: nix develop --command yamllint
-        files: |
-          (?x)^(
-            .*\.yaml|
-            .*\.yml
-          )$
         language: system
-        name: just
+        name: yamllint
         pass_filenames: true
+        types: [file, yaml]
