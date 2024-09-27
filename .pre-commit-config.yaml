@@ -41,7 +41,8 @@ repos:
         files: |
           (?x)^(
             \.justfile|
-            justfile
+            justfile|
+            .*\.just
           )$
         language: system
         name: just
