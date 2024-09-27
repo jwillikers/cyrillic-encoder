@@ -5,6 +5,7 @@ name: yamllint
     paths:
       - .github/workflows/yamllint.yaml
       - .yamllint.yaml
+      - flake.lock
       - '**.yaml'
       - '**.yml'
 

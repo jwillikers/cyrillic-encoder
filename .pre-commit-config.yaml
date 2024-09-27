@@ -5,14 +5,6 @@ exclude: |
     .vscode/.*
   )$
 repos:
-  - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v18.1.8
-    hooks:
-      - id: clang-format
-  - repo: https://github.com/cheshirekow/cmake-format-precommit
-    rev: v0.6.13
-    hooks:
-      - id: cmake-format
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
@@ -31,17 +23,44 @@ repos:
       - id: trailing-whitespace
   - repo: local
     hooks:
-      - id: just
-        entry: just --fmt --unstable
+      - id: cmake-format
+        entry: nix develop --command cmake-format --in-place
         files: |
           (?x)^(
-            .justfile|
+            CMakeLists.txt|
+            .*\.cmake|
+            .*/CMakeLists.txt
+          )$
+        language: system
+        name: cmake-format
+        pass_filenames: true
+      - id: clang-format
+        entry: nix develop --command clang-format -i -Werror
+        files: |
+          (?x)^(
+            .*\.cpp|
+            .*\.hpp
+          )$
+        language: system
+        name: clang-format
+        pass_filenames: true
+      - id: just
+        entry: nix develop --command just --fmt --unstable
+        files: |
+          (?x)^(
+            \.justfile|
             justfile
           )$
         language: system
         name: just
         pass_filenames: false
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.35.1
-    hooks:
       - id: yamllint
+        entry: nix develop --command yamllint
+        files: |
+          (?x)^(
+            .*\.yaml|
+            .*\.yml
+          )$
+        language: system
+        name: just
+        pass_filenames: true
