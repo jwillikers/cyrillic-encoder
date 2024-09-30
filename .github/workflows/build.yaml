@@ -77,8 +77,6 @@ jobs:
       - name: Code Coverage Report
         uses: clearlyip/code-coverage-report-action@v4
         id: code_coverage_report_action
-        # Don't run for dependabot unless you fix PR comment permissions
-        if: ${{ github.actor != 'dependabot[bot]'}}
         with:
           artifact_download_workflow_names: "build,schedule"
           badge: true
@@ -91,6 +89,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         if: github.event_name == 'pull_request'
         with:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
           recreate: true
           path: code-coverage-results.md
 
