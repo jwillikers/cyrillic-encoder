@@ -160,7 +160,6 @@
       in
       with pkgs;
       {
-        packages.default = qt6Packages.callPackage ./default.nix { };
         devShells.default = mkShell {
           inherit buildInputs;
           inherit (pre-commit) shellHook;
@@ -174,6 +173,7 @@
             ++ pre-commit.enabledPackages;
         };
         formatter = treefmtEval.config.build.wrapper;
+        packages.default = qt6Packages.callPackage ./default.nix { };
       }
     );
 }
