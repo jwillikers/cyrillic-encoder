@@ -34,7 +34,6 @@
           clang
           clang-tools
           cmake
-          cmake-format
           desktop-file-utils
           fish
           flatpak-builder
@@ -52,7 +51,6 @@
           nushell
           python311Packages.lcov-cobertura
           qt6.wrapQtAppsHook
-          yamllint
         ];
         buildInputs = with pkgs; [
           boost
@@ -61,50 +59,52 @@
           qt6.qtwayland
           ut
         ];
-        treefmt.config = {
-          programs = {
-            actionlint.enable = true;
-            clang-format.enable = true;
-            # todo Upstream support for cmake-format.
-            cmake-format.enable = true;
-            jsonfmt.enable = true;
-            just.enable = true;
-            nixfmt.enable = true;
-            statix.enable = true;
-            taplo.enable = true;
-            typos.enable = true;
-            yamlfmt.enable = true;
-          };
-          settings.formatter.typos.excludes = [
-            "*.avif"
-            "*.bmp"
-            "*.gif"
-            "*.jpeg"
-            "*.jpg"
-            "*.png"
-            "*.svg"
-            "*.tiff"
-            "*.webp"
-            ".vscode/settings.json"
-          ];
-          projectRootFile = "flake.nix";
-          settings.formatter = {
-            "cmake-format" = {
-              command = "${pkgs.bash}/bin/bash";
-              package = pkgs.cmake-format;
-              options = [
-                "-euc"
-                ''
-                  for file in "$@"; do
-                    ${pkgs.cmake-format}/bin/cmake-format --in-place "$file"
-                  done
-                ''
-                "--" # bash swallows the second argument when using -c
-              ];
-              includes = [
-                "*.cmake"
-                "CMakeLists.txt"
-              ];
+        treefmt = {
+          config = {
+            programs = {
+              actionlint.enable = true;
+              clang-format.enable = true;
+              # todo Upstream support for cmake-format.
+              cmake-format.enable = true;
+              jsonfmt.enable = true;
+              just.enable = true;
+              nixfmt.enable = true;
+              statix.enable = true;
+              taplo.enable = true;
+              typos.enable = true;
+              yamlfmt.enable = true;
+            };
+            settings.formatter.typos.excludes = [
+              "*.avif"
+              "*.bmp"
+              "*.gif"
+              "*.jpeg"
+              "*.jpg"
+              "*.png"
+              "*.svg"
+              "*.tiff"
+              "*.webp"
+              ".vscode/settings.json"
+            ];
+            projectRootFile = "flake.nix";
+            settings.formatter = {
+              "cmake-format" = {
+                command = "${pkgs.bash}/bin/bash";
+                package = pkgs.cmake-format;
+                options = [
+                  "-euc"
+                  ''
+                    for file in "$@"; do
+                      ${pkgs.cmake-format}/bin/cmake-format --in-place "$file"
+                    done
+                  ''
+                  "--" # bash swallows the second argument when using -c
+                ];
+                includes = [
+                  "*.cmake"
+                  "CMakeLists.txt"
+                ];
+              };
             };
           };
           options.programs.cmake-format = {
