@@ -88,3 +88,12 @@ result
 .flatpak-builder/
 build-dir/
 repo/
+
+# git-hooks.nix
+/.pre-commit-config.yaml
+
+# Asciidoctor
+*.html
+
+# lychee
+.lycheecache

@@ -19,7 +19,7 @@ jobs:
         shell: cmake -P {0}
         run: |
           string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
-          message("::set-output name=timestamp::${current_date}")
+          message("::echo timestamp=${current_date}")
       - name: ccache cache files
         uses: actions/cache@v4
         with:
@@ -27,7 +27,7 @@ jobs:
           path: .ccache
           # This avoids the size of the cache increasing after every run.
           restore-keys: |
-              coverage-${{ matrix.compiler }}-ccache-
+            coverage-${{ matrix.compiler }}-ccache-
           save-always: true
       - name: Generate Coverage
         run: nix develop --command just workflow coverage-${{ matrix.compiler }}

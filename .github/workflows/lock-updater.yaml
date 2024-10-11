@@ -19,6 +19,7 @@ jobs:
       - uses: DeterminateSystems/update-flake-lock@v24
         with:
           pr-assignees: ${{ github.repository_owner }}
+          pr-reviewers: ${{ github.repository_owner }}
           pr-labels: |
             automated
             dependencies
