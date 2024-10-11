@@ -19,9 +19,9 @@ jobs:
       - uses: DeterminateSystems/update-flake-lock@v24
         with:
           pr-assignees: ${{ github.repository_owner }}
-          pr-reviewers: ${{ github.repository_owner }}
           pr-labels: |
             automated
             dependencies
+          pr-reviewers: ${{ github.repository_owner }}
           pr-title: "chore: update flake.lock"
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
