@@ -2,8 +2,8 @@ name: Flake ❄️ Lock 🔒️ Updater ✨
 
 "on":
   schedule:
-    # Pi o'clock
-    - cron: '3 14 * * 1,5'
+    # Run on the third of the month.
+    - cron: '0 0 3 * *'
   workflow_dispatch:
 
 jobs:
@@ -22,5 +22,6 @@ jobs:
           pr-labels: |
             automated
             dependencies
+          pr-reviewers: ${{ github.repository_owner }}
           pr-title: "chore: update flake.lock"
           token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}

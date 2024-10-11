@@ -1,41 +1,21 @@
 default: build
 
-alias f := format
-alias fmt := format
-
-format: just-fmt clang-format
-
-clang-format:
-    clang-format -i include/cyrillic-encoder/*.hpp src/*.cpp
-
-just-fmt:
-    just --fmt --unstable
-
-alias c := configure
-
-configure preset="dev":
-    cmake --preset {{ preset }}
-
 alias b := build
 
 build preset="dev" target="all":
     cmake --build --preset {{ preset }} --target {{ target }}
 
-alias t := test
+alias ch := check
 
-test preset="dev": build
-    ctest --preset {{ preset }}
+check: && format
+    yamllint .
+    asciidoctor *.adoc
+    lychee --cache *.html
 
-alias w := workflow
+alias c := configure
 
-workflow preset="dev" *flags="":
-    cmake --workflow --preset {{ preset }} {{ flags }}
-
-alias r := run
-
-# todo Parse build directory from preset.
-run preset="dev": (build preset)
-    build/src/cyrillic-encoder
+configure preset="dev":
+    cmake --preset {{ preset }}
 
 alias d := debug
 
@@ -43,11 +23,39 @@ alias d := debug
 debug preset="dev" debugger="gdb": (build preset)
     {{ debugger }} build/src/cyrillic-encoder
 
+flatpak:
+    flatpak-builder \
+        --force-clean \
+        --install \
+        --install-deps-from=flathub \
+        --repo=repo \
+        --user \
+        build-dir \
+        packaging/com.jwillikers.CyrillicEncoder.yaml
+
+alias f := format
+alias fmt := format
+
+format:
+    treefmt
+
+alias r := run
+
+# todo Parse build directory from preset.
+run preset="dev": (build preset)
+    build/src/cyrillic-encoder
+
 alias p := package
 alias pack := package
 
 package:
     nix build
+
+alias t := test
+
+test preset="dev": build
+    ctest --preset {{ preset }}
+    nu update-nix-direnv-tests.nu
 
 alias u := update
 alias up := package
@@ -55,5 +63,8 @@ alias up := package
 update:
     nix flake update
 
-flatpak:
-    flatpak-builder --user --install --install-deps-from=flathub --force-clean --repo=repo build-dir packaging/com.jwillikers.CyrillicEncoder.yaml
+
+alias w := workflow
+
+workflow preset="dev" *flags="":
+    cmake --workflow --preset {{ preset }} {{ flags }}

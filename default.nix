@@ -1,13 +1,14 @@
-{ stdenv
-, boost
-, cmake
-, microsoft-gsl
-, mold-wrapped
-, ninja
-, qtbase
-, qtwayland
-, ut
-, wrapQtAppsHook
+{
+  stdenv,
+  boost,
+  cmake,
+  microsoft-gsl,
+  mold-wrapped,
+  ninja,
+  qtbase,
+  qtwayland,
+  ut,
+  wrapQtAppsHook,
 }:
 stdenv.mkDerivation {
   pname = "cyrillic-encoder";

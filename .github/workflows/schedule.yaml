@@ -14,23 +14,26 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v14
       - uses: DeterminateSystems/magic-nix-cache-action@v8
+      - name: Restore ccache cache
+        id: cache-ccache-restore
+        uses: actions/cache/restore@v4
+        with:
+          key: coverage-${{ matrix.compiler }}-ccache-
+          path: .ccache
+      - name: Generate Coverage
+        run: nix develop --command just workflow coverage-${{ matrix.compiler }}
       - name: Prepare ccache timestamp
         id: ccache_cache_timestamp
         shell: cmake -P {0}
         run: |
           string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
-          message("::set-output name=timestamp::${current_date}")
-      - name: ccache cache files
-        uses: actions/cache@v4
+          message("::echo timestamp=${current_date}")
+      - name: Save ccache cache
+        uses: actions/cache/save@v4
+        if: always() && steps.cache-ccache-restore.outputs.cache-hit != 'true'
         with:
           key: coverage-${{ matrix.compiler }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
           path: .ccache
-          # This avoids the size of the cache increasing after every run.
-          restore-keys: |
-              coverage-${{ matrix.compiler }}-ccache-
-          save-always: true
-      - name: Generate Coverage
-        run: nix develop --command just workflow coverage-${{ matrix.compiler }}
       - uses: clearlyip/code-coverage-report-action@v5
         with:
           filename: build-coverage-${{ matrix.compiler }}/cobertura.xml
