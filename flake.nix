@@ -74,20 +74,20 @@
               typos.enable = true;
               yamlfmt.enable = true;
             };
-            settings.formatter.typos.excludes = [
-              "*.avif"
-              "*.bmp"
-              "*.gif"
-              "*.jpeg"
-              "*.jpg"
-              "*.png"
-              "*.svg"
-              "*.tiff"
-              "*.webp"
-              ".vscode/settings.json"
-            ];
             projectRootFile = "flake.nix";
             settings.formatter = {
+              typos.excludes = [
+                "*.avif"
+                "*.bmp"
+                "*.gif"
+                "*.jpeg"
+                "*.jpg"
+                "*.png"
+                "*.svg"
+                "*.tiff"
+                "*.webp"
+                ".vscode/settings.json"
+              ];
               "cmake-format" = {
                 command = "${pkgs.bash}/bin/bash";
                 package = pkgs.cmake-format;
