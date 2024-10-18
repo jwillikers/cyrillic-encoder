@@ -3,6 +3,14 @@ name: Validate MetaInfo
   pull_request:
     branches: ["main"]
     paths:
+      - '**.nix'
+      - .github/workflows/appstream-util-validate.yaml
+      - flake.lock
+      - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
+  push:
+    branches: ["main"]
+    paths:
+      - '**.nix'
       - .github/workflows/appstream-util-validate.yaml
       - flake.lock
       - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml

@@ -1,6 +1,7 @@
 {
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
+    nix-update-scripts.url = "github:jwillikers/nix-update-scripts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
@@ -14,6 +15,7 @@
     {
       # deadnix: skip
       self,
+      nix-update-scripts,
       nixpkgs,
       flake-utils,
       pre-commit-hooks,
@@ -160,6 +162,10 @@
       in
       with pkgs;
       {
+        apps = {
+          inherit (nix-update-scripts.apps.${system}) update-nix-direnv;
+        };
+        formatter = treefmtEval.config.build.wrapper;
         devShells.default = mkShell {
           inherit buildInputs;
           inherit (pre-commit) shellHook;
@@ -172,7 +178,6 @@
             ]
             ++ pre-commit.enabledPackages;
         };
-        formatter = treefmtEval.config.build.wrapper;
         packages.default = qt6Packages.callPackage ./default.nix { };
       }
     );

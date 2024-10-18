@@ -3,6 +3,14 @@ name: Check desktop file
   pull_request:
     branches: ["main"]
     paths:
+      - '**.nix'
+      - .github/workflows/desktop-file-validate.yaml
+      - flake.lock
+      - packaging/com.jwillikers.CyrillicEncoder.desktop
+  push:
+    branches: ["main"]
+    paths:
+      - '**.nix'
       - .github/workflows/desktop-file-validate.yaml
       - flake.lock
       - packaging/com.jwillikers.CyrillicEncoder.desktop

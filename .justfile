@@ -55,14 +55,12 @@ alias t := test
 
 test preset="dev": build
     ctest --preset {{ preset }}
-    nu update-nix-direnv-tests.nu
 
 alias u := update
-alias up := package
+alias up := update
 
 update:
     nix flake update
-
 
 alias w := workflow
 

@@ -72,6 +72,7 @@ Nix also generates the configuration for https://pre-commit.com/[pre-commit], wh
 [,sh]
 ----
 sudo rpm-ostree install direnv
+sudo systemctl reboot
 ----
 
 . Integrate direnv with your shell by following the instructions on the https://direnv.net/docs/hook.html[direnv Setup page].

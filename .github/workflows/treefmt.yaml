@@ -2,8 +2,42 @@ name: Check files with treefmt
 "on":
   pull_request:
     branches: ["main"]
+    paths:
+      - '**.cmake'
+      - '**.cpp'
+      - '**.hpp'
+      - '**.h'
+      - '**.json'
+      - '**.just'
+      - '**.nix'
+      - '**.toml'
+      - '**.yaml'
+      - '**.yml'
+      - '**/.justfile'
+      - '**/CMakeLists.txt'
+      - '**/justfile'
+      - .clang-format
+      - .github/workflows/treefmt.yaml
+      - flake.lock
   push:
     branches: ["main"]
+    paths:
+      - '**.cmake'
+      - '**.cpp'
+      - '**.hpp'
+      - '**.h'
+      - '**.json'
+      - '**.just'
+      - '**.nix'
+      - '**.toml'
+      - '**.yaml'
+      - '**.yml'
+      - '**/.justfile'
+      - '**/CMakeLists.txt'
+      - '**/justfile'
+      - .clang-format
+      - .github/workflows/treefmt.yaml
+      - flake.lock
 
 jobs:
   treefmt:

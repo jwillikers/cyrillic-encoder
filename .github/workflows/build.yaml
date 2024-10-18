@@ -3,8 +3,44 @@ name: Build
 "on":
   pull_request:
     branches: ["main"]
+    paths:
+      - '**.cmake'
+      - '**.cpp'
+      - '**.hpp'
+      - '**.hpp.in'
+      - '**.h'
+      - '**.h.in'
+      - '**.nix'
+      - '**/CMakeLists.txt'
+      - .clang-tidy
+      - .github/workflows/build.yaml
+      - CMakePresets.json
+      - flake.lock
+      - iwyu.imp
+      - packaging/com.jwillikers.CyrillicEncoder.desktop
+      - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
+      - packaging/com.jwillikers.CyrillicEncoder.svg
+      - packaging/com.jwillikers.CyrillicEncoder.yaml
   push:
     branches: ["main"]
+    paths:
+      - '**.cmake'
+      - '**.cpp'
+      - '**.hpp'
+      - '**.hpp.in'
+      - '**.h'
+      - '**.h.in'
+      - '**.nix'
+      - '**/CMakeLists.txt'
+      - .clang-tidy
+      - .github/workflows/build.yaml
+      - CMakePresets.json
+      - flake.lock
+      - iwyu.imp
+      - packaging/com.jwillikers.CyrillicEncoder.desktop
+      - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
+      - packaging/com.jwillikers.CyrillicEncoder.svg
+      - packaging/com.jwillikers.CyrillicEncoder.yaml
   workflow_dispatch:
 
 jobs:
