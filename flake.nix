@@ -28,39 +28,6 @@
         pkgs = import nixpkgs {
           inherit system overlays;
         };
-        nativeBuildInputs = with pkgs; [
-          appstream
-          appstream-glib
-          asciidoctor
-          ccache
-          clang
-          clang-tools
-          cmake
-          desktop-file-utils
-          fish
-          flatpak-builder
-          gdb
-          include-what-you-use
-          just
-          lcov
-          librsvg
-          lldb
-          llvm
-          lychee
-          mold-wrapped
-          nil
-          ninja
-          nushell
-          python311Packages.lcov-cobertura
-          qt6.wrapQtAppsHook
-        ];
-        buildInputs = with pkgs; [
-          boost
-          microsoft-gsl
-          qt6.qtbase
-          qt6.qtwayland
-          ut
-        ];
         treefmt = {
           config = {
             programs = {
@@ -167,14 +134,42 @@
         };
         formatter = treefmtEval.config.build.wrapper;
         devShells.default = mkShell {
-          inherit buildInputs;
           inherit (pre-commit) shellHook;
-          nativeBuildInputs =
-            nativeBuildInputs
-            ++ [
-              treefmtEval.config.build.wrapper
-              # Make formatters available for IDE's.
-              (lib.attrValues treefmtEval.config.build.programs)
+          buildInputs = with pkgs; [
+            boost
+            microsoft-gsl
+            qt6.qtbase
+            qt6.qtwayland
+            ut
+          ];
+          nativeBuildInputs = with pkgs; [
+            appstream
+            appstream-glib
+            asciidoctor
+            ccache
+            clang
+            clang-tools
+            cmake
+            desktop-file-utils
+            fish
+            flatpak-builder
+            gdb
+            include-what-you-use
+            just
+            lcov
+            librsvg
+            lldb
+            llvm
+            lychee
+            mold-wrapped
+            nil
+            ninja
+            nushell
+            python311Packages.lcov-cobertura
+            qt6.wrapQtAppsHook
+            treefmtEval.config.build.wrapper
+            # Make formatters available for IDE's.
+            (lib.attrValues treefmtEval.config.build.programs)
             ]
             ++ pre-commit.enabledPackages;
         };

@@ -1,5 +1,4 @@
 {
-  stdenv,
   boost,
   cmake,
   microsoft-gsl,
@@ -7,6 +6,7 @@
   ninja,
   qtbase,
   qtwayland,
+  stdenv,
   ut,
   wrapQtAppsHook,
 }:
