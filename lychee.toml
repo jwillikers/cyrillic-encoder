@@ -2,6 +2,7 @@
 accept = [429]
 
 cache = true
+exclude = ['^https://flatpak\.org']
 exclude_path = [
   ".cache/",
   ".direnv/",
