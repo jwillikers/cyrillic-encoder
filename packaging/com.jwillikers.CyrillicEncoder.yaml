@@ -26,11 +26,11 @@ modules:
     sources:
       - type: git
         url: https://github.com/boost-ext/ut.git
-        commit: 6a4deddc306e0134f7d3229ebb06bf1f7ae913ab
-        tag: v2.1.0
+        commit: aefa90116ac59b5af6ae3af8ce435a3dba657fcb
+        tag: v2.1.1
         x-checker-data:
           type: git
-          tag-pattern: "^v([\\d.]+)$"
+          tag-pattern: ^v([\d.]+)$
   - name: microsoft-gsl
     buildsystem: cmake-ninja
     config-opts:
@@ -40,11 +40,11 @@ modules:
     sources:
       - type: git
         url: https://github.com/microsoft/GSL.git
-        commit: a3534567187d2edc428efd3f13466ff75fe5805c
-        tag: v4.0.0
+        commit: 87f9d768866548b5b86e72be66c60c5abd4d9b37
+        tag: v4.1.0
         x-checker-data:
           type: git
-          tag-pattern: "^v([\\d.]+)$"
+          tag-pattern: ^v([\d.]+)$
   - name: cyrillic-encoder
     buildsystem: simple
     build-commands:
