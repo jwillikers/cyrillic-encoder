@@ -4,7 +4,7 @@
   <id>com.jwillikers.CyrillicEncoder</id>
   <metadata_license>FSFAP</metadata_license>
   <project_license>GPL-3.0-only</project_license>
-  <content_rating type="oars-1.1" />
+  <content_rating type="oars-1.1"/>
   <name>Cyrillic Encoder</name>
   <summary>Convert characters to Cyrillic letters</summary>
   <developer id="com.jwillikers">
@@ -28,6 +28,9 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="4.1.0" date="2024-11-13">
+      <description></description>
+    </release>
     <release version="0.0.1" date="2024-09-24">
       <description>
         <p>
