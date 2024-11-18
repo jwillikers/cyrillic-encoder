@@ -89,9 +89,16 @@
     "**/build-dir/**": true,
     "**/build/**": true,
     "**/repo/**": true,
+    "**/.direnv/**": true,
+    "**/.flatpak/**": true,
     "**/node_modules/*/**": true,
-    ".flatpak/**": true,
-    "_build/**": true
+    "**/result": true,
+    "**/result/**": true,
+    "**/target/**": true,
+    ".lycheecache": true,
+    ".pre-commit-config.yaml": true,
+    "_build/**": true,
+    ".flatpak/**": true
   },
   "nix.enableLanguageServer": true,
   "nix.serverPath": "nil"
