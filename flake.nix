@@ -6,12 +6,11 @@
       inputs = {
         flake-utils.follows = "flake-utils";
         nixpkgs.follows = "nixpkgs";
-        nixpkgs-unstable.follows = "nixpkgs";
         pre-commit-hooks.follows = "pre-commit-hooks";
         treefmt-nix.follows = "treefmt-nix";
       };
     };
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     pre-commit-hooks = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs = {
@@ -49,7 +48,7 @@
       with pkgs;
       {
         apps = {
-          inherit (nix-update-scripts.apps.${system}) update-nix-direnv;
+          inherit (nix-update-scripts.apps.${system}) update-nix-direnv update-nixos-release;
         };
         devShells.default = mkShell {
           inherit (pre-commit) shellHook;
@@ -82,7 +81,6 @@
               llvm
               lychee
               mold-wrapped
-              nil
               ninja
               nushell
               python311Packages.lcov-cobertura
