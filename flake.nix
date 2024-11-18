@@ -82,7 +82,6 @@
               llvm
               lychee
               mold-wrapped
-              nil
               ninja
               nushell
               python311Packages.lcov-cobertura
