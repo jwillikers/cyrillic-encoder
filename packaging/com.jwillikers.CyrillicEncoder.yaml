@@ -26,8 +26,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/boost-ext/ut.git
-        commit: aefa90116ac59b5af6ae3af8ce435a3dba657fcb
-        tag: v2.1.1
+        commit: ac167b8c160f3b3f749a14a086ace480ba7b5a31
+        tag: v2.3.0
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
