@@ -149,4 +149,5 @@ jobs:
         with:
           bundle: cyrillic-encoder.flatpak
           manifest-path: packaging/com.jwillikers.CyrillicEncoder.yaml
-          cache-key: flatpak-builder-${{ matrix.arch }}-${{ github.sha }}
+          cache-key: flatpak-builder-${{ github.sha }}
+          arch: ${{ matrix.arch }}
