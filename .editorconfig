@@ -9,7 +9,7 @@ indent_style = space
 max_line_length = 120
 trim_trailing_whitespace = true
 
-[*.adoc]
+[{*.adoc,*.cmake,CMakeLists.txt}]
 indent_size = unset
 
 [*.{adoc,envrc,nu,yaml,yml}]
