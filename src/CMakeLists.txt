@@ -355,6 +355,10 @@ if(CYRILLIC_ENCODER_ENABLE_TESTING)
     )
     add_test(NAME cyrillic-encoder-encode-test COMMAND cyrillic-encoder-encode-test)
     set_tests_properties(cyrillic-encoder-encode-test PROPERTIES LABELS "cyrillic-encoder")
+    set_property(
+        TEST cyrillic-encoder-encode-test
+        APPEND
+        PROPERTY ENVIRONMENT_MODIFICATION LSAN_OPTIONS=string_append::verbosity=1:log_threads=1)
     if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
         set(cyrillic-encoder-encoder-dir "$<SHELL_PATH:$<TARGET_FILE_DIR:cyrillic-encoder::encode>>")
         set_property(
