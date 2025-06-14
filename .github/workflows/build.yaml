@@ -52,7 +52,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v17
-      - uses: DeterminateSystems/magic-nix-cache-action@v9
       - name: Restore ccache cache
         id: cache-ccache-restore
         uses: actions/cache/restore@v4
@@ -78,7 +77,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v17
-      - uses: DeterminateSystems/magic-nix-cache-action@v9
       - name: Build the Nix package
         run: nix build
 
@@ -92,7 +90,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v17
-      - uses: DeterminateSystems/magic-nix-cache-action@v9
       - name: Restore ccache cache
         id: cache-ccache-restore
         uses: actions/cache/restore@v4
