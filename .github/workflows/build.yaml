@@ -52,7 +52,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v17
-      - uses: DeterminateSystems/magic-nix-cache-action@v9
       - name: Restore ccache cache
         id: cache-ccache-restore
         uses: actions/cache/restore@v4
@@ -78,7 +77,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v17
-      - uses: DeterminateSystems/magic-nix-cache-action@v9
       - name: Build the Nix package
         run: nix build
 
@@ -92,7 +90,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@v17
-      - uses: DeterminateSystems/magic-nix-cache-action@v9
       - name: Restore ccache cache
         id: cache-ccache-restore
         uses: actions/cache/restore@v4
@@ -132,21 +129,32 @@ jobs:
           recreate: true
           path: code-coverage-results.md
 
-  flatpak:
-    name: "Flatpak"
+  flatpak-x86_64:
+    name: "Flatpak x86_64"
     runs-on: ubuntu-latest
     container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-44
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
       options: --privileged
-    strategy:
-      matrix:
-        arch: [x86_64, aarch64]
-      # Don't fail the whole workflow if one architecture fails
-      fail-fast: false
     steps:
       - uses: actions/checkout@v4
       - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
+          arch: x86_64
           bundle: cyrillic-encoder.flatpak
           manifest-path: packaging/com.jwillikers.CyrillicEncoder.yaml
-          cache-key: flatpak-builder-${{ matrix.arch }}-${{ github.sha }}
+          cache-key: flatpak-builder-${{ github.sha }}
+
+  flatpak-aarch64:
+    name: "Flatpak aarch64"
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          arch: aarch64
+          bundle: cyrillic-encoder.flatpak
+          manifest-path: packaging/com.jwillikers.CyrillicEncoder.yaml
+          cache-key: flatpak-builder-${{ github.sha }}
