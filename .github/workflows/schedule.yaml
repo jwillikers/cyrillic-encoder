@@ -33,6 +33,6 @@ jobs:
         with:
           key: coverage-${{ matrix.compiler }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
           path: .ccache
-      - uses: clearlyip/code-coverage-report-action@v5
+      - uses: clearlyip/code-coverage-report-action@v6
         with:
           filename: build-coverage-${{ matrix.compiler }}/cobertura.xml
