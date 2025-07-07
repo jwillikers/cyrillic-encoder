@@ -20,6 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@v17
+      - uses: DeterminateSystems/nix-installer-action@v18
       - name: Check the MetaInfo file
         run: nix develop --command appstream-util validate packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
