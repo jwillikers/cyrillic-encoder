@@ -313,8 +313,8 @@ endif()
 configure_file(qt_plugin_imports.h.in ${CYRILLIC_ENCODER_GENERATED_INCLUDEDIR}/cyrillic-encoder/qt_plugin_imports.h
                @ONLY)
 
-target_link_libraries(cyrillic-encoder PRIVATE Boost::headers cyrillic-encoder::encode Microsoft.GSL::GSL Qt6::Core
-                                               Qt6::Widgets)
+target_link_libraries(cyrillic-encoder PUBLIC Boost::headers PRIVATE cyrillic-encoder::encode Microsoft.GSL::GSL Qt6::Core
+                                              Qt6::Widgets)
 
 target_compile_options(
     cyrillic-encoder
