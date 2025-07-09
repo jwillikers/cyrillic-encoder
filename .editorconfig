@@ -12,8 +12,15 @@ trim_trailing_whitespace = true
 [*.adoc]
 indent_size = unset
 
+[CMakeLists.txt]
+indent_size = unset
+max_line_length = off
+
 [*.{adoc,envrc,nu,yaml,yml}]
 max_line_length = off
 
-[{justfile,.justfile,*.just,*.cpp,*.h.in,*.hpp}]
+[.*{cpp,hpp,h.in}]
+indent_size = 2
+
+[{justfile,.justfile,*.just}]
 indent_size = 4
