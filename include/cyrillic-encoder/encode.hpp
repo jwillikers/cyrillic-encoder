@@ -1,14 +1,11 @@
 #pragma once
-#include <algorithm>
 #include <array>
+#include <boost/range/algorithm/lower_bound.hpp>
+#include <boost/range/end.hpp>
 #include <cyrillic-encoder/export.h>
 #include <string>
 #include <string_view>
 #include <utility>
-
-#include <boost/range.hpp>
-#include <boost/range/algorithm.hpp>
-#include <boost/range/end.hpp>
 
 namespace cyr_enc {
 
