@@ -11,6 +11,9 @@ project(
 set(CMAKE_EXPORT_COMPILE_COMMANDS yes)
 set(CMAKE_LINK_LIBRARIES_ONLY_TARGETS yes)
 
+# Disable C++20 modules for tooling that won't understand what the generated compile_commands.json file, like IWYU.
+set(CMAKE_CXX_SCAN_FOR_MODULES no)
+
 if(PROJECT_IS_TOP_LEVEL AND CMAKE_EXPORT_COMPILE_COMMANDS)
     list(APPEND CMAKE_C_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES})
     list(REMOVE_DUPLICATES CMAKE_C_STANDARD_INCLUDE_DIRECTORIES)
@@ -27,7 +30,7 @@ if(DEFINED CMAKE_CXX_STANDARD)
         message(FATAL_ERROR "This project requires at least C++20")
     endif()
 else()
-    set(CMAKE_CXX_STANDARD 20)
+    set(CMAKE_CXX_STANDARD 23)
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED yes)
 if(NOT DEFINED CMAKE_CXX_EXTENSIONS)

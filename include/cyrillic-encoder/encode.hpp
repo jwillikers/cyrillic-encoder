@@ -1,6 +1,7 @@
 #pragma once
-#include <algorithm>
 #include <array>
+#include <boost/range/algorithm/lower_bound.hpp>
+#include <boost/range/end.hpp>
 #include <cyrillic-encoder/export.h>
 #include <string>
 #include <string_view>
@@ -41,12 +42,12 @@ static constexpr std::string_view encode_char(
   // This isn't necessary for the limited size of the sample table.
   // However, it scales better.
   // A compile-time hash map would make much more sense and not require sorting.
-  auto const *found =
-      std::lower_bound(std::begin(conversion_table), std::end(conversion_table),
-                       character, [](auto const &pair, char the_character) {
-                         return std::get<0>(pair) < the_character;
-                       });
-  if (found == std::end(conversion_table) || std::get<0>(*found) != character) {
+  auto const *found = boost::range::lower_bound(
+      conversion_table, character, [](auto const &pair, char the_character) {
+        return std::get<0>(pair) < the_character;
+      });
+  if (found == boost::end(conversion_table) ||
+      std::get<0>(*found) != character) {
     return {};
   }
   return std::get<1>(*found);

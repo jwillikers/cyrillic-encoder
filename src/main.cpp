@@ -16,13 +16,15 @@
 #include <QWidget>
 #include <Qt>
 #include <QtContainerFwd>
+#include <QtMinMax>
+#include <QtSwap>
 #include <boost/range/adaptors.hpp>
 #include <cyrillic-encoder/encode.hpp>
 #include <cyrillic-encoder/qt_plugin_imports.h> // IWYU pragma: keep
 #include <gsl/narrow>
 #include <qobjectdefs.h>
-#include <string> // IWYU pragma: keep
-#include <string_view>
+#include <string>      // IWYU pragma: keep
+#include <string_view> // IWYU pragma: keep
 #include <utility>
 
 int main(int argc, char *argv[]) {
@@ -61,10 +63,8 @@ int main(int argc, char *argv[]) {
   encode_box.addWidget(&encoded);
 
   QObject::connect(&input, &QTextEdit::textChanged, &encoded, [&]() {
-    encoded.setText(
-        QString(std::string_view(
-                    cyr_enc::encode_string(input.toPlainText().toStdString()))
-                    .data()));
+    encoded.setText(QString::fromStdString(
+        cyr_enc::encode_string(input.toPlainText().toStdString())));
   });
 
   QWidget decode_table_widget(&encode_area);
@@ -88,8 +88,8 @@ int main(int argc, char *argv[]) {
     flags.setFlag(Qt::ItemFlag::ItemIsEditable, false);
     latin->setFlags(flags);
     decode_table.setItem(gsl::narrow<int>(pair.index()), 0, latin);
-    auto *cyrillic =
-        new QTableWidgetItem(QString(std::get<1>(pair.value()).data()));
+    auto *cyrillic = new QTableWidgetItem(QString::fromStdString(std::string(
+        std::get<1>(pair.value()).data(), std::get<1>(pair.value()).size())));
     cyrillic->setFlags(flags);
     decode_table.setItem(gsl::narrow<int>(pair.index()), 1, cyrillic);
   }
