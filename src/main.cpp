@@ -23,7 +23,8 @@
 #include <cyrillic-encoder/qt_plugin_imports.h> // IWYU pragma: keep
 #include <gsl/narrow>
 #include <qobjectdefs.h>
-#include <string> // IWYU pragma: keep
+#include <string>      // IWYU pragma: keep
+#include <string_view> // IWYU pragma: keep
 #include <utility>
 
 int main(int argc, char *argv[]) {
