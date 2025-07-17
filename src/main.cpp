@@ -24,7 +24,6 @@
 #include <gsl/narrow>
 #include <qobjectdefs.h>
 #include <string> // IWYU pragma: keep
-#include <string_view>
 #include <utility>
 
 int main(int argc, char *argv[]) {
@@ -88,9 +87,8 @@ int main(int argc, char *argv[]) {
     flags.setFlag(Qt::ItemFlag::ItemIsEditable, false);
     latin->setFlags(flags);
     decode_table.setItem(gsl::narrow<int>(pair.index()), 0, latin);
-    auto *cyrillic = new QTableWidgetItem(
-        QString::fromStdString(std::string(std::get<1>(pair.value()).data()),
-                               std::get<1>(pair.size())));
+    auto *cyrillic = new QTableWidgetItem(QString::fromStdString(std::string(
+        std::get<1>(pair.value()).data(), std::get<1>(pair.value()).size())));
     cyrillic->setFlags(flags);
     decode_table.setItem(gsl::narrow<int>(pair.index()), 1, cyrillic);
   }
