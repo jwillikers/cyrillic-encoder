@@ -15,7 +15,7 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@v21
       - name: Restore ccache cache
         id: cache-ccache-restore
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           key: coverage-${{ matrix.compiler }}-ccache-
           path: .ccache
@@ -28,7 +28,7 @@ jobs:
           string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
           message("::echo timestamp=${current_date}")
       - name: Save ccache cache
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         if: always() && steps.cache-ccache-restore.outputs.cache-hit != 'true'
         with:
           key: coverage-${{ matrix.compiler }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
