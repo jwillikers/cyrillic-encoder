@@ -122,7 +122,7 @@ jobs:
           filename: build-coverage-${{ matrix.compiler }}/cobertura.xml
           overall_coverage_fail_threshold: 60
       - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@v3
         if: github.event_name == 'pull_request'
         with:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
