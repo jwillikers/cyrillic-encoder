@@ -40,8 +40,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/microsoft/GSL.git
-        commit: 249146590e322123cd0b378b1f364d6069717687
-        tag: v4.2.1
+        commit: 152d6eb989a1ecd23fe9c9cfb2fb8cfc7c0cd0c1
+        tag: v4.2.2
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
