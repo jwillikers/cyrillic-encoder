@@ -50,11 +50,11 @@ jobs:
         compiler: [clang, gcc]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: DeterminateSystems/nix-installer-action@v22
       - name: Restore ccache cache
         id: cache-ccache-restore
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           key: coverage-${{ matrix.compiler }}-ccache-
           path: .ccache
@@ -67,7 +67,7 @@ jobs:
           string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
           message("::echo timestamp=${current_date}")
       - name: Save ccache cache
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         if: always() && steps.cache-ccache-restore.outputs.cache-hit != 'true'
         with:
           key: coverage-${{ matrix.compiler }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
@@ -75,7 +75,7 @@ jobs:
   package-nix:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: DeterminateSystems/nix-installer-action@v22
       - name: Build the Nix package
         run: nix build
@@ -88,11 +88,11 @@ jobs:
         compiler: [clang]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: DeterminateSystems/nix-installer-action@v22
       - name: Restore ccache cache
         id: cache-ccache-restore
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           key: coverage-${{ matrix.compiler }}-ccache-
           path: .ccache
@@ -105,13 +105,13 @@ jobs:
           string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
           message("::echo timestamp=${current_date}")
       - name: Save ccache cache
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         if: always() && steps.cache-ccache-restore.outputs.cache-hit != 'true'
         with:
           key: coverage-${{ matrix.compiler }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
           path: .ccache
       - name: Code Coverage Report
-        uses: clearlyip/code-coverage-report-action@v6
+        uses: clearlyip/code-coverage-report-action@v7
         id: code_coverage_report_action
         with:
           artifact_download_workflow_names: "build,schedule"
@@ -136,7 +136,7 @@ jobs:
       image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
       options: --privileged
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
           arch: x86_64
@@ -151,7 +151,7 @@ jobs:
       image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
       options: --privileged
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
           arch: aarch64
