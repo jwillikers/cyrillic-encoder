@@ -12,8 +12,8 @@ modules:
       - '*'
     sources:
       - type: archive
-        url: https://github.com/boostorg/boost/releases/download/boost-1.91.0-1/boost-1.91.0-1-cmake.tar.xz
-        sha256: cc5dc5006ecbdf0051f90979be31b4eee5987d9ae14ae9fb9c03cfa43fa3cdad
+        url: https://github.com/boostorg/boost/releases/download/boost-1.92.0/boost-1.92.0-cmake.tar.xz
+        sha256: 9bed76128d4e46755dbe818487788c6fceb6f72b378f4daa49b7e1e600d9088d
         x-checker-data:
           type: anitya
           project-id: 6845
@@ -40,8 +40,8 @@ modules:
     sources:
       - type: git
         url: https://github.com/microsoft/GSL.git
-        commit: 152d6eb989a1ecd23fe9c9cfb2fb8cfc7c0cd0c1
-        tag: v4.2.2
+        commit: 417ef685eafd626db765f0027b7fc5a0057e0770
+        tag: v5.0.0
         x-checker-data:
           type: git
           tag-pattern: ^v([\d.]+)$
