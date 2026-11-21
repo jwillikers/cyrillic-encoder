@@ -26,6 +26,7 @@ debug preset="dev" debugger="gdb": (build preset)
 
 flatpak:
     flatpak-builder \
+        --disable-rofiles-fuse \
         --force-clean \
         --install \
         --install-deps-from=flathub \

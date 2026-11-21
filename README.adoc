@@ -127,6 +127,12 @@ flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/fl
 ----
 just flatpak
 ----
++
+[NOTE]
+====
+The `just flatpak` recipe passes `--disable-rofiles-fuse` to `flatpak-builder`.
+This avoids build failures in environments where FUSE mounts aren't permitted, such as containers and sandboxes.
+====
 
 == Todo
 
