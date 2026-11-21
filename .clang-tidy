@@ -33,6 +33,7 @@ Checks: >
   -hicpp-vararg,
   -llvm-*,
   -objc-*,
+  -portability-avoid-pragma-once,
   -readability-avoid-unconditional-preprocessor-if,
   -readability-else-after-return,
   -readability-implicit-bool-conversion,
@@ -55,3 +56,5 @@ Checks: >
 WarningsAsErrors: '*'
 HeaderFilterRegex: 'include/cyrillic-encoder/|src/'
 FormatStyle: 'llvm'
+CheckOptions:
+  misc-include-cleaner.IgnoreHeaders: 'boost/range/(adaptor|algorithm_ext).*'

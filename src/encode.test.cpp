@@ -3,7 +3,6 @@
 #include <boost/range/size.hpp>
 #include <boost/ut.hpp>
 #include <cyrillic-encoder/encode.hpp>
-#include <iterator>
 #include <string>
 #include <string_view>
 

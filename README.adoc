@@ -114,6 +114,20 @@ Cyrillic Encoder can be built locally as a https://flatpak.org/[Flatpak].
 I might get around to setting up a Flatpak remote using GitHub Pages for easy installation someday.
 Follow these instructions to build the Flatpak.
 
+. Make sure the FUSE 2 `fusermount` command is installed.
+`flatpak-builder` uses it to unmount `rofiles-fuse` between build stages.
+Fedora only includes FUSE 3's `fusermount3` by default, and without `fusermount` the build fails with `fusermount3: failed to access mountpoint ... Permission denied`.
+On Fedora Atomic, install the `fuse` package and reboot.
+This has to come from the system package manager, because `fusermount` must be installed setuid root.
++
+[,sh]
+----
+sudo rpm-ostree install fuse
+sudo systemctl reboot
+----
++
+On Fedora Workstation, use `sudo dnf install fuse` instead.
+
 . Add the Flathub remote to the user's Flatpak installation.
 +
 [,sh]
@@ -168,7 +182,7 @@ The project's Code of Conduct is available in the link:CODE_OF_CONDUCT.adoc[Code
 
 This repository is licensed under the https://www.gnu.org/licenses/gpl-3.0.html[GPLv3], available in the link:LICENSE.adoc[license file].
 
-© 2021-2024 Jordan Williams
+© 2021-2026 Jordan Williams
 
 == Authors
 

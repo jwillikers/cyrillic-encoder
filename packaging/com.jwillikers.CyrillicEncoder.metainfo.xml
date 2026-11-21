@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2024 Jordan Williams <jordan@jwillikers.com> -->
+<!-- Copyright 2024-2026 Jordan Williams <jordan@jwillikers.com> -->
 <component type="desktop-application">
   <id>com.jwillikers.CyrillicEncoder</id>
   <metadata_license>FSFAP</metadata_license>
@@ -23,6 +23,7 @@
   <url type="vcs-browser">https://github.com/jwillikers/cyrillic-encoder</url>
   <screenshots>
     <screenshot type="default">
+      <!-- editorconfig-checker-disable-next-line -->
       <image>https://raw.githubusercontent.com/jwillikers/cyrillic-encoder/refs/heads/main/screenshots/Cyrillic%20Encoder%20Demo.png</image>
       <caption>Cyrillic Encoder application window</caption>
     </screenshot>
