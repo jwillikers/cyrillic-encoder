@@ -3,24 +3,6 @@ name: Build
 "on":
   pull_request:
     branches: ["main"]
-    paths:
-      - '**.cmake'
-      - '**.cpp'
-      - '**.hpp'
-      - '**.hpp.in'
-      - '**.h'
-      - '**.h.in'
-      - '**.nix'
-      - '**/CMakeLists.txt'
-      - .clang-tidy
-      - .github/workflows/build.yaml
-      - CMakePresets.json
-      - flake.lock
-      - iwyu.imp
-      - packaging/com.jwillikers.CyrillicEncoder.desktop
-      - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
-      - packaging/com.jwillikers.CyrillicEncoder.svg
-      - packaging/com.jwillikers.CyrillicEncoder.yaml
   push:
     branches: ["main"]
     paths:
@@ -43,6 +25,10 @@ name: Build
       - packaging/com.jwillikers.CyrillicEncoder.yaml
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   build:
     strategy:
@@ -50,17 +36,50 @@ jobs:
         compiler: [clang, gcc]
     runs-on: ubuntu-latest
     steps:
+      # Always run this job so that required status checks report on every PR,
+      # but only do the work when relevant files changed.
+      - uses: dorny/paths-filter@v4
+        id: filter
+        if: github.event_name == 'pull_request'
+        with:
+          filters: |
+            relevant:
+              - '**.cmake'
+              - '**.cpp'
+              - '**.hpp'
+              - '**.hpp.in'
+              - '**.h'
+              - '**.h.in'
+              - '**.nix'
+              - '**/CMakeLists.txt'
+              - .clang-tidy
+              - .github/workflows/build.yaml
+              - CMakePresets.json
+              - flake.lock
+              - iwyu.imp
+              - packaging/com.jwillikers.CyrillicEncoder.desktop
+              - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
+              - packaging/com.jwillikers.CyrillicEncoder.svg
+              - packaging/com.jwillikers.CyrillicEncoder.yaml
+      - name: Determine whether to run
+        id: gate
+        run: echo "run=${{ github.event_name != 'pull_request' || steps.filter.outputs.relevant == 'true' }}" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v7
+        if: steps.gate.outputs.run == 'true'
       - uses: DeterminateSystems/nix-installer-action@v23
+        if: steps.gate.outputs.run == 'true'
       - name: Restore ccache cache
+        if: steps.gate.outputs.run == 'true'
         id: cache-ccache-restore
         uses: actions/cache/restore@v6
         with:
           key: coverage-${{ matrix.compiler }}-ccache-
           path: .ccache
       - name: Build
+        if: steps.gate.outputs.run == 'true'
         run: nix develop --command just workflow ci-${{ matrix.compiler }}
       - name: Prepare ccache timestamp
+        if: steps.gate.outputs.run == 'true'
         id: ccache_cache_timestamp
         shell: cmake -P {0}
         run: |
@@ -68,16 +87,47 @@ jobs:
           message("::echo timestamp=${current_date}")
       - name: Save ccache cache
         uses: actions/cache/save@v6
-        if: always() && steps.cache-ccache-restore.outputs.cache-hit != 'true'
+        if: steps.gate.outputs.run == 'true' && (always() && steps.cache-ccache-restore.outputs.cache-hit != 'true')
         with:
           key: coverage-${{ matrix.compiler }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
           path: .ccache
   package-nix:
     runs-on: ubuntu-latest
     steps:
+      # Always run this job so that required status checks report on every PR,
+      # but only do the work when relevant files changed.
+      - uses: dorny/paths-filter@v4
+        id: filter
+        if: github.event_name == 'pull_request'
+        with:
+          filters: |
+            relevant:
+              - '**.cmake'
+              - '**.cpp'
+              - '**.hpp'
+              - '**.hpp.in'
+              - '**.h'
+              - '**.h.in'
+              - '**.nix'
+              - '**/CMakeLists.txt'
+              - .clang-tidy
+              - .github/workflows/build.yaml
+              - CMakePresets.json
+              - flake.lock
+              - iwyu.imp
+              - packaging/com.jwillikers.CyrillicEncoder.desktop
+              - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
+              - packaging/com.jwillikers.CyrillicEncoder.svg
+              - packaging/com.jwillikers.CyrillicEncoder.yaml
+      - name: Determine whether to run
+        id: gate
+        run: echo "run=${{ github.event_name != 'pull_request' || steps.filter.outputs.relevant == 'true' }}" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v7
+        if: steps.gate.outputs.run == 'true'
       - uses: DeterminateSystems/nix-installer-action@v23
+        if: steps.gate.outputs.run == 'true'
       - name: Build the Nix package
+        if: steps.gate.outputs.run == 'true'
         run: nix build
 
   coverage:
@@ -88,17 +138,50 @@ jobs:
         compiler: [clang]
     runs-on: ubuntu-latest
     steps:
+      # Always run this job so that required status checks report on every PR,
+      # but only do the work when relevant files changed.
+      - uses: dorny/paths-filter@v4
+        id: filter
+        if: github.event_name == 'pull_request'
+        with:
+          filters: |
+            relevant:
+              - '**.cmake'
+              - '**.cpp'
+              - '**.hpp'
+              - '**.hpp.in'
+              - '**.h'
+              - '**.h.in'
+              - '**.nix'
+              - '**/CMakeLists.txt'
+              - .clang-tidy
+              - .github/workflows/build.yaml
+              - CMakePresets.json
+              - flake.lock
+              - iwyu.imp
+              - packaging/com.jwillikers.CyrillicEncoder.desktop
+              - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
+              - packaging/com.jwillikers.CyrillicEncoder.svg
+              - packaging/com.jwillikers.CyrillicEncoder.yaml
+      - name: Determine whether to run
+        id: gate
+        run: echo "run=${{ github.event_name != 'pull_request' || steps.filter.outputs.relevant == 'true' }}" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v7
+        if: steps.gate.outputs.run == 'true'
       - uses: DeterminateSystems/nix-installer-action@v23
+        if: steps.gate.outputs.run == 'true'
       - name: Restore ccache cache
+        if: steps.gate.outputs.run == 'true'
         id: cache-ccache-restore
         uses: actions/cache/restore@v6
         with:
           key: coverage-${{ matrix.compiler }}-ccache-
           path: .ccache
       - name: Generate Coverage
+        if: steps.gate.outputs.run == 'true'
         run: nix develop --command just workflow coverage-${{ matrix.compiler }}
       - name: Prepare ccache timestamp
+        if: steps.gate.outputs.run == 'true'
         id: ccache_cache_timestamp
         shell: cmake -P {0}
         run: |
@@ -106,11 +189,12 @@ jobs:
           message("::echo timestamp=${current_date}")
       - name: Save ccache cache
         uses: actions/cache/save@v6
-        if: always() && steps.cache-ccache-restore.outputs.cache-hit != 'true'
+        if: steps.gate.outputs.run == 'true' && (always() && steps.cache-ccache-restore.outputs.cache-hit != 'true')
         with:
           key: coverage-${{ matrix.compiler }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
           path: .ccache
       - name: Code Coverage Report
+        if: steps.gate.outputs.run == 'true'
         uses: clearlyip/code-coverage-report-action@v7
         id: code_coverage_report_action
         with:
@@ -123,7 +207,7 @@ jobs:
           overall_coverage_fail_threshold: 60
       - name: Add Coverage PR Comment
         uses: marocchino/sticky-pull-request-comment@v3
-        if: github.event_name == 'pull_request'
+        if: steps.gate.outputs.run == 'true' && (github.event_name == 'pull_request')
         with:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
           recreate: true
@@ -136,8 +220,38 @@ jobs:
       image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
       options: --privileged
     steps:
+      # Always run this job so that required status checks report on every PR,
+      # but only do the work when relevant files changed.
+      - uses: dorny/paths-filter@v4
+        id: filter
+        if: github.event_name == 'pull_request'
+        with:
+          filters: |
+            relevant:
+              - '**.cmake'
+              - '**.cpp'
+              - '**.hpp'
+              - '**.hpp.in'
+              - '**.h'
+              - '**.h.in'
+              - '**.nix'
+              - '**/CMakeLists.txt'
+              - .clang-tidy
+              - .github/workflows/build.yaml
+              - CMakePresets.json
+              - flake.lock
+              - iwyu.imp
+              - packaging/com.jwillikers.CyrillicEncoder.desktop
+              - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
+              - packaging/com.jwillikers.CyrillicEncoder.svg
+              - packaging/com.jwillikers.CyrillicEncoder.yaml
+      - name: Determine whether to run
+        id: gate
+        run: echo "run=${{ github.event_name != 'pull_request' || steps.filter.outputs.relevant == 'true' }}" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v7
+        if: steps.gate.outputs.run == 'true'
       - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        if: steps.gate.outputs.run == 'true'
         with:
           arch: x86_64
           bundle: cyrillic-encoder.flatpak
@@ -151,8 +265,38 @@ jobs:
       image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
       options: --privileged
     steps:
+      # Always run this job so that required status checks report on every PR,
+      # but only do the work when relevant files changed.
+      - uses: dorny/paths-filter@v4
+        id: filter
+        if: github.event_name == 'pull_request'
+        with:
+          filters: |
+            relevant:
+              - '**.cmake'
+              - '**.cpp'
+              - '**.hpp'
+              - '**.hpp.in'
+              - '**.h'
+              - '**.h.in'
+              - '**.nix'
+              - '**/CMakeLists.txt'
+              - .clang-tidy
+              - .github/workflows/build.yaml
+              - CMakePresets.json
+              - flake.lock
+              - iwyu.imp
+              - packaging/com.jwillikers.CyrillicEncoder.desktop
+              - packaging/com.jwillikers.CyrillicEncoder.metainfo.xml
+              - packaging/com.jwillikers.CyrillicEncoder.svg
+              - packaging/com.jwillikers.CyrillicEncoder.yaml
+      - name: Determine whether to run
+        id: gate
+        run: echo "run=${{ github.event_name != 'pull_request' || steps.filter.outputs.relevant == 'true' }}" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v7
+        if: steps.gate.outputs.run == 'true'
       - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        if: steps.gate.outputs.run == 'true'
         with:
           arch: aarch64
           bundle: cyrillic-encoder.flatpak
