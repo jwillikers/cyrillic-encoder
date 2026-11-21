@@ -2,7 +2,7 @@
   boost,
   cmake,
   microsoft-gsl,
-  mold-wrapped,
+  mold,
   ninja,
   qtbase,
   qtwayland,
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    mold-wrapped
+    mold
     ninja
     wrapQtAppsHook
   ];
