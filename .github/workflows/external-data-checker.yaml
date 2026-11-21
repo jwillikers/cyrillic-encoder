@@ -24,3 +24,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
         with:
           args: --update --never-fork packaging/com.jwillikers.CyrillicEncoder.yaml
+      - name: Enable auto-merge
+        # The external data checker opens PRs from branches named update-<branch>-<commit>.
+        # Use the PAT so that the merge triggers the push workflows on main.
+        run: |
+          gh pr list --state open --base "${{ matrix.branch }}" --json number,headRefName \
+            --jq '.[] | select(.headRefName | startswith("update-${{ matrix.branch }}-")) | .number' \
+            | xargs --no-run-if-empty --max-args 1 gh pr merge --auto --merge
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
